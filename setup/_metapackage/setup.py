@@ -8,6 +8,7 @@ setuptools.setup(
     description="Meta package for oca-web-api Odoo addons",
     version=version,
     install_requires=[
+        'odoo14-addon-endpoint',
         'odoo14-addon-endpoint_route_handler',
     ],
     classifiers=[
