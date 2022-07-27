@@ -4,7 +4,7 @@
 {
     "name": "Endpoint",
     "summary": """Provide custom endpoint machinery.""",
-    "version": "14.0.1.3.0",
+    "version": "14.0.1.4.0",
     "license": "LGPL-3",
     "development_status": "Alpha",
     "author": "Camptocamp,Odoo Community Association (OCA)",
@@ -18,4 +18,5 @@
     "demo": [
         "demo/endpoint_demo.xml",
     ],
+    "post_init_hook": "post_init_hook",
 }
