@@ -11,6 +11,7 @@ setuptools.setup(
         'odoo14-addon-endpoint',
         'odoo14-addon-endpoint_auth_api_key',
         'odoo14-addon-endpoint_route_handler',
+        'odoo14-addon-webservice',
     ],
     classifiers=[
         'Programming Language :: Python',
