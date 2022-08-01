@@ -9,7 +9,7 @@
     "development_status": "Alpha",
     "author": "Camptocamp, Odoo Community Association (OCA)",
     "maintainers": ["simahawk"],
-    "website": "https://github.com/OCA/edi",
+    "website": "https://github.com/OCA/web-api",
     "depends": ["endpoint", "auth_api_key_group"],
     "demo": ["demo/api_key_demo.xml", "demo/endpoint_demo.xml"],
     "data": ["views/endpoint_view.xml"],
