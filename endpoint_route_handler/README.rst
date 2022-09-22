@@ -14,13 +14,13 @@
     :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
     :alt: License: LGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fweb--api-lightgray.png?logo=github
-    :target: https://github.com/OCA/web-api/tree/14.0/endpoint_route_handler
+    :target: https://github.com/OCA/web-api/tree/16.0/endpoint_route_handler
     :alt: OCA/web-api
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
     :target: https://translation.odoo-community.org/projects/web-api-14-0/web-api-14-0-endpoint_route_handler
     :alt: Translate me on Weblate
 
-|badge1| |badge2| |badge3| |badge4| 
+|badge1| |badge2| |badge3| |badge4|
 
 Technical module that provides a base handler
 for adding and removing controller routes on the fly.
@@ -92,7 +92,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/web-api/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/web-api/issues/new?body=module:%20endpoint_route_handler%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/web-api/issues/new?body=module:%20endpoint_route_handler%0Aversion:%2016.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -128,8 +128,8 @@ promote its widespread use.
 
 Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
-|maintainer-simahawk| 
+|maintainer-simahawk|
 
-This module is part of the `OCA/web-api <https://github.com/OCA/web-api/tree/14.0/endpoint_route_handler>`_ project on GitHub.
+This module is part of the `OCA/web-api <https://github.com/OCA/web-api/tree/16.0/endpoint_route_handler>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

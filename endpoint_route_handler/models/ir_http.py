@@ -34,7 +34,7 @@ class IrHttp(models.AbstractModel):
             _logger.debug("LOADING %s", endpoint_rule)
             endpoint = endpoint_rule.endpoint
             for url in endpoint_rule.routing["routes"]:
-                yield (url, endpoint, endpoint_rule.routing)
+                yield (url, endpoint)
 
     @classmethod
     def routing_map(cls, key=None):
@@ -90,5 +90,5 @@ class IrHttp(models.AbstractModel):
         """
         try:
             cls._auth_method_user()
-        except http.SessionExpiredException:
-            raise werkzeug.exceptions.Unauthorized()
+        except http.SessionExpiredException as err:
+            raise werkzeug.exceptions.Unauthorized() from err

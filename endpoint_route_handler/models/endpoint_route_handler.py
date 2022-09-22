@@ -2,9 +2,10 @@
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+import functools
 import logging
 
-from odoo import _, api, exceptions, fields, http, models
+from odoo import _, api, exceptions, fields, models
 
 # from odoo.addons.base_sparse_field.models.fields import Serialized
 from ..registry import EndpointRegistry
@@ -176,7 +177,11 @@ class EndpointRouteHandler(models.AbstractModel):
         for rec in self:
             if rec.route in self._blacklist_routes:
                 raise exceptions.UserError(
-                    _("`%s` uses a blacklisted routed = `%s`") % (rec.name, rec.route)
+                    _(
+                        "`%(name)s` uses a blacklisted routed = `%(route)s`",
+                        name=rec.name,
+                        route=rec.route,
+                    )
                 )
 
     @api.constrains("request_method", "request_content_type")
@@ -262,7 +267,9 @@ class EndpointRouteHandler(models.AbstractModel):
         route, routing, endpoint_hash = self._get_routing_info()
         endpoint_handler = endpoint_handler or self._default_endpoint_handler()
         assert callable(endpoint_handler)
-        endpoint = http.EndPoint(endpoint_handler, routing)
+        endpoint = functools.partial(endpoint_handler)
+        functools.update_wrapper(endpoint, endpoint_handler)
+        endpoint.routing = routing
         rule = self._endpoint_registry.make_rule(
             # fmt: off
             key,

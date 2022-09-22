@@ -6,7 +6,7 @@ import os
 import unittest
 from functools import partial
 
-from odoo.http import Controller
+from odoo.http import Controller, request
 from odoo.tests.common import HttpCase
 
 from ..registry import EndpointRegistry
@@ -14,10 +14,12 @@ from ..registry import EndpointRegistry
 
 class TestController(Controller):
     def _do_something1(self, foo=None):
-        return f"Got: {foo}"
+        message = f"Got: {foo}"
+        return request.make_response(message)
 
     def _do_something2(self, default_arg, foo=None):
-        return f"{default_arg} -> got: {foo}"
+        message = f"{default_arg} -> got: {foo}"
+        return request.make_response(message)
 
 
 @unittest.skipIf(os.getenv("SKIP_HTTP_CASE"), "EndpointHttpCase skipped")
