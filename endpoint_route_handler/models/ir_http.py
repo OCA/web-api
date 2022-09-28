@@ -90,5 +90,5 @@ class IrHttp(models.AbstractModel):
         """
         try:
             cls._auth_method_user()
-        except http.SessionExpiredException:
-            raise werkzeug.exceptions.Unauthorized()
+        except http.SessionExpiredException as err:
+            raise werkzeug.exceptions.Unauthorized() from err

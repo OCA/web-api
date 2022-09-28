@@ -138,7 +138,11 @@ class EndpointRouteHandler(models.AbstractModel):
         # (NewId records are classified as missing in ACL check).
         # values = self.read(self._controller_fields())
         values = [
-            {fname: rec[fname] for fname in self._controller_fields()} for rec in self
+            {
+                fname: rec[fname] if fname != "id" else None
+                for fname in self._controller_fields()
+            }
+            for rec in self
         ]
         for rec, vals in zip(self, values):
             vals.pop("id", None)
@@ -176,7 +180,8 @@ class EndpointRouteHandler(models.AbstractModel):
         for rec in self:
             if rec.route in self._blacklist_routes:
                 raise exceptions.UserError(
-                    _("`%s` uses a blacklisted routed = `%s`") % (rec.name, rec.route)
+                    _("`%(name)s` uses a blacklisted routed = `%(route)s`")
+                    % (rec.name, rec.route)
                 )
 
     @api.constrains("request_method", "request_content_type")
@@ -283,13 +288,21 @@ class EndpointRouteHandler(models.AbstractModel):
         raise NotImplementedError("No default endpoint handler defined.")
 
     def _get_routing_info(self):
+        try:
+            route_type = self.route_type
+        except BaseException:
+            route_type = "http"
+        try:
+            csrf = self.csrf
+        except BaseException:
+            csrf = False
         route = self.route
         routing = dict(
-            type=self.route_type,
+            type=route_type,
             auth=self.auth_type,
             methods=[self.request_method],
             routes=[route],
-            csrf=self.csrf,
+            csrf=csrf,
         )
         return route, routing, self.endpoint_hash
 
