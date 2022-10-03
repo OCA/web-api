@@ -13,6 +13,8 @@ from requests_oauthlib import OAuth2Session
 
 from odoo.addons.component.core import Component
 
+from ..utils import sanitize_url_for_log
+
 _logger = logging.getLogger(__name__)
 
 
@@ -25,6 +27,9 @@ class BaseRestRequestsAdapter(Component):
     def _request(self, method, url=None, url_params=None, **kwargs):
         url = self._get_url(url=url, url_params=url_params)
         content_only = kwargs.pop("content_only", True)
+        # TODO: turn on/off debug from webservice setting?
+        url_to_log = self._sanitize_url_for_log(url)
+        _logger.info("%s call to %s", method, url_to_log)
         new_kwargs = kwargs.copy()
         new_kwargs.update(
             {
@@ -39,6 +44,9 @@ class BaseRestRequestsAdapter(Component):
         if content_only:
             return request.content
         return request
+
+    def _sanitize_url_for_log(self, url):
+        return sanitize_url_for_log(url)
 
     def get(self, **kwargs):
         return self._request("get", **kwargs)
