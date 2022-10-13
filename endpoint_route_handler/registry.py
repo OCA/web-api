@@ -2,6 +2,16 @@
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+import logging
+from contextlib import closing
+
+from psycopg2 import ProgrammingError
+
+from odoo import api
+from odoo.modules.registry import Registry
+
+_logger = logging.getLogger(__name__)
+
 _REGISTRY_BY_DB = {}
 
 
@@ -111,3 +121,54 @@ class EndpointRule:
         return f"{self.key}: {self.route}" + (
             f"[{self.route_group}]" if self.route_group else ""
         )
+
+
+setup_signaling = Registry.setup_signaling
+
+
+def _setup_signaling(self):
+    setup_signaling(self)
+    if self.in_test_mode():
+        return
+
+    with self.cursor() as cr:
+        self.endpoint_registry_sequence = -1
+        cr.execute("""SELECT 1  FROM pg_class WHERE RELNAME = 'endpoint_version'""")
+        if cr.fetchone():
+            cr.execute("SELECT last_value FROM endpoint_version")
+            self.endpoint_registry_sequence = cr.fetchone()[0]
+
+
+Registry.setup_signaling = _setup_signaling
+
+check_signaling = Registry.check_signaling
+
+
+def _check_signaling(self):
+    check_signaling(self)
+    if self.in_test_mode():
+        return self
+
+    with closing(self.cursor()) as cr:
+        # TODO  manage endpoint deletion
+        try:
+            cr.execute("SELECT last_value FROM endpoint_version")
+            r = cr.fetchone()[0]
+            if getattr(self, "endpoint_registry_sequence", 1) != r:
+                _logger.info(
+                    "Invalidating the endpoint registry after database signaling"
+                    " with version %d",
+                    r,
+                )
+                self.endpoint_registry_sequence = r
+                env = api.Environment(cr, 1, {})
+                env["endpoint.route.handler"]._check_signaling(
+                    self.endpoint_registry_sequence
+                )
+        except ProgrammingError as pe:
+            if pe.pgcode != "42P01":
+                raise pe
+            _logger.info("enpoint_route_handler not installed on this DB")
+
+
+Registry.check_signaling = _check_signaling

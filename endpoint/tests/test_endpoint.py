@@ -112,7 +112,7 @@ class TestEndpoint(CommonEndpoint):
                 endpoint._validate_request(req)
 
     def test_routing(self):
-        route, info, __ = self.endpoint._get_routing_info()
+        route, info, __ = self.endpoint.endpoint_handler_id._get_routing_info()
         self.assertEqual(route, "/demo/one")
         self.assertEqual(
             info,
@@ -133,7 +133,7 @@ class TestEndpoint(CommonEndpoint):
                 "exec_as_user_id": self.env.user.id,
             }
         )
-        __, info, __ = endpoint._get_routing_info()
+        __, info, __ = endpoint.endpoint_handler_id._get_routing_info()
         self.assertEqual(
             info,
             {
@@ -145,9 +145,9 @@ class TestEndpoint(CommonEndpoint):
             },
         )
         # check prefix
-        type(endpoint)._endpoint_route_prefix = "/foo"
-        endpoint._compute_route()
-        __, info, __ = endpoint._get_routing_info()
+        type(endpoint.endpoint_handler_id)._endpoint_route_prefix = "/foo"
+        endpoint.endpoint_handler_id._compute_route()
+        __, info, __ = endpoint.endpoint_handler_id._get_routing_info()
         self.assertEqual(
             info,
             {
@@ -158,7 +158,7 @@ class TestEndpoint(CommonEndpoint):
                 "csrf": False,
             },
         )
-        type(endpoint)._endpoint_route_prefix = ""
+        type(endpoint.endpoint_handler_id)._endpoint_route_prefix = ""
 
     def test_unlink(self):
         endpoint = self.endpoint.copy(
@@ -170,7 +170,7 @@ class TestEndpoint(CommonEndpoint):
                 "exec_as_user_id": self.env.user.id,
             }
         )
-        registry = endpoint._endpoint_registry
+        registry = endpoint.endpoint_handler_id._endpoint_registry
         endpoint.unlink()
         http_id = self.env["ir.http"]._endpoint_make_http_id()
         self.assertTrue(registry.routing_update_required(http_id))
@@ -186,7 +186,7 @@ class TestEndpoint(CommonEndpoint):
             }
         )
         self.assertTrue(endpoint.active)
-        registry = endpoint._endpoint_registry
+        registry = endpoint.endpoint_handler_id._endpoint_registry
         http_id = self.env["ir.http"]._endpoint_make_http_id()
         fake_2nd_http_id = id(2)
         registry.ir_http_track(http_id)

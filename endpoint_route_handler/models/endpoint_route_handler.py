@@ -4,6 +4,8 @@
 
 import logging
 
+from psycopg2.extensions import AsIs
+
 from odoo import _, api, exceptions, fields, http, models
 
 # from odoo.addons.base_sparse_field.models.fields import Serialized
@@ -14,7 +16,7 @@ ENDPOINT_ROUTE_CONSUMER_MODELS = {
 }
 
 
-class EndpointRouteHandler(models.AbstractModel):
+class EndpointRouteHandler(models.Model):
 
     _name = "endpoint.route.handler"
     _description = "Endpoint Route handler"
@@ -50,6 +52,9 @@ class EndpointRouteHandler(models.AbstractModel):
 
     csrf = fields.Boolean(default=False)
 
+    handler_model = fields.Char(required=True)
+    version = fields.Integer(readonly=True, required=True, default=0)
+
     _sql_constraints = [
         (
             "endpoint_route_unique",
@@ -57,6 +62,36 @@ class EndpointRouteHandler(models.AbstractModel):
             "You can register an endpoint route only once.",
         )
     ]
+
+    def init(self):
+
+        self.env.cr.execute(
+            """
+            SELECT 1  FROM pg_class WHERE RELNAME = 'endpoint_version'
+        """
+        )
+        if not self.env.cr.fetchone():
+            sql = """
+                CREATE SEQUENCE endpoint_version INCREMENT BY 1 START WITH 1;
+                CREATE FUNCTION increment_endpoint_version()
+                  returns trigger
+                AS
+                $body$
+                begin
+                  new.version := nextval('endpoint_version');
+                  return new;
+                end;
+                $body$
+                language plpgsql;
+
+                CREATE TRIGGER  update_endpoint_version_trigger
+                   before update on %(table)s
+                   for each row execute procedure increment_endpoint_version();
+                CREATE TRIGGER  insert_endpoint_version_trigger
+                   before insert on %(table)s
+                   for each row execute procedure increment_endpoint_version();
+            """
+            self._cr.execute(sql, {"table": AsIs(self._table)})
 
     @api.constrains("route")
     def _check_route_unique_across_models(self):
@@ -226,6 +261,10 @@ class EndpointRouteHandler(models.AbstractModel):
             # since this piece of code runs only when the model is loaded.
             self.search([("active", "=", True)])._register_controllers(init=True)
 
+    def _check_signaling(self, new_version):
+        # TODO what about deleted route?
+        self.search([("version", ">=", new_version)])._register_controllers(init=False)
+
     def _register_controllers(self, init=False):
         if self._abstract:
             self._refresh_endpoint_data()
@@ -280,7 +319,12 @@ class EndpointRouteHandler(models.AbstractModel):
 
         :return: bound method of a controller (eg: MyController()._my_handler)
         """
-        raise NotImplementedError("No default endpoint handler defined.")
+        handler = self.env[self.handler_model].search(
+            [("endpoint_handler_id", "=", self.id)]
+        )
+        if not hasattr(handler, "_default_endpoint_handler"):
+            raise NotImplementedError("No default endpoint handler defined.")
+        return handler._default_endpoint_handler()
 
     def _get_routing_info(self):
         route = self.route

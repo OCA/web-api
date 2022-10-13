@@ -2,6 +2,7 @@
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+import logging
 import textwrap
 from functools import partial
 
@@ -19,7 +20,6 @@ from ..controllers.main import EndpointController
 class EndpointMixin(models.AbstractModel):
 
     _name = "endpoint.mixin"
-    _inherit = "endpoint.route.handler"
     _description = "Endpoint mixin"
 
     exec_mode = fields.Selection(
@@ -32,6 +32,15 @@ class EndpointMixin(models.AbstractModel):
         default=lambda self: self._default_code_snippet_docs(),
     )
     exec_as_user_id = fields.Many2one(comodel_name="res.users")
+    endpoint_handler_id = fields.Many2one(
+        comodel_name="endpoint.route.handler", delegate=True, ondelete="cascade"
+    )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            vals["handler_model"] = self._name
+        return super().create(vals_list)
 
     def _selection_exec_mode(self):
         return [("code", "Execute code")]
@@ -179,3 +188,7 @@ class EndpointMixin(models.AbstractModel):
 
     def _find_endpoint_domain(self, endpoint_route):
         return [("route", "=", endpoint_route)]
+
+    @property
+    def _logger(self):
+        return logging.getLogger(self._name)
