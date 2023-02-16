@@ -8,16 +8,23 @@ import unittest
 import requests
 
 from odoo import tools
-from odoo.tests.common import HttpCase
+from odoo.tests.common import HttpSavepointCase
 from odoo.tools.misc import mute_logger
 
 
 @unittest.skipIf(os.getenv("SKIP_HTTP_CASE"), "EndpoinAuthApikeytHttpCase skipped")
-class EndpoinAuthApikeytHttpCase(HttpCase):
-    def setUp(self):
-        super().setUp()
-        self.api_key = self.env.ref("endpoint_auth_api_key.auth_api_key_demo")
-        self.api_key2 = self.env.ref("endpoint_auth_api_key.auth_api_key_demo2")
+class EndpoinAuthApikeytHttpCase(HttpSavepointCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.api_key = cls.env.ref("endpoint_auth_api_key.auth_api_key_demo")
+        cls.api_key2 = cls.env.ref("endpoint_auth_api_key.auth_api_key_demo2")
+        # force sync for demo records
+        cls.env["endpoint.endpoint"].search([])._handle_registry_sync()
+
+    def tearDown(self):
+        self.env["ir.http"]._clear_routing_map()
+        super().tearDown()
 
     def _make_url(self, route):
         return "http://127.0.0.1:%s%s" % (tools.config["http_port"], route)
