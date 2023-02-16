@@ -176,7 +176,8 @@ class EndpointRouteHandler(models.AbstractModel):
         for rec in self:
             if rec.route in self._blacklist_routes:
                 raise exceptions.UserError(
-                    _("`%s` uses a blacklisted routed = `%s`") % (rec.name, rec.route)
+                    _("`%(name)s` uses a blacklisted routed = `%(route)s`")
+                    % {"name": rec.name, "route": rec.route}
                 )
 
     @api.constrains("request_method", "request_content_type")
