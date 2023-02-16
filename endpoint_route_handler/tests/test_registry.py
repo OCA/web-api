@@ -4,7 +4,6 @@
 
 from psycopg2 import DatabaseError
 
-from odoo import http
 from odoo.tests.common import TransactionCase, tagged
 from odoo.tools import mute_logger
 
@@ -196,7 +195,11 @@ class TestRegistry(TransactionCase):
 
     def test_endpoint_lookup_ok(self):
         rule = self._make_rules(stop=2)[0]
-        self.assertTrue(isinstance(rule.endpoint, http.EndPoint))
+        expected = (
+            "<bound method CTRLFake.handler1 of "
+            "<odoo.addons.endpoint_route_handler.tests.fake_controllers.CTRLFake"
+        )
+        self.assertTrue(str(rule.endpoint.func).startswith(expected))
         self.assertEqual(rule.endpoint("one"), ("one", 2))
 
     def test_endpoint_lookup_ok_args(self):
@@ -208,7 +211,11 @@ class TestRegistry(TransactionCase):
             }
         }
         rule = self._make_rules(stop=2, options=options)[0]
-        self.assertTrue(isinstance(rule.endpoint, http.EndPoint))
+        expected = (
+            "<bound method CTRLFake.handler1 of "
+            "<odoo.addons.endpoint_route_handler.tests.fake_controllers.CTRLFake"
+        )
+        self.assertTrue(str(rule.endpoint.func).startswith(expected))
         self.assertEqual(rule.endpoint(), ("one", 2))
 
     def test_get_rule_by_group(self):
