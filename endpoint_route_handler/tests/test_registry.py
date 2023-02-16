@@ -5,7 +5,7 @@
 from psycopg2 import DatabaseError
 
 from odoo import http
-from odoo.tests.common import SavepointCase, tagged
+from odoo.tests.common import TransactionCase, tagged
 from odoo.tools import mute_logger
 
 from odoo.addons.endpoint_route_handler.exceptions import EndpointHandlerNotFound
@@ -15,7 +15,7 @@ from .fake_controllers import CTRLFake
 
 
 @tagged("-at_install", "post_install")
-class TestRegistry(SavepointCase):
+class TestRegistry(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
