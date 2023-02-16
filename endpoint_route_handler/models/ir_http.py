@@ -58,9 +58,10 @@ class IrHttp(models.AbstractModel):
 
     @classmethod
     def _clear_routing_map(cls):
-        super()._clear_routing_map()
+        res = super()._clear_routing_map()
         if hasattr(cls, "_endpoint_route_last_version"):
             cls._endpoint_route_last_version = 0
+        return res
 
     @classmethod
     def _auth_method_user_endpoint(cls):
@@ -77,5 +78,5 @@ class IrHttp(models.AbstractModel):
         """
         try:
             cls._auth_method_user()
-        except http.SessionExpiredException:
-            raise werkzeug.exceptions.Unauthorized()
+        except http.SessionExpiredException as err:
+            raise werkzeug.exceptions.Unauthorized() from err

@@ -4,14 +4,14 @@
 
 import contextlib
 
-from odoo.tests.common import SavepointCase, tagged
+from odoo.tests.common import TransactionCase, tagged
 from odoo.tools import DotDict
 
 from odoo.addons.website.tools import MockRequest
 
 
 @tagged("-at_install", "post_install")
-class CommonEndpoint(SavepointCase):
+class CommonEndpoint(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
