@@ -23,7 +23,9 @@ class TestController(http.Controller):
     _path = "odoo.addons.endpoint_route_handler.tests.fake_controllers.TestController"
 
     def _do_something1(self, foo=None):
-        return f"Got: {foo}"
+        body = f"Got: {foo}"
+        return http.request.make_response(body)
 
     def _do_something2(self, default_arg, foo=None):
-        return f"{default_arg} -> got: {foo}"
+        body = f"{default_arg} -> got: {foo}"
+        return http.request.make_response(body)
