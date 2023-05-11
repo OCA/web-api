@@ -4,22 +4,23 @@
 
 import json
 import os
-import unittest
+from unittest import skipIf
 
-from odoo.tests.common import HttpCase
+from odoo.tests.common import HttpSavepointCase
 from odoo.tools.misc import mute_logger
 
-# odoo.addons.base.models.res_users: Login successful for db:openerp_test login:admin from n/a
-# endpoint.endpoint: Registered controller /demo/one/new (auth: user_endpoint)
-# odoo.addons.endpoint.models.ir_http: DROPPED /demo/one
-# odoo.addons.endpoint.models.ir_http: LOADED /demo/one/new
-# odoo.addons.endpoint.models.ir_http: Endpoint routing map re-loaded
 
+@skipIf(os.getenv("SKIP_HTTP_CASE"), "EndpointHttpCase skipped")
+class EndpointHttpCase(HttpSavepointCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        # force sync for demo records
+        cls.env["endpoint.endpoint"].search([])._handle_registry_sync()
 
-@unittest.skipIf(os.getenv("SKIP_HTTP_CASE"), "EndpointHttpCase skipped")
-class EndpointHttpCase(HttpCase):
-    def setUp(self):
-        super().setUp()
+    def tearDown(self):
+        self.env["ir.http"]._clear_routing_map()
+        super().tearDown()
 
     def test_call1(self):
         response = self.url_open("/demo/one")
@@ -35,6 +36,8 @@ class EndpointHttpCase(HttpCase):
         self.authenticate("admin", "admin")
         endpoint = self.env.ref("endpoint.endpoint_demo_1")
         endpoint.route += "/new"
+        # force sync
+        endpoint._handle_registry_sync()
         response = self.url_open("/demo/one")
         self.assertEqual(response.status_code, 404)
         response = self.url_open("/demo/one/new")
