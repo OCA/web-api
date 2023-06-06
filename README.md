@@ -17,7 +17,11 @@ Collect Odoo modules that help exposing web APIs and/or deal with external web A
 
 [//]: # (addons)
 
-This part will be replaced when running the oca-gen-addons-table script from OCA/maintainer-tools.
+Available addons
+----------------
+addon | version | maintainers | summary
+--- | --- | --- | ---
+[endpoint_route_handler](endpoint_route_handler/) | 16.0.1.0.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide mixin and tool to generate custom endpoints on the fly.
 
 [//]: # (end addons)
 
