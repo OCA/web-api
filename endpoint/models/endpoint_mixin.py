@@ -7,6 +7,7 @@ import textwrap
 import werkzeug
 
 from odoo import _, api, exceptions, fields, http, models
+from odoo.exceptions import UserError
 from odoo.tools import safe_eval
 
 from odoo.addons.rpc_helper.decorator import disable_rpc
@@ -48,7 +49,7 @@ class EndpointMixin(models.AbstractModel):
 
     def _validate_exec__code(self):
         if not self._code_snippet_valued():
-            raise exceptions.UserError(
+            raise UserError(
                 _("Exec mode is set to `Code`: you must provide a piece of code")
             )
 
@@ -56,9 +57,7 @@ class EndpointMixin(models.AbstractModel):
     def _check_auth(self):
         for rec in self:
             if rec.auth_type == "public" and not rec.exec_as_user_id:
-                raise exceptions.UserError(
-                    _("'Exec as user' is mandatory for public endpoints.")
-                )
+                raise UserError(_("'Exec as user' is mandatory for public endpoints."))
 
     def _default_code_snippet_docs(self):
         return """
@@ -153,10 +152,10 @@ class EndpointMixin(models.AbstractModel):
     def _get_handler(self):
         try:
             return getattr(self, "_handle_exec__" + self.exec_mode)
-        except AttributeError:
-            raise exceptions.UserError(
+        except AttributeError as e:
+            raise UserError(
                 _("Missing handler for exec mode %s") % self.exec_mode
-            )
+            ) from e
 
     def _handle_request(self, request):
         # Switch user for the whole process
