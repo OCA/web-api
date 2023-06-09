@@ -4,8 +4,8 @@
 
 import json
 import textwrap
+from unittest import mock
 
-import mock
 import psycopg2
 import werkzeug
 
@@ -18,8 +18,9 @@ from .common import CommonEndpoint
 class TestEndpoint(CommonEndpoint):
     @classmethod
     def _setup_records(cls):
-        super()._setup_records()
+        res = super()._setup_records()
         cls.endpoint = cls.env.ref("endpoint.endpoint_demo_1")
+        return res
 
     @mute_logger("odoo.sql_db")
     def test_endpoint_unique(self):

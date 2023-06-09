@@ -6,12 +6,12 @@ import json
 import os
 from unittest import skipIf
 
-from odoo.tests.common import HttpSavepointCase
+from odoo.tests.common import HttpCase
 from odoo.tools.misc import mute_logger
 
 
-@skipIf(os.getenv("SKIP_HTTP_CASE"), "EndpointHttpCase skipped")
-class EndpointHttpCase(HttpSavepointCase):
+@skipIf(os.getenv("SKIP_HTTP_CASE"), "HttpCase skipped")
+class EndpointHttpCase(HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

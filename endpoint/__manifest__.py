@@ -4,7 +4,7 @@
 {
     "name": "Endpoint",
     "summary": """Provide custom endpoint machinery.""",
-    "version": "14.0.2.0.2",
+    "version": "16.0.1.0.0",
     "license": "LGPL-3",
     "development_status": "Beta",
     "author": "Camptocamp,Odoo Community Association (OCA)",
@@ -12,11 +12,11 @@
     "website": "https://github.com/OCA/web-api",
     "depends": ["endpoint_route_handler", "rpc_helper"],
     "data": [
+        "data/server_action.xml",
         "security/ir.model.access.csv",
         "views/endpoint_view.xml",
     ],
     "demo": [
         "demo/endpoint_demo.xml",
     ],
-    "post_init_hook": "post_init_hook",
 }
