@@ -24,6 +24,7 @@
                         <field name="protocol" />
                         <field name="url" />
                         <field name="content_type" />
+                        <field name="save_response" />
                     </group>
                     <group name="auth">
                         <field name="auth_type" />
