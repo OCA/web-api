@@ -17,7 +17,7 @@ class BaseRestRequestsAdapter(Component):
             {"auth": self._get_auth(**kwargs), "headers": self._get_headers(**kwargs)}
         )
         request = requests.request(
-            method, self.collection.url.format(**kwargs), **new_kwargs
+            method, self.collection.url.format(**kwargs), **new_kwargs, timeout=None
         )
         request.raise_for_status()
         return request.content
