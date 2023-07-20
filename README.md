@@ -21,7 +21,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[endpoint_route_handler](endpoint_route_handler/) | 16.0.1.0.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide mixin and tool to generate custom endpoints on the fly.
+[endpoint_route_handler](endpoint_route_handler/) | 16.0.1.1.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide mixin and tool to generate custom endpoints on the fly.
 
 [//]: # (end addons)
 
