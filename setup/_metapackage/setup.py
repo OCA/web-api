@@ -8,6 +8,7 @@ setuptools.setup(
     description="Meta package for oca-web-api Odoo addons",
     version=version,
     install_requires=[
+        'odoo-addon-endpoint>=16.0dev,<16.1dev',
         'odoo-addon-endpoint_route_handler>=16.0dev,<16.1dev',
         'odoo-addon-webservice>=16.0dev,<16.1dev',
     ],
