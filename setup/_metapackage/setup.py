@@ -9,6 +9,7 @@ setuptools.setup(
     version=version,
     install_requires=[
         'odoo-addon-endpoint_route_handler>=16.0dev,<16.1dev',
+        'odoo-addon-webservice>=16.0dev,<16.1dev',
     ],
     classifiers=[
         'Programming Language :: Python',
