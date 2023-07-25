@@ -15,6 +15,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 
 #. module: endpoint
+#. odoo-python
 #: code:addons/endpoint/models/endpoint_mixin.py:0
 #, python-format
 msgid "'Exec as user' is mandatory for public endpoints."
@@ -88,7 +89,6 @@ msgstr ""
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__display_name
-#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -127,6 +127,7 @@ msgid "Exec Mode"
 msgstr ""
 
 #. module: endpoint
+#. odoo-python
 #: code:addons/endpoint/models/endpoint_mixin.py:0
 #, python-format
 msgid "Exec mode is set to `Code`: you must provide a piece of code"
@@ -134,7 +135,6 @@ msgstr ""
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__id
-#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__id
 msgid "ID"
 msgstr ""
 
@@ -146,7 +146,6 @@ msgstr ""
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint____last_update
-#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin____last_update
 msgid "Last Modified on"
 msgstr ""
 
@@ -166,6 +165,7 @@ msgid "Main"
 msgstr ""
 
 #. module: endpoint
+#. odoo-python
 #: code:addons/endpoint/models/endpoint_mixin.py:0
 #, python-format
 msgid "Missing handler for exec mode %s"
@@ -259,6 +259,7 @@ msgid "Use this to classify routes together"
 msgstr ""
 
 #. module: endpoint
+#. odoo-python
 #: code:addons/endpoint/models/endpoint_mixin.py:0
 #, python-format
 msgid "code_snippet should return a dict into `result` variable."
