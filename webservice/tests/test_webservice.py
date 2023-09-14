@@ -82,7 +82,7 @@ class TestWebService(CommonWebService):
     def test_web_service_get(self):
         responses.add(responses.GET, self.url, body="{}")
         result = self.webservice.call("get")
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
@@ -92,7 +92,7 @@ class TestWebService(CommonWebService):
     def test_web_service_post(self):
         responses.add(responses.POST, self.url, body="{}")
         result = self.webservice.call("post", data="demo_response")
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
         )
@@ -102,7 +102,7 @@ class TestWebService(CommonWebService):
     def test_web_service_put(self):
         responses.add(responses.PUT, self.url, body="{}")
         result = self.webservice.call("put", data="demo_response")
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
         )
@@ -115,7 +115,7 @@ class TestWebService(CommonWebService):
         )
         responses.add(responses.GET, self.url, body="{}")
         result = self.webservice.call("get")
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
@@ -130,7 +130,7 @@ class TestWebService(CommonWebService):
         )
         responses.add(responses.GET, self.url, body="{}")
         result = self.webservice.call("get", auth=("user2", "pass2"))
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
@@ -145,7 +145,7 @@ class TestWebService(CommonWebService):
         )
         responses.add(responses.POST, self.url, body="{}")
         result = self.webservice.call("post")
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
@@ -156,7 +156,7 @@ class TestWebService(CommonWebService):
     def test_web_service_headers(self):
         responses.add(responses.GET, self.url, body="{}")
         result = self.webservice.call("get", headers={"demo_header": "HEADER"})
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
@@ -170,7 +170,7 @@ class TestWebService(CommonWebService):
         result = self.webservice.call(
             "post", url=url, headers={"demo_header": "HEADER"}
         )
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
@@ -185,7 +185,7 @@ class TestWebService(CommonWebService):
             url_params={"endpoint": "custom/path"},
             headers={"demo_header": "HEADER"},
         )
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(len(responses.calls), 2)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"

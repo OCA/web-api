@@ -27,7 +27,7 @@ class BaseRestRequestsAdapter(Component):
         # pylint: disable=E8106
         request = requests.request(method, url, **new_kwargs)
         request.raise_for_status()
-        return request.content
+        return request
 
     def get(self, **kwargs):
         return self._request("get", **kwargs)
