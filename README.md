@@ -24,7 +24,7 @@ addon | version | maintainers | summary
 [endpoint](endpoint/) | 14.0.2.0.2 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide custom endpoint machinery.
 [endpoint_auth_api_key](endpoint_auth_api_key/) | 14.0.1.1.2 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide API key auth for endpoints.
 [endpoint_route_handler](endpoint_route_handler/) | 14.0.2.0.1 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide mixin and tool to generate custom endpoints on the fly.
-[webservice](webservice/) | 14.0.1.4.0 | [![etobella](https://github.com/etobella.png?size=30px)](https://github.com/etobella) [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide unified way to handle external webservices configuration and calls.
+[webservice](webservice/) | 14.0.1.5.0 | [![etobella](https://github.com/etobella.png?size=30px)](https://github.com/etobella) [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide unified way to handle external webservices configuration and calls.
 
 [//]: # (end addons)
 
