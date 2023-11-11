@@ -67,7 +67,7 @@ class IrHttp(models.AbstractModel):
                 )
                 # routing map just initialized, store last update for this env
                 cls._endpoint_route_last_version = last_version
-            elif cls._endpoint_route_last_version < last_version:
+            elif cls._endpoint_route_last_version <= last_version:
                 _logger.info("Endpoint registry updated, reset routing map")
                 cls._routing_map = {}
                 cls._rewrite_len = {}
