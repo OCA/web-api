@@ -6,125 +6,127 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2023-11-27 12:33+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: endpoint
 #. odoo-python
 #: code:addons/endpoint/models/endpoint_mixin.py:0
 #, python-format
 msgid "'Exec as user' is mandatory for public endpoints."
-msgstr ""
+msgstr "'Esegui come utente' è obbligatorio per gli endpoint pubblici."
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__active
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__active
 msgid "Active"
-msgstr ""
+msgstr "Attivo"
 
 #. module: endpoint
 #: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_search_view
 msgid "All"
-msgstr ""
+msgstr "Tutti"
 
 #. module: endpoint
 #: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
 #: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_search_view
 msgid "Archived"
-msgstr ""
+msgstr "In archivio"
 
 #. module: endpoint
 #: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
 msgid "Auth"
-msgstr ""
+msgstr "Autrizzazione"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__auth_type
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__auth_type
 msgid "Auth Type"
-msgstr ""
+msgstr "Tipo autorizzazione"
 
 #. module: endpoint
 #: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
 msgid "Code"
-msgstr ""
+msgstr "Codice"
 
 #. module: endpoint
 #: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
 msgid "Code Help"
-msgstr ""
+msgstr "Aiuto codice"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__code_snippet
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__code_snippet
 msgid "Code Snippet"
-msgstr ""
+msgstr "Esempio codice"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__code_snippet_docs
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__code_snippet_docs
 msgid "Code Snippet Docs"
-msgstr ""
+msgstr "Documenti esempio codice"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creato da"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creato il"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__csrf
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__csrf
 msgid "Csrf"
-msgstr ""
+msgstr "CSRF"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nome visualizzato"
 
 #. module: endpoint
 #: model:ir.model,name:endpoint.model_endpoint_endpoint
 msgid "Endpoint"
-msgstr ""
+msgstr "Endpoint"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__endpoint_hash
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__endpoint_hash
 msgid "Endpoint Hash"
-msgstr ""
+msgstr "Hash endpoint"
 
 #. module: endpoint
 #: model:ir.model,name:endpoint.model_endpoint_mixin
 msgid "Endpoint mixin"
-msgstr ""
+msgstr "Mixin endpoint"
 
 #. module: endpoint
 #: model:ir.actions.act_window,name:endpoint.endpoint_endpoint_act_window
 #: model:ir.ui.menu,name:endpoint.endpoint_endpoint_menu
 msgid "Endpoints"
-msgstr ""
+msgstr "Endpoint"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__exec_as_user_id
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__exec_as_user_id
 msgid "Exec As User"
-msgstr ""
+msgstr "Esegui come utente"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__exec_mode
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__exec_mode
 msgid "Exec Mode"
-msgstr ""
+msgstr "Modo esecuzione"
 
 #. module: endpoint
 #. odoo-python
@@ -132,50 +134,51 @@ msgstr ""
 #, python-format
 msgid "Exec mode is set to `Code`: you must provide a piece of code"
 msgstr ""
+"Im modo di esecuzione è impostato a `Codice`: bisogna fornire del codice"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: endpoint
 #: model:ir.model.fields,help:endpoint.field_endpoint_endpoint__endpoint_hash
 #: model:ir.model.fields,help:endpoint.field_endpoint_mixin__endpoint_hash
 msgid "Identify the route with its main params"
-msgstr ""
+msgstr "Identifica la rotta con questi parametri principali"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Ultima modifica il"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Ultimo aggiornamento di"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Ultimo aggiornamento il"
 
 #. module: endpoint
 #: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
 msgid "Main"
-msgstr ""
+msgstr "Principale"
 
 #. module: endpoint
 #. odoo-python
 #: code:addons/endpoint/models/endpoint_mixin.py:0
 #, python-format
 msgid "Missing handler for exec mode %s"
-msgstr ""
+msgstr "Gestore non disponibile per il modo esecuzione %s"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__name
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__name
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #. module: endpoint
 #: model:ir.model.fields,help:endpoint.field_endpoint_endpoint__registry_sync
@@ -186,12 +189,17 @@ msgid ""
 "\n"
 "OFF: record in line with the registry, nothing to do."
 msgstr ""
+"Acceso: il record è stato modificato e il registro non è stato notificato.\n"
+"Nessuna modifica sarà attiva finchè questa opzione è impostata a falso "
+"attraverso un'azione opportuna.\n"
+"\n"
+"Spento: record allineato con il registro, non c'è niente da fare."
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__registry_sync
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__registry_sync
 msgid "Registry Sync"
-msgstr ""
+msgstr "Sincro registro"
 
 #. module: endpoint
 #: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
@@ -199,51 +207,53 @@ msgid ""
 "Registry out of sync. Likely the record has been modified but not sync'ed "
 "with the routing registry."
 msgstr ""
+"Registro fuori sinc. Probabilmente il record è stato modificto ma non "
+"sincronizzato con il registro di instradamento."
 
 #. module: endpoint
 #: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
 msgid "Request"
-msgstr ""
+msgstr "Richiesta"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__request_content_type
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__request_content_type
 msgid "Request Content Type"
-msgstr ""
+msgstr "Tipo contenuto richiesta"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__request_method
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__request_method
 msgid "Request Method"
-msgstr ""
+msgstr "Metodo richiesta"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__route
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__route
 msgid "Route"
-msgstr ""
+msgstr "Percorso"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__route_group
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__route_group
 msgid "Route Group"
-msgstr ""
+msgstr "Gruppo percorso"
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__route_type
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__route_type
 msgid "Route Type"
-msgstr ""
+msgstr "Tipo percorso"
 
 #. module: endpoint
 #: model:ir.actions.server,name:endpoint.server_action_registry_sync
 msgid "Sync registry"
-msgstr ""
+msgstr "Sincronizza registro"
 
 #. module: endpoint
 #: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_search_view
 msgid "To sync"
-msgstr ""
+msgstr "Sa sincronizzare"
 
 #. module: endpoint
 #: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
@@ -251,16 +261,18 @@ msgid ""
 "Use the action \"Sync registry\" to make changes effective once you are done"
 " with edits and creates."
 msgstr ""
+"Utilizzare l'azione \"Sincronizza registro\" per rendere effettive le "
+"modifiche una volta completate le modifiche e le creazioni."
 
 #. module: endpoint
 #: model:ir.model.fields,help:endpoint.field_endpoint_endpoint__route_group
 #: model:ir.model.fields,help:endpoint.field_endpoint_mixin__route_group
 msgid "Use this to classify routes together"
-msgstr ""
+msgstr "Utilizzarlo per classificare i percorsi insieme"
 
 #. module: endpoint
 #. odoo-python
 #: code:addons/endpoint/models/endpoint_mixin.py:0
 #, python-format
 msgid "code_snippet should return a dict into `result` variable."
-msgstr ""
+msgstr "code_snippet deve restituire un dizIonaro nella variabile `result`."
