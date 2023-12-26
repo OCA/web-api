@@ -18,6 +18,7 @@ class TestEndpoint(CommonEndpoint):
         cls.key_group = cls.env.ref("endpoint_auth_api_key.auth_api_key_group_demo")
         cls.api_key = cls.env.ref("endpoint_auth_api_key.auth_api_key_demo")
         cls.api_key2 = cls.env.ref("endpoint_auth_api_key.auth_api_key_demo2")
+        return
 
     @mute_logger("endpoint.endpoint")
     def test_endpoint_validate_request_no_key(self):

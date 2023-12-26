@@ -23,6 +23,7 @@ class EndpointMixin(models.AbstractModel):
         super()._validate_request(request)
         if self.auth_type == "api_key":
             self._validate_api_key(request)
+        return
 
     def _validate_api_key(self, request):
         key_id = request.auth_api_key_id

@@ -8,12 +8,12 @@ import unittest
 import requests
 
 from odoo import tools
-from odoo.tests.common import HttpSavepointCase
+from odoo.tests.common import HttpCase
 from odoo.tools.misc import mute_logger
 
 
 @unittest.skipIf(os.getenv("SKIP_HTTP_CASE"), "EndpoinAuthApikeytHttpCase skipped")
-class EndpoinAuthApikeytHttpCase(HttpSavepointCase):
+class EndpoinAuthApikeytHttpCase(HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -34,7 +34,7 @@ class EndpoinAuthApikeytHttpCase(HttpSavepointCase):
         headers = headers or {}
         if api_key:
             headers.update({"API-KEY": api_key.key})
-        return requests.get(self._make_url(route), headers=headers)
+        return requests.get(self._make_url(route), headers=headers, timeout=60)
 
     @mute_logger("odoo.addons.auth_api_key.models.ir_http")
     def test_call_no_key(self):
