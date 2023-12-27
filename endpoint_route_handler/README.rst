@@ -17,19 +17,19 @@ Endpoint route handler
     :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
     :alt: License: LGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fweb--api-lightgray.png?logo=github
-    :target: https://github.com/OCA/web-api/tree/16.0/endpoint_route_handler
+    :target: https://github.com/OCA/web-api/tree/17.0/endpoint_route_handler
     :alt: OCA/web-api
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/web-api-16-0/web-api-16-0-endpoint_route_handler
+    :target: https://translation.odoo-community.org/projects/web-api-17-0/web-api-17-0-endpoint_route_handler
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/web-api&target_branch=16.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/web-api&target_branch=17.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-Technical module that provides a base handler
-for adding and removing controller routes on the fly.
+Technical module that provides a base handler for adding and removing
+controller routes on the fly.
 
 Can be used as a mixin or as a tool.
 
@@ -42,93 +42,109 @@ Usage
 =====
 
 As a mixin
-~~~~~~~~~~
+----------
 
-Use standard Odoo inheritance::
+Use standard Odoo inheritance:
 
-    class MyModel(models.Model):
-        _name = "my.model"
-        _inherit = "endpoint.route.handler"
+::
 
-Once you have this, each `my.model` record will generate a route.
-You can have a look at the `endpoint` module to see a real life example.
+   class MyModel(models.Model):
+       _name = "my.model"
+       _inherit = "endpoint.route.handler"
 
-The options of the routing rules are defined by the method `_default_endpoint_options`.
-Here's an example from the `endpoint` module::
+Once you have this, each my.model record will generate a route. You can
+have a look at the endpoint module to see a real life example.
 
-    def _default_endpoint_options_handler(self):
-        return {
-            "klass_dotted_path": "odoo.addons.endpoint.controllers.main.EndpointController",
-            "method_name": "auto_endpoint",
-            "default_pargs": (self.route,),
-        }
+The options of the routing rules are defined by the method
+\_default_endpoint_options. Here's an example from the endpoint module:
 
-As you can see, you have to pass the references to the controller class and the method to use
-when the endpoint is called. And you can prepare some default arguments to pass.
-In this case, the route of the current record.
+::
 
+   def _default_endpoint_options_handler(self):
+       return {
+           "klass_dotted_path": "odoo.addons.endpoint.controllers.main.EndpointController",
+           "method_name": "auto_endpoint",
+           "default_pargs": (self.route,),
+       }
+
+As you can see, you have to pass the references to the controller class
+and the method to use when the endpoint is called. And you can prepare
+some default arguments to pass. In this case, the route of the current
+record.
 
 As a tool
-~~~~~~~~~
+---------
 
-Initialize non stored route handlers and generate routes from them.
-For instance::
+Initialize non stored route handlers and generate routes from them. For
+instance:
 
-    route_handler = self.env["endpoint.route.handler.tool"]
-    endpoint_handler = MyController()._my_handler
-    vals = {
-        "name": "My custom route",
-        "route": "/my/custom/route",
-        "request_method": "GET",
-        "auth_type": "public",
-    }
-    new_route = route_handler.new(vals)
-    new_route._register_controller()
+::
 
-You can override options and define - for instance - a different controller method::
+   route_handler = self.env["endpoint.route.handler.tool"]
+   endpoint_handler = MyController()._my_handler
+   vals = {
+       "name": "My custom route",
+       "route": "/my/custom/route",
+       "request_method": "GET",
+       "auth_type": "public",
+   }
+   new_route = route_handler.new(vals)
+   new_route._register_controller()
 
-    options = {
-        "handler": {
-            "klass_dotted_path": "odoo.addons.my_module.controllers.SpecialController",
-            "method_name": "my_special_handler",
-        }
-    }
-    new_route._register_controller(options=options)
+You can override options and define - for instance - a different
+controller method:
 
-Of course, what happens when the endpoint gets called
-depends on the logic defined on the controller method.
+::
 
-In both cases (mixin and tool) when a new route is generated or an existing one is updated,
-the `ir.http.routing_map` (which holds all Odoo controllers) will be updated.
+   options = {
+       "handler": {
+           "klass_dotted_path": "odoo.addons.my_module.controllers.SpecialController",
+           "method_name": "my_special_handler",
+       }
+   }
+   new_route._register_controller(options=options)
 
-You can see a real life example on `shopfloor.app` model.
+Of course, what happens when the endpoint gets called depends on the
+logic defined on the controller method.
+
+In both cases (mixin and tool) when a new route is generated or an
+existing one is updated, the ir.http.routing_map (which holds all Odoo
+controllers) will be updated.
+
+You can see a real life example on shopfloor.app model.
 
 Known issues / Roadmap
 ======================
 
-* add api docs helpers
-* allow multiple HTTP methods on the same endpoint
-* multiple values for route and methods
+-  add api docs helpers
 
-    keep the same in the ui for now, later own we can imagine a multi-value selection or just add text field w/ proper validation and cleanup
+-  allow multiple HTTP methods on the same endpoint
 
-    remove the route field in the table of endpoint_route
+-  multiple values for route and methods
 
-    support a comma separated list of routes
-    maybe support comma separated list of methods
-    use only routing.routes for generating the rule
-    sort and freeze its values to update the endpoint hash
+      keep the same in the ui for now, later own we can imagine a
+      multi-value selection or just add text field w/ proper validation
+      and cleanup
 
-    catch dup route exception on the sync to detect duplicated routes
-    and use the endpoint_hash to retrieve the real record
-    (note: we could store more info in the routing information which will stay in the map)
+      remove the route field in the table of endpoint_route
 
-    for customizing the rule behavior the endpoint the hook is to override the registry lookup
+      support a comma separated list of routes maybe support comma
+      separated list of methods use only routing.routes for generating
+      the rule sort and freeze its values to update the endpoint hash
 
-    make EndpointRule class overridable on the registry
+      catch dup route exception on the sync to detect duplicated routes
+      and use the endpoint_hash to retrieve the real record (note: we
+      could store more info in the routing information which will stay
+      in the map)
 
-NOTE in v16 we won't care anymore about odoo controller
-so the lookup of the controller can be simplified to a basic py obj that holds the routing info.
+      for customizing the rule behavior the endpoint the hook is to
+      override the registry lookup
+
+      make EndpointRule class overridable on the registry
+
+NOTE in v16 we won't care anymore about odoo controller so the lookup of
+the controller can be simplified to a basic py obj that holds the
+routing info.
 
 Bug Tracker
 ===========
@@ -136,7 +152,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/web-api/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/web-api/issues/new?body=module:%20endpoint_route_handler%0Aversion:%2016.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/web-api/issues/new?body=module:%20endpoint_route_handler%0Aversion:%2017.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -144,17 +160,17 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * Camptocamp
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* Simone Orsi <simone.orsi@camptocamp.com>
+-  Simone Orsi <simone.orsi@camptocamp.com>
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
 This module is maintained by the OCA.
 
@@ -174,6 +190,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-simahawk| 
 
-This module is part of the `OCA/web-api <https://github.com/OCA/web-api/tree/16.0/endpoint_route_handler>`_ project on GitHub.
+This module is part of the `OCA/web-api <https://github.com/OCA/web-api/tree/17.0/endpoint_route_handler>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

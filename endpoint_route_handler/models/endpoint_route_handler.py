@@ -12,7 +12,6 @@ ENDPOINT_ROUTE_CONSUMER_MODELS = {
 
 
 class EndpointRouteHandler(models.AbstractModel):
-
     _name = "endpoint.route.handler"
     _inherit = "endpoint.route.sync.mixin"
     _description = "Endpoint Route handler"
@@ -196,7 +195,7 @@ class EndpointRouteHandler(models.AbstractModel):
         return tuple([rec._endpoint_registry_unique_key() for rec in self])
 
     def _endpoint_registry_unique_key(self):
-        return "{0._name}:{0.id}".format(self)
+        return f"{self._name}:{self.id}"
 
     # TODO: consider if useful or not for single records
     def _register_single_controller(self, options=None, key=None, init=False):
@@ -218,7 +217,7 @@ class EndpointRouteHandler(models.AbstractModel):
             options,
             routing,
             endpoint_hash,
-            route_group=self.route_group
+            route_group=self.route_group,
             # fmt: on
         )
 

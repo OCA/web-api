@@ -30,11 +30,11 @@ def query_multi_update(cr, table_name, rows, cols):
     :param `cols`: list of keys representing columns' names
     """
     # eg: key=c.key, route=c.route
-    keys = sql.SQL(",").join([sql.SQL("{0}=c.{0}".format(col)) for col in cols])
+    keys = sql.SQL(",").join([sql.SQL(f"{col}=c.{col}") for col in cols])
     col_names = sql.SQL(",").join([sql.Identifier(col) for col in cols])
     template = (
         sql.SQL("(")
-        + sql.SQL(",").join([sql.SQL("%({})s".format(col)) for col in cols])
+        + sql.SQL(",").join([sql.SQL(f"%({col})s") for col in cols])
         + sql.SQL(")")
     )
     query = sql.SQL(
