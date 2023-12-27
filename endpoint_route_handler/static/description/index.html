@@ -369,9 +369,9 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:297624cb3e41c272a265b40fe8f8a3b7fe0ddc991fd286937800f2ea5bd1728c
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/lgpl-3.0-standalone.html"><img alt="License: LGPL-3" src="https://img.shields.io/badge/licence-LGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/web-api/tree/16.0/endpoint_route_handler"><img alt="OCA/web-api" src="https://img.shields.io/badge/github-OCA%2Fweb--api-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/web-api-16-0/web-api-16-0-endpoint_route_handler"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/web-api&amp;target_branch=16.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
-<p>Technical module that provides a base handler
-for adding and removing controller routes on the fly.</p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/lgpl-3.0-standalone.html"><img alt="License: LGPL-3" src="https://img.shields.io/badge/licence-LGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/web-api/tree/17.0/endpoint_route_handler"><img alt="OCA/web-api" src="https://img.shields.io/badge/github-OCA%2Fweb--api-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/web-api-17-0/web-api-17-0-endpoint_route_handler"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/web-api&amp;target_branch=17.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
+<p>Technical module that provides a base handler for adding and removing
+controller routes on the fly.</p>
 <p>Can be used as a mixin or as a tool.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
@@ -401,10 +401,10 @@ class MyModel(models.Model):
     _name = &quot;my.model&quot;
     _inherit = &quot;endpoint.route.handler&quot;
 </pre>
-<p>Once you have this, each <cite>my.model</cite> record will generate a route.
-You can have a look at the <cite>endpoint</cite> module to see a real life example.</p>
-<p>The options of the routing rules are defined by the method <cite>_default_endpoint_options</cite>.
-Here’s an example from the <cite>endpoint</cite> module:</p>
+<p>Once you have this, each my.model record will generate a route. You can
+have a look at the endpoint module to see a real life example.</p>
+<p>The options of the routing rules are defined by the method
+_default_endpoint_options. Here’s an example from the endpoint module:</p>
 <pre class="literal-block">
 def _default_endpoint_options_handler(self):
     return {
@@ -413,14 +413,15 @@ def _default_endpoint_options_handler(self):
         &quot;default_pargs&quot;: (self.route,),
     }
 </pre>
-<p>As you can see, you have to pass the references to the controller class and the method to use
-when the endpoint is called. And you can prepare some default arguments to pass.
-In this case, the route of the current record.</p>
+<p>As you can see, you have to pass the references to the controller class
+and the method to use when the endpoint is called. And you can prepare
+some default arguments to pass. In this case, the route of the current
+record.</p>
 </div>
 <div class="section" id="as-a-tool">
 <h2><a class="toc-backref" href="#toc-entry-3">As a tool</a></h2>
-<p>Initialize non stored route handlers and generate routes from them.
-For instance:</p>
+<p>Initialize non stored route handlers and generate routes from them. For
+instance:</p>
 <pre class="literal-block">
 route_handler = self.env[&quot;endpoint.route.handler.tool&quot;]
 endpoint_handler = MyController()._my_handler
@@ -433,7 +434,8 @@ vals = {
 new_route = route_handler.new(vals)
 new_route._register_controller()
 </pre>
-<p>You can override options and define - for instance - a different controller method:</p>
+<p>You can override options and define - for instance - a different
+controller method:</p>
 <pre class="literal-block">
 options = {
     &quot;handler&quot;: {
@@ -443,11 +445,12 @@ options = {
 }
 new_route._register_controller(options=options)
 </pre>
-<p>Of course, what happens when the endpoint gets called
-depends on the logic defined on the controller method.</p>
-<p>In both cases (mixin and tool) when a new route is generated or an existing one is updated,
-the <cite>ir.http.routing_map</cite> (which holds all Odoo controllers) will be updated.</p>
-<p>You can see a real life example on <cite>shopfloor.app</cite> model.</p>
+<p>Of course, what happens when the endpoint gets called depends on the
+logic defined on the controller method.</p>
+<p>In both cases (mixin and tool) when a new route is generated or an
+existing one is updated, the ir.http.routing_map (which holds all Odoo
+controllers) will be updated.</p>
+<p>You can see a real life example on shopfloor.app model.</p>
 </div>
 </div>
 <div class="section" id="known-issues-roadmap">
@@ -459,29 +462,33 @@ the <cite>ir.http.routing_map</cite> (which holds all Odoo controllers) will be 
 </li>
 <li><p class="first">multiple values for route and methods</p>
 <blockquote>
-<p>keep the same in the ui for now, later own we can imagine a multi-value selection or just add text field w/ proper validation and cleanup</p>
+<p>keep the same in the ui for now, later own we can imagine a
+multi-value selection or just add text field w/ proper validation
+and cleanup</p>
 <p>remove the route field in the table of endpoint_route</p>
-<p>support a comma separated list of routes
-maybe support comma separated list of methods
-use only routing.routes for generating the rule
-sort and freeze its values to update the endpoint hash</p>
+<p>support a comma separated list of routes maybe support comma
+separated list of methods use only routing.routes for generating
+the rule sort and freeze its values to update the endpoint hash</p>
 <p>catch dup route exception on the sync to detect duplicated routes
-and use the endpoint_hash to retrieve the real record
-(note: we could store more info in the routing information which will stay in the map)</p>
-<p>for customizing the rule behavior the endpoint the hook is to override the registry lookup</p>
+and use the endpoint_hash to retrieve the real record (note: we
+could store more info in the routing information which will stay
+in the map)</p>
+<p>for customizing the rule behavior the endpoint the hook is to
+override the registry lookup</p>
 <p>make EndpointRule class overridable on the registry</p>
 </blockquote>
 </li>
 </ul>
-<p>NOTE in v16 we won’t care anymore about odoo controller
-so the lookup of the controller can be simplified to a basic py obj that holds the routing info.</p>
+<p>NOTE in v16 we won’t care anymore about odoo controller so the lookup of
+the controller can be simplified to a basic py obj that holds the
+routing info.</p>
 </div>
 <div class="section" id="bug-tracker">
 <h1><a class="toc-backref" href="#toc-entry-5">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/web-api/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-<a class="reference external" href="https://github.com/OCA/web-api/issues/new?body=module:%20endpoint_route_handler%0Aversion:%2016.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
+<a class="reference external" href="https://github.com/OCA/web-api/issues/new?body=module:%20endpoint_route_handler%0Aversion:%2017.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
@@ -507,7 +514,7 @@ mission is to support the collaborative development of Odoo features and
 promote its widespread use.</p>
 <p>Current <a class="reference external" href="https://odoo-community.org/page/maintainer-role">maintainer</a>:</p>
 <p><a class="reference external image-reference" href="https://github.com/simahawk"><img alt="simahawk" src="https://github.com/simahawk.png?size=40px" /></a></p>
-<p>This module is part of the <a class="reference external" href="https://github.com/OCA/web-api/tree/16.0/endpoint_route_handler">OCA/web-api</a> project on GitHub.</p>
+<p>This module is part of the <a class="reference external" href="https://github.com/OCA/web-api/tree/17.0/endpoint_route_handler">OCA/web-api</a> project on GitHub.</p>
 <p>You are welcome to contribute. To learn how please visit <a class="reference external" href="https://odoo-community.org/page/Contribute">https://odoo-community.org/page/Contribute</a>.</p>
 </div>
 </div>
