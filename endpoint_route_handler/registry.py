@@ -343,7 +343,7 @@ class EndpointRule:
     def to_row(self):
         row = self.to_dict()
         for k, v in row.items():
-            if isinstance(v, (dict, list)):
+            if isinstance(v, (dict | list)):
                 row[k] = json.dumps(v)
         return row
 
