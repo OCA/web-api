@@ -140,7 +140,7 @@ class EndpointRouteHandler(models.AbstractModel):
             {fname: rec[fname] for fname in self._routing_impacting_fields()}
             for rec in self
         ]
-        for rec, vals in zip(self, values):
+        for rec, vals in zip(self, values, strict=True):
             vals.pop("id", None)
             rec.endpoint_hash = hash(tuple(vals.values()))
 
@@ -202,6 +202,7 @@ class EndpointRouteHandler(models.AbstractModel):
         """Shortcut to register one single controller."""
         rule = self._make_controller_rule(options=options, key=key)
         self._endpoint_registry.update_rules([rule], init=init)
+        self.env.registry.clear_cache("routing")
         self._logger.debug(
             "Registered controller %s (auth: %s)", self.route, self.auth_type
         )

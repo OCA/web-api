@@ -191,7 +191,7 @@ class TestRegistry(TransactionCase):
         }
         rule = self._make_rules(stop=2, options=options)[0]
         with self.assertRaises(EndpointHandlerNotFound):
-            rule.endpoint  # pylint: disable=pointless-statement
+            rule.endpoint  # pylint: disable=pointless-statement # noqa: B018
 
     def test_endpoint_lookup_ok(self):
         rule = self._make_rules(stop=2)[0]

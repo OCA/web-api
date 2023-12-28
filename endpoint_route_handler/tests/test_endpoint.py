@@ -38,7 +38,6 @@ def make_new_route(env, **kw):
 
 class TestEndpoint(CommonEndpoint):
     def tearDown(self):
-        self.env["ir.http"]._clear_routing_map()
         EndpointRegistry.wipe_registry_for(self.env.cr)
         super().tearDown()
 
@@ -70,7 +69,6 @@ class TestEndpoint(CommonEndpoint):
         new_route.route += "/new"
         with self._get_mocked_request():
             new_route._register_single_controller(options=options, init=True)
-            rmap = self.env["ir.http"]._clear_routing_map()
             rmap = self.env["ir.http"].routing_map()
             self.assertNotIn("/my/test/route", [x.rule for x in rmap._rules])
             self.assertIn("/my/test/route/new", [x.rule for x in rmap._rules])
@@ -95,7 +93,6 @@ class TestEndpoint(CommonEndpoint):
         new_route.route += "/new"
         with self._get_mocked_request():
             new_route._register_controllers(options=options, init=True)
-            rmap = self.env["ir.http"]._clear_routing_map()
             rmap = self.env["ir.http"].routing_map()
             self.assertNotIn("/my/test/route", [x.rule for x in rmap._rules])
             self.assertIn("/my/test/route/new", [x.rule for x in rmap._rules])
@@ -121,7 +118,6 @@ class TestEndpoint(CommonEndpoint):
 class TestEndpointCrossEnv(CommonEndpoint):
     def setUp(self):
         super().setUp()
-        self.env["ir.http"]._clear_routing_map()
         EndpointRegistry.wipe_registry_for(self.env.cr)
 
     @mute_logger("odoo.addons.base.models.ir_http", "odoo.modules.registry")
@@ -147,10 +143,10 @@ class TestEndpointCrossEnv(CommonEndpoint):
                 env1["ir.http"].routing_map()
                 env2["ir.http"].routing_map()
                 self.assertEqual(
-                    env1["ir.http"]._endpoint_route_last_version, last_version0
+                    env1["ir.http"]._endpoint_route_last_version(), last_version0
                 )
                 self.assertEqual(
-                    env2["ir.http"]._endpoint_route_last_version, last_version0
+                    env2["ir.http"]._endpoint_route_last_version(), last_version0
                 )
                 rmap = self.env["ir.http"].routing_map()
                 self.assertIn(route, [x.rule for x in rmap._rules])
@@ -167,10 +163,10 @@ class TestEndpointCrossEnv(CommonEndpoint):
                 rmap = env2["ir.http"].routing_map()
                 self.assertIn(route, [x.rule for x in rmap._rules])
                 self.assertTrue(
-                    env1["ir.http"]._endpoint_route_last_version > last_version0
+                    env1["ir.http"]._endpoint_route_last_version() > last_version0
                 )
                 self.assertTrue(
-                    env2["ir.http"]._endpoint_route_last_version > last_version0
+                    env2["ir.http"]._endpoint_route_last_version() > last_version0
                 )
 
     # TODO: test unregister
