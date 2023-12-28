@@ -89,6 +89,7 @@ class EndpointRouteSyncMixin(models.AbstractModel):
             return
         rules = self._prepare_endpoint_rules(options=options)
         self._endpoint_registry.update_rules(rules, init=init)
+        self.env.registry.clear_cache("routing")
         _logger.debug(
             "%s registered controllers: %s",
             self._name,
@@ -99,6 +100,7 @@ class EndpointRouteSyncMixin(models.AbstractModel):
         if not self:
             return
         self._endpoint_registry.drop_rules(self._registered_endpoint_rule_keys())
+        self.env.registry.clear_cache("routing")
 
     def _routing_impacting_fields(self, options=None):
         """Return list of fields that have impact on routing for current record."""
