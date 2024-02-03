@@ -88,11 +88,6 @@ msgid "Identify the route with its main params"
 msgstr "Identifica la rotta con questi parametri principali"
 
 #. module: endpoint_route_handler
-#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool____last_update
-msgid "Last Modified on"
-msgstr "Ultima modifica il"
-
-#. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__write_uid
 msgid "Last Updated by"
 msgstr "Ultimo aggiornamento di"
@@ -186,8 +181,6 @@ msgid "Use this to classify routes together"
 msgstr "Utilizzarlo per classificare i percorsi insieme"
 
 #. module: endpoint_route_handler
-#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_endpoint_endpoint_route_unique
-#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_mixin_endpoint_route_unique
 #: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_route_handler_endpoint_route_unique
 #: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_route_handler_tool_endpoint_route_unique
 msgid "You can register an endpoint route only once."
@@ -199,3 +192,6 @@ msgstr "Si può regiStrare un percorso endpoint solo una volta."
 #, python-format
 msgid "`%(name)s` uses a blacklisted routed = `%(route)s`"
 msgstr "`%(name)s` utilizza un percorso bloccato = `%(route)s`"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Ultima modifica il"
