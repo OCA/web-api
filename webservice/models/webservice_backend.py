@@ -7,7 +7,6 @@ from odoo import _, api, exceptions, fields, models
 
 
 class WebserviceBackend(models.Model):
-
     _name = "webservice.backend"
     _inherit = ["collection.base", "server.env.techname.mixin", "server.env.mixin"]
     _description = "WebService Backend"
