@@ -30,33 +30,25 @@
                         <field name="auth_type" />
                         <field
                             name="username"
-                            attrs="{
-                                'invisible': [('auth_type', '!=', 'user_pwd')],
-                                'required': [('auth_type', '=', 'user_pwd')],
-                            }"
+                            invisible="auth_type != 'user_pwd'"
+                            required="auth_type == 'user_pwd'"
                         />
                         <field
                             name="password"
-                            attrs="{
-                                'invisible': [('auth_type', '!=', 'user_pwd')],
-                                'required': [('auth_type', '=', 'user_pwd')],
-                            }"
+                            invisible="auth_type != 'user_pwd'"
+                            required="auth_type == 'user_pwd'"
                             password="True"
                         />
                         <field
                             name="api_key"
-                            attrs="{
-                                'invisible': [('auth_type', '!=', 'api_key')],
-                                'required': [('auth_type', '=', 'api_key')],
-                            }"
+                            invisible="auth_type != 'api_key'"
+                            required="auth_type == 'api_key'"
                             password="True"
                         />
                         <field
                             name="api_key_header"
-                            attrs="{
-                                'invisible': [('auth_type', '!=', 'api_key')],
-                                'required': [('auth_type', '=', 'api_key')],
-                            }"
+                            invisible="auth_type != 'api_key'"
+                            required="auth_type == 'api_key'"
                         />
                     </group>
                 </sheet>
