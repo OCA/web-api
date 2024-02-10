@@ -16,7 +16,7 @@ class TestWebService(CommonWebService):
     @classmethod
     def _setup_records(cls):
         res = super()._setup_records()
-        cls.url = "http://localhost.demo.odoo/"
+        cls.url = "http://demo.localhost.odoo/"
         cls.webservice = cls.env["webservice.backend"].create(
             {
                 "name": "WebService",
