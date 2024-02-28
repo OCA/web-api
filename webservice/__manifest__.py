@@ -15,6 +15,10 @@
     "author": "Creu Blanca, Camptocamp, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/web-api",
     "depends": ["component", "server_environment"],
-    "data": ["security/ir.model.access.csv", "views/webservice_backend.xml"],
+    "external_dependencies": {"python": ["requests-oauthlib"]},
+    "data": [
+        "security/ir.model.access.csv",
+        "views/webservice_backend.xml",
+    ],
     "demo": [],
 }
