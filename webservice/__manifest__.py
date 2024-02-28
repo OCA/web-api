@@ -20,5 +20,6 @@
         "security/ir_rule.xml",
         "views/webservice_backend.xml",
     ],
+    "external_dependencies": {"python": ["requests-oauthlib"]},
     "demo": [],
 }
