@@ -3,9 +3,11 @@
 # @author Simone Orsi <simahawk@gmail.com>
 # @author Alexandre Fayolle <alexandre.fayolle@camptocamp.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-
+import logging
 
 from odoo import _, api, exceptions, fields, models
+
+_logger = logging.getLogger(__name__)
 
 
 class WebserviceBackend(models.Model):
@@ -127,16 +129,20 @@ class WebserviceBackend(models.Model):
         get_param = self.env["ir.config_parameter"].sudo().get_param
         base_url = get_param("web.base.url")
         for rec in self:
-            if rec.auth_type == "oauth2" and rec.oauth2_flow == "authorization_flow":
-                rec.redirect_url = base_url + f"/webservice/{rec.id}/oauth2/redirect"
+            if rec.auth_type == "oauth2" and rec.oauth2_flow == "authorization_code":
+                rec.redirect_url = (
+                    f"https://{base_url}/webservice/{rec.id}/oauth2/redirect"
+                )
             else:
                 rec.redirect_url = False
 
     def button_authorize(self):
-        self._get_adapter().redirect_to_authorize()
+        _logger.info("Button OAuth2 Authorize")
+        authorize_url = self._get_adapter().redirect_to_authorize()
+        _logger.info("Redirecting to %s", authorize_url)
         return {
             "type": "ir.actions.act_url",
-            "url": "authorize_url",
+            "url": authorize_url,
             "target": "self",
         }
 
