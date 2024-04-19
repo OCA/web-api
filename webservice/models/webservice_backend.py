@@ -103,7 +103,10 @@ class WebserviceBackend(models.Model):
         return name in extra_params or super()._valid_field_parameter(field, name)
 
     def call(self, method, *args, **kwargs):
-        return getattr(self._get_adapter(), method)(*args, **kwargs)
+        _logger.debug("backend %s: call %s %s %s", self.name, method, args, kwargs)
+        response = getattr(self._get_adapter(), method)(*args, **kwargs)
+        _logger.debug("backend %s: response: \n%s", self.name, response)
+        return response
 
     def _get_adapter(self):
         with self.work_on(self._name) as work:

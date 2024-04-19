@@ -197,7 +197,6 @@ class WebApplicationOAuth2RestRequestsAdapter(Component):
         with OAuth2Session(
             client=client, redirect_uri=oauth_params.get("redirect_url")
         ) as session:
-            # breakpoint()
             token = session.fetch_token(
                 oauth_params["oauth2_token_url"],
                 client_secret=oauth_params["oauth2_client_secret"],
