@@ -188,7 +188,6 @@ class WebApplicationOAuth2RestRequestsAdapter(Component):
                 "oauth2_client_secret",
                 "oauth2_token_url",
                 "oauth2_audience",
-                # "oauth2_authorization",
                 "redirect_url",
             ]
         )[0]
@@ -229,9 +228,7 @@ class WebApplicationOAuth2RestRequestsAdapter(Component):
         with OAuth2Session(
             client=client,
             redirect_uri=oauth_params.get("redirect_url"),
-            # scope=oauth_params.get("oauth2_scope"),
         ) as session:
-            # breakpoint()
             authorization_url, state = session.authorization_url(
                 backend.oauth2_authorization_url, **authorization_url_extra_params
             )
