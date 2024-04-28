@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 
 class WebserviceBackend(models.Model):
     _name = "webservice.backend"
-    _inherit = ["collection.base", "server.env.techname.mixin", "server.env.mixin"]
+    _inherit = ["collection.base"]
     _description = "WebService Backend"
 
     name = fields.Char(required=True)
@@ -145,33 +145,3 @@ class WebserviceBackend(models.Model):
             "url": authorize_url,
             "target": "self",
         }
-
-    @property
-    def _server_env_fields(self):
-        base_fields = super()._server_env_fields
-        webservice_fields = {
-            "protocol": {},
-            "url": {},
-            "auth_type": {},
-            "username": {},
-            "password": {},
-            "api_key": {},
-            "api_key_header": {},
-            "content_type": {},
-            "oauth2_flow": {},
-            "oauth2_scope": {},
-            "oauth2_clientid": {},
-            "oauth2_client_secret": {},
-            "oauth2_authorization_url": {},
-            "oauth2_token_url": {},
-            "oauth2_audience": {},
-        }
-        webservice_fields.update(base_fields)
-        return webservice_fields
-
-    def _compute_server_env(self):
-        # OVERRIDE: reset ``oauth2_flow`` when ``auth_type`` is not "oauth2", even if
-        # defined otherwise in server env vars
-        res = super()._compute_server_env()
-        self.filtered(lambda r: r.auth_type != "oauth2").oauth2_flow = None
-        return res
