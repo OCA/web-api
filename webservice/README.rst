@@ -61,8 +61,8 @@ Authors
 Contributors
 ------------
 
-- Enric Tobella <etobella@creublanca.es>
-- Alexandre Fayolle <alexandre.fayolle@camptocamp.com>
+-  Enric Tobella <etobella@creublanca.es>
+-  Alexandre Fayolle <alexandre.fayolle@camptocamp.com>
 
 Maintainers
 -----------
