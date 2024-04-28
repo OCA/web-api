@@ -6,15 +6,14 @@
 
 {
     "name": "WebService",
-    "summary": """
-        Defines webservice abstract definition to be used generally""",
+    "summary": "Defines webservice abstract definition to be used generally",
     "version": "16.0.1.2.0",
     "license": "AGPL-3",
     "development_status": "Production/Stable",
     "maintainers": ["etobella"],
     "author": "Creu Blanca, Camptocamp, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/web-api",
-    "depends": ["component", "server_environment"],
+    "depends": ["component"],
     "data": [
         "security/ir.model.access.csv",
         "security/ir_rule.xml",
