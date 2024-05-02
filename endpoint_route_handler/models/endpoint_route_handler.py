@@ -228,7 +228,8 @@ class EndpointRouteHandler(models.AbstractModel):
 
     def _default_endpoint_options_handler(self):
         self._logger.warning(
-            "No specific endpoint handler options defined for: %s, falling back to default",
+            "No specific endpoint handler options defined for: %s, falling back to "
+            "default",
             self._name,
         )
         base_path = "odoo.addons.endpoint_route_handler.controllers.main"
