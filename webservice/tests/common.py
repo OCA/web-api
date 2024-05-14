@@ -2,7 +2,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from contextlib import contextmanager
 from unittest import mock
-from requests import Session, PreparedRequest, Response
+
+from requests import PreparedRequest, Response, Session
 
 from odoo.tests.common import tagged
 
@@ -35,7 +36,7 @@ class CommonWebService(TransactionComponentCase):
 
     @classmethod
     def _request_handler(cls, s: Session, r: PreparedRequest, /, **kw):
-        if r.url.startswith('http://localhost.demo.odoo/'):
+        if r.url.startswith("http://localhost.demo.odoo/"):
             r = Response()
             r.status_code = 200
             return r
