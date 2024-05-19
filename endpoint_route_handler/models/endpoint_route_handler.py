@@ -176,7 +176,8 @@ class EndpointRouteHandler(models.AbstractModel):
         for rec in self:
             if rec.route in self._blacklist_routes:
                 raise exceptions.UserError(
-                    _("`%s` uses a blacklisted routed = `%s`") % (rec.name, rec.route)
+                    _("`%(name)s` uses a blacklisted routed = `%(route)s`")
+                    % {"name": rec.name, "route": rec.route}
                 )
 
     @api.constrains("request_method", "request_content_type")
@@ -191,7 +192,7 @@ class EndpointRouteHandler(models.AbstractModel):
         return [rec._make_controller_rule(options=options) for rec in self]
 
     def _registered_endpoint_rule_keys(self):
-        return tuple([rec._endpoint_registry_unique_key() for rec in self])
+        return tuple(rec._endpoint_registry_unique_key() for rec in self)
 
     def _endpoint_registry_unique_key(self):
         return "{0._name}:{0.id}".format(self)
