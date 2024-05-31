@@ -40,7 +40,6 @@ class WebserviceBackend(models.Model):
         ],
         readonly=False,
         store=True,
-        compute="_compute_oauth2_flow",
     )
     oauth2_clientid = fields.Char(string="Client ID", auth_type="oauth2")
     oauth2_client_secret = fields.Char(string="Client Secret", auth_type="oauth2")
@@ -122,8 +121,10 @@ class WebserviceBackend(models.Model):
             protocol += f"+{self.auth_type}-{self.oauth2_flow}"
         return protocol
 
-    @api.depends("auth_type")
-    def _compute_oauth2_flow(self):
+    @api.onchange("auth_type")
+    def _onchange_oauth2_auth_type(self):
+        # reset the auth2_flow when auth_type is not oaut2
+        # using a compute method interfers with the server environment mixin
         for rec in self:
             if rec.auth_type != "oauth2":
                 rec.oauth2_flow = False
