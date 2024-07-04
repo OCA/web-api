@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="endpoint_endpoint_form_view" model="ir.ui.view">
+        <field name="model">endpoint.endpoint</field>
+        <field name="inherit_id" ref="endpoint.endpoint_endpoint_form_view" />
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page name="export" string="Export">
+                    <group>
+                        <group name="export_base_info">
+                            <field name="exporter_id" />
+                        </group>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+</odoo>
