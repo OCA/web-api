@@ -21,7 +21,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[endpoint](endpoint/) | 14.0.2.0.2 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide custom endpoint machinery.
+[endpoint](endpoint/) | 14.0.2.1.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide custom endpoint machinery.
 [endpoint_auth_api_key](endpoint_auth_api_key/) | 14.0.1.1.2 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide API key auth for endpoints.
 [endpoint_jsonifier](endpoint_jsonifier/) | 14.0.1.0.0 | [![SilvioC2C](https://github.com/SilvioC2C.png?size=30px)](https://github.com/SilvioC2C) [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Allow to configure jsonifier parsers on endpoints
 [endpoint_route_handler](endpoint_route_handler/) | 14.0.2.0.2 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide mixin and tool to generate custom endpoints on the fly.
