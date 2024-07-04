@@ -74,6 +74,12 @@ msgid "Code Snippet Docs"
 msgstr "Documenti esempio codice"
 
 #. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__company_id
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__company_id
+msgid "Company"
+msgstr ""
+
+#. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__create_uid
 msgid "Created by"
 msgstr "Creato da"
@@ -258,8 +264,8 @@ msgstr "Sa sincronizzare"
 #. module: endpoint
 #: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
 msgid ""
-"Use the action \"Sync registry\" to make changes effective once you are done"
-" with edits and creates."
+"Use the action \"Sync registry\" to make changes effective once you are done "
+"with edits and creates."
 msgstr ""
 "Utilizzare l'azione \"Sincronizza registro\" per rendere effettive le "
 "modifiche una volta completate le modifiche e le creazioni."
