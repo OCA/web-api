@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 Camptocamp SA
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+
+    <record model="ir.ui.view" id="endpoint_endpoint_form_view">
+        <field name="model">endpoint.endpoint</field>
+        <field name="inherit_id" ref="endpoint.endpoint_endpoint_form_view" />
+        <field name="arch" type="xml">
+          <notebook>
+            <page string="Cache">
+              <group>
+                <field name="cache_policy" />
+                <button
+                            class="oe_inline"
+                            name="action_view_cache_attachments"
+                            string="View caches"
+                            type="object"
+                        />
+              </group>
+              <hr string="Cache usage example" />
+              <pre>
+# get the name of the cache
+cache_name = endpoint._endpoint_make_cache_name("json")
+# check if the cache exists
+cached = endpoint._endpoint_cache_get(cache_name)
+if cached:
+    result = cached
+else:
+    result = json.dumps(env["my.model"]._get_a_very_expensive_computed_result())
+    # cache does not exist, create it0
+    endpoint._endpoint_cache_store(cache_name, result)
+resp = Response(result, content_type="application/json", status=200)
+result = dict(response=resp)
+              </pre>
+            </page>
+          </notebook>
+        </field>
+    </record>
+
+</odoo>
