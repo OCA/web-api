@@ -10,6 +10,7 @@ setuptools.setup(
     install_requires=[
         'odoo14-addon-endpoint',
         'odoo14-addon-endpoint_auth_api_key',
+        'odoo14-addon-endpoint_cache',
         'odoo14-addon-endpoint_jsonifier',
         'odoo14-addon-endpoint_route_handler',
         'odoo14-addon-webservice',
