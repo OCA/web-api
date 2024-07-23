@@ -3,9 +3,9 @@
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
 <odoo>
 
-    <record model="ir.ui.view" id="endpoint_endpoint_form_view">
+    <record model="ir.ui.view" id="endpoint_mixin_form_view">
         <field name="model">endpoint.endpoint</field>
-        <field name="inherit_id" ref="endpoint.endpoint_endpoint_form_view" />
+        <field name="inherit_id" ref="endpoint.endpoint_mixin_form_view" />
         <field name="arch" type="xml">
             <group name="auth" position="inside">
                 <field
