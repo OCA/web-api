@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: endpoint_cache
-#: model_terms:ir.ui.view,arch_db:endpoint_cache.endpoint_endpoint_form_view
+#: model_terms:ir.ui.view,arch_db:endpoint_cache.endpoint_mixin_form_view
 msgid ""
 "# get the name of the cache\n"
 "cache_name = endpoint._endpoint_make_cache_name(\"json\")\n"
@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 
 #. module: endpoint_cache
-#: model_terms:ir.ui.view,arch_db:endpoint_cache.endpoint_endpoint_form_view
+#: model_terms:ir.ui.view,arch_db:endpoint_cache.endpoint_mixin_form_view
 msgid "Cache"
 msgstr ""
 
@@ -54,7 +54,7 @@ msgid "Cache results"
 msgstr ""
 
 #. module: endpoint_cache
-#: model_terms:ir.ui.view,arch_db:endpoint_cache.endpoint_endpoint_form_view
+#: model_terms:ir.ui.view,arch_db:endpoint_cache.endpoint_mixin_form_view
 msgid "Cache usage example"
 msgstr ""
 
@@ -91,7 +91,7 @@ msgid "Monthly"
 msgstr ""
 
 #. module: endpoint_cache
-#: model_terms:ir.ui.view,arch_db:endpoint_cache.endpoint_endpoint_form_view
+#: model_terms:ir.ui.view,arch_db:endpoint_cache.endpoint_mixin_form_view
 msgid "View caches"
 msgstr ""
 
