@@ -24,7 +24,7 @@ msgid "Endpoint mixin"
 msgstr ""
 
 #. module: endpoint_jsonifier
-#: model_terms:ir.ui.view,arch_db:endpoint_jsonifier.endpoint_endpoint_form_view
+#: model_terms:ir.ui.view,arch_db:endpoint_jsonifier.endpoint_mixin_form_view
 msgid "Export"
 msgstr ""
 
