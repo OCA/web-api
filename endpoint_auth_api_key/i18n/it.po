@@ -28,6 +28,6 @@ msgid "Endpoint mixin"
 msgstr "Mixin endpoint"
 
 #. module: endpoint_auth_api_key
-#: model_terms:ir.ui.view,arch_db:endpoint_auth_api_key.endpoint_endpoint_form_view
+#: model_terms:ir.ui.view,arch_db:endpoint_auth_api_key.endpoint_mixin_form_view
 msgid "Manage groups"
 msgstr "Gestione gruppi"
