@@ -47,7 +47,7 @@ class CommonWebService(TransactionComponentCase):
 def mock_cursor(cr):
     with mock.patch("odoo.sql_db.Connection.cursor") as mocked_cursor_call:
         org_close = cr.close
-        org_autocommit = cr.autocommit
+        org_autocommit = cr._cnx.autocommit
         try:
             cr.close = mock.Mock()
             cr.autocommit = mock.Mock()
