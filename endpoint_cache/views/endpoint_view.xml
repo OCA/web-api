@@ -4,7 +4,7 @@
 <odoo>
 
     <record model="ir.ui.view" id="endpoint_mixin_form_view">
-        <field name="model">endpoint.endpoint</field>
+        <field name="model">endpoint.mixin</field>
         <field name="inherit_id" ref="endpoint.endpoint_mixin_form_view" />
         <field name="arch" type="xml">
           <notebook>
