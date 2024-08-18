@@ -104,7 +104,7 @@ class TestWebService(CommonWebService):
     def test_web_service_get_url_combine_full_url(self):
         endpoint = "api/test"
         result = self.webservice.call("get", url=self.url + endpoint)
-        responses.add(result)
+        responses.add(result.method, result.url)
         self.assertEqual(result, b"{}")
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
