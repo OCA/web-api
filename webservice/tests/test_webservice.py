@@ -16,7 +16,7 @@ class TestWebService(CommonWebService):
     @classmethod
     def _setup_records(cls):
         res = super()._setup_records()
-        cls.url = "http://localhost.demo.odoo/"
+        cls.url = "https://localhost.demo.odoo/"
         cls.webservice = cls.env["webservice.backend"].create(
             {
                 "name": "WebService",
@@ -104,7 +104,7 @@ class TestWebService(CommonWebService):
     def test_web_service_get_url_combine_full_url(self):
         endpoint = "api/test"
         responses.add(responses.GET, self.url + endpoint, body="{}")
-        result = self.webservice.call("get", url="http://localhost.demo.odoo/api/test")
+        result = self.webservice.call("get", url="https://localhost.demo.odoo/api/test")
         self.assertEqual(result, b"{}")
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(

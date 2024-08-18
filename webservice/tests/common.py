@@ -37,10 +37,10 @@ class CommonWebService(TransactionComponentCase):
 
     @classmethod
     def _request_handler(cls, s: Session, r: PreparedRequest, /, **kw):
-        if r.url.startswith("http://localhost.demo.odoo/") or r.url.startswith(
+        if r.url.startswith("https://localhost.demo.odoo/") or r.url.startswith(
             "https://custom.url"
         ):
-            return cls._super_send(s, r, **kw)
+            return cls._super_send(r, **kw)
         return super()._request_handler(s, r, **kw)
 
 
