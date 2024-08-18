@@ -43,7 +43,7 @@ class CommonWebService(TransactionComponentCase):
             response.status_code = 200
             response.request = r
             response._content = b"{}"
-            return r
+            return response
         return super()._request_handler(s, r, **kw)
 
 
