@@ -107,7 +107,9 @@ class TestWebService(CommonWebService):
         responses.add(result)
         self.assertEqual(result, b"{}")
         self.assertEqual(len(responses.calls), 1)
-        self.assertEqual(responses.calls[0].url, "https://localhost.demo.odoo/api/test")
+        self.assertEqual(
+            responses.calls[0].request.url, "https://localhost.demo.odoo/api/test"
+        )
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
         )
