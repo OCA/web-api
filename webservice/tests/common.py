@@ -3,6 +3,8 @@
 from contextlib import contextmanager
 from unittest import mock
 
+from requests import PreparedRequest, Response, Session
+
 from odoo.tests.common import tagged
 
 from odoo.addons.component.tests.common import TransactionComponentCase
@@ -31,6 +33,15 @@ class CommonWebService(TransactionComponentCase):
         super().setUpClass()
         cls._setup_env()
         cls._setup_records()
+
+    @classmethod
+    def _request_handler(cls, s: Session, r: PreparedRequest, /, **kw):
+        if r.url.startswith("http://localhost.demo.odoo/"):
+            r = Response()
+            r.status_code = 200
+            r._content = b"{}"
+            return r
+        return super()._request_handler(s, r, **kw)
 
 
 @contextmanager
