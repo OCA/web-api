@@ -3,7 +3,7 @@
 from contextlib import contextmanager
 from unittest import mock
 
-from requests import PreparedRequest, Response, Session
+from requests import PreparedRequest, Session
 
 from odoo.tests.common import tagged
 
@@ -33,16 +33,14 @@ class CommonWebService(TransactionComponentCase):
         super().setUpClass()
         cls._setup_env()
         cls._setup_records()
+        cls._super_send = Session.send
 
     @classmethod
     def _request_handler(cls, s: Session, r: PreparedRequest, /, **kw):
         if r.url.startswith("http://localhost.demo.odoo/") or r.url.startswith(
             "https://custom.url"
         ):
-            r = Response()
-            r.status_code = 200
-            r._content = b"{}"
-            return r
+            return cls._super_send(s, r, **kw)
         return super()._request_handler(s, r, **kw)
 
 
