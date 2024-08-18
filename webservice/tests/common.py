@@ -40,7 +40,7 @@ class CommonWebService(TransactionComponentCase):
         if r.url.startswith("https://localhost.demo.odoo/") or r.url.startswith(
             "https://custom.url"
         ):
-            return cls._super_send(r, **kw)
+            return cls._super_send(s, r, **kw)
         return super()._request_handler(s, r, **kw)
 
 
