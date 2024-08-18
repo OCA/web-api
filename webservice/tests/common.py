@@ -36,7 +36,9 @@ class CommonWebService(TransactionComponentCase):
 
     @classmethod
     def _request_handler(cls, s: Session, r: PreparedRequest, /, **kw):
-        if r.url.startswith("http://localhost.demo.odoo/"):
+        if r.url.startswith("http://localhost.demo.odoo/") or r.url.startswith(
+            "https://custom.url"
+        ):
             r = Response()
             r.status_code = 200
             r._content = b"{}"
