@@ -9,6 +9,9 @@ from urllib.parse import quote
 import responses
 from oauthlib.oauth2.rfc6749.errors import InvalidGrantError
 
+from odoo.addons.server_environment import server_env
+from odoo.addons.server_environment.models import server_env_mixin
+
 from .common import CommonWebService, mock_cursor
 
 
@@ -213,3 +216,31 @@ class TestWebServiceOauth2WebApplication(CommonWebService):
         adapter = self.webservice._get_adapter()
         token = adapter._fetch_token_from_authorization(code)
         self.assertEqual("cool_token", token["access_token"])
+
+    def test_oauth2_flow_compute(self):
+        # Test with current configuration
+        env = os.environ
+        self.assertIn("auth_type = oauth2\n", env["SERVER_ENV_CONFIG"])
+        self.assertIn("oauth2_flow = web_application\n", env["SERVER_ENV_CONFIG"])
+        server_env_mixin.serv_config = server_env._load_config()  # Reload env vars
+        self.webservice.invalidate_recordset()  # Force recomputation when reading
+        self.assertEqual(self.webservice.oauth2_flow, "web_application")
+
+        # Update configuration: ``auth_type`` is changed to ``none``
+        env["SERVER_ENV_CONFIG"] = env["SERVER_ENV_CONFIG"].replace(
+            "auth_type = oauth2", "auth_type = none"
+        )
+        server_env_mixin.serv_config = server_env._load_config()  # Reload env vars
+        self.webservice.invalidate_recordset()  # Clear cache => read forces compute
+        self.assertFalse(self.webservice.oauth2_flow)
+
+        # Update configuration: ``auth_type`` is reverted to ``oauth2``,
+        # and ``oauth2_flow`` is updated to ``backend_application``
+        env["SERVER_ENV_CONFIG"] = env["SERVER_ENV_CONFIG"].replace(
+            "auth_type = none", "auth_type = oauth2"
+        ).replace(
+            "oauth2_flow = web_application", "oauth2_flow = backend_application"
+        )
+        server_env_mixin.serv_config = server_env._load_config()  # Reload env vars
+        self.webservice.invalidate_recordset()  # Clear cache => read forces compute
+        self.assertEqual(self.webservice.oauth2_flow, "backend_application")
