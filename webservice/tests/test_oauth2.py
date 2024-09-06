@@ -236,10 +236,12 @@ class TestWebServiceOauth2WebApplication(CommonWebService):
 
         # Update configuration: ``auth_type`` is reverted to ``oauth2``,
         # and ``oauth2_flow`` is updated to ``backend_application``
-        env["SERVER_ENV_CONFIG"] = env["SERVER_ENV_CONFIG"].replace(
-            "auth_type = none", "auth_type = oauth2"
-        ).replace(
-            "oauth2_flow = web_application", "oauth2_flow = backend_application"
+        env["SERVER_ENV_CONFIG"] = (
+            env["SERVER_ENV_CONFIG"]
+            .replace("auth_type = none", "auth_type = oauth2")
+            .replace(
+                "oauth2_flow = web_application", "oauth2_flow = backend_application"
+            )
         )
         server_env_mixin.serv_config = server_env._load_config()  # Reload env vars
         self.webservice.invalidate_recordset()  # Clear cache => read forces compute
