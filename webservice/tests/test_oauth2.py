@@ -57,8 +57,8 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
 
     @responses.activate
     def test_fetch_token(self):
+        now = time.time()
         duration = 3600
-        expires_timestamp = time.time() + duration
         responses.add(
             responses.POST,
             f"{self.url}oauth2/token",
@@ -66,83 +66,105 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
                 "access_token": "cool_token",
                 "token_type": "Bearer",
                 "expires_in": duration,
-                "expires_at": expires_timestamp,
+                "expires_at": now + duration,
             },
         )
         responses.add(responses.GET, f"{self.url}endpoint", body="OK")
-
         with mock_cursor(self.env.cr):
             result = self.webservice.call("get", url=f"{self.url}endpoint")
         self.webservice.invalidate_recordset()
-        self.assertTrue("cool_token" in self.webservice.oauth2_token)
-        self.assertEqual(result, b"OK")
+        self.assertEqual(len(responses.calls), 2)
+        call_token = json.loads(responses.calls[0].response.content.decode())
+        webs_token = json.loads(self.webservice.oauth2_token)
+        self.assertEqual(call_token["access_token"], webs_token["access_token"])
+        self.assertEqual(call_token["token_type"], webs_token["token_type"])
+        self.assertEqual(call_token["expires_in"], webs_token["expires_in"])
+        self.assertAlmostEqual(
+            call_token["expires_at"],
+            webs_token["expires_at"],
+            delta=1,  # Accept a diff of 1s
+        )
+        self.assertEqual(responses.calls[1].response.content.decode(), "OK")
+        self.assertEqual(result.decode(), "OK")
 
     @responses.activate
     def test_update_token(self):
+        now = time.time()
         duration = 3600
-        self.webservice.oauth2_token = json.dumps(
-            {
-                "access_token": "old_token",
-                "expires_at": time.time() + 10,  # in the near future
-                "expires_in": duration,
-                "token_type": "Bearer",
-            }
-        )
-        self.webservice.flush_model()
-
-        expires_timestamp = time.time() + duration
         responses.add(
             responses.POST,
             f"{self.url}oauth2/token",
             json={
                 "access_token": "cool_token",
-                "expires_at": expires_timestamp,
+                "expires_at": now + duration,
                 "expires_in": duration,
                 "token_type": "Bearer",
             },
         )
         responses.add(responses.GET, f"{self.url}endpoint", body="OK")
-
-        with mock_cursor(self.env.cr):
-            result = self.webservice.call("get", url=f"{self.url}endpoint")
-            self.env.cr.commit.assert_called_once_with()  # one call with no args
-
-        self.webservice.invalidate_recordset()
-        self.assertTrue("cool_token" in self.webservice.oauth2_token)
-        self.assertEqual(result, b"OK")
-
-    @responses.activate
-    def test_update_token_with_error(self):
-        duration = 3600
         self.webservice.oauth2_token = json.dumps(
             {
                 "access_token": "old_token",
-                "expires_at": time.time() + 10,  # in the near future
+                "expires_at": now + 10,  # in the near future
                 "expires_in": duration,
                 "token_type": "Bearer",
             }
         )
         self.webservice.flush_model()
+        with mock_cursor(self.env.cr):
+            result = self.webservice.call("get", url=f"{self.url}endpoint")
+            self.env.cr.commit.assert_called_once_with()  # one call with no args
+        self.webservice.invalidate_recordset()
+        self.assertEqual(len(responses.calls), 2)
+        call_token = json.loads(responses.calls[0].response.content.decode())
+        webs_token = json.loads(self.webservice.oauth2_token)
+        self.assertEqual(call_token["access_token"], webs_token["access_token"])
+        self.assertEqual(call_token["token_type"], webs_token["token_type"])
+        self.assertEqual(call_token["expires_in"], webs_token["expires_in"])
+        self.assertAlmostEqual(
+            call_token["expires_at"],
+            webs_token["expires_at"],
+            delta=1,  # Accept a diff of 1s
+        )
+        self.assertEqual(responses.calls[1].response.content.decode(), "OK")
+        self.assertEqual(result.decode(), "OK")
 
+    @responses.activate
+    def test_update_token_with_error(self):
+        now = time.time()
+        duration = 3600
         responses.add(
             responses.POST,
             f"{self.url}oauth2/token",
-            json={
-                "error": "invalid_grant",
-                "error_description": "invalid grant",
-            },
+            json={"error": "invalid_grant", "error_description": "invalid grant"},
             status=404,
         )
         responses.add(responses.GET, f"{self.url}endpoint", body="NOK", status=403)
-
+        self.webservice.oauth2_token = json.dumps(
+            {
+                "access_token": "old_token",
+                "expires_at": now + 10,  # in the near future
+                "expires_in": duration,
+                "token_type": "Bearer",
+            }
+        )
+        self.webservice.flush_model()
         with mock_cursor(self.env.cr):
             with self.assertRaises(InvalidGrantError):
                 self.webservice.call("get", url=f"{self.url}endpoint")
             self.env.cr.commit.assert_not_called()
             self.env.cr.close.assert_called_once_with()  # one call with no args
-
         self.webservice.invalidate_recordset()
-        self.assertTrue("old_token" in self.webservice.oauth2_token)
+        self.assertEqual(len(responses.calls), 1)  # ``GET`` is not executed
+        self.assertEqual(responses.calls[0].request.method, "POST")
+        self.assertEqual(
+            json.loads(responses.calls[0].response.content.decode()),
+            {"error": "invalid_grant", "error_description": "invalid grant"},
+        )
+        self.assertEqual(
+            json.loads(self.webservice.oauth2_token)["access_token"],
+            "old_token",
+        )
 
 
 class TestWebServiceOauth2WebApplication(CommonWebService):
@@ -202,8 +224,9 @@ class TestWebServiceOauth2WebApplication(CommonWebService):
 
     @responses.activate
     def test_fetch_token_from_auth(self):
+        now = time.time()
         duration = 3600
-        expires_timestamp = time.time() + duration
+        expires_timestamp = now + duration
         responses.add(
             responses.POST,
             self.webservice.oauth2_token_url,
@@ -214,9 +237,13 @@ class TestWebServiceOauth2WebApplication(CommonWebService):
                 "token_type": "Bearer",
             },
         )
-        code = "some code"
         adapter = self.webservice._get_adapter()
-        token = adapter._fetch_token_from_authorization(code)
+        token = adapter._fetch_token_from_authorization("some code")
+        self.assertEqual(len(responses.calls), 1)
+        self.assertEqual(
+            "cool_token",
+            json.loads(responses.calls[0].response.content.decode())["access_token"],
+        )
         self.assertEqual("cool_token", token["access_token"])
 
     def test_oauth2_flow_compute_with_server_env(self):
