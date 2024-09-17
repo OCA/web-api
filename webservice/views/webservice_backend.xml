@@ -13,7 +13,7 @@
                         type="object"
                         name="button_authorize"
                         string="OAuth Authorize"
-                        attrs="{'invisible': ['|', ('auth_type', '!=', 'oauth2'), ('oauth2_flow', '!=', 'web_application')]}"
+                        invisible="auth_type != 'oauth2' or oauth2_flow != 'web_application'"
                     />
                 </header>
                 <sheet>
@@ -37,65 +37,63 @@
                         <field name="auth_type" />
                         <field
                             name="username"
-                            attrs="{
-                                'invisible': [('auth_type', '!=', 'user_pwd')],
-                                'required': [('auth_type', '=', 'user_pwd')],
-                            }"
+                            invisible="auth_type != 'user_pwd'"
+                            required="auth_type == 'user_pwd'"
                         />
                         <field
                             name="password"
-                            attrs="{
-                                'invisible': [('auth_type', '!=', 'user_pwd')],
-                                'required': [('auth_type', '=', 'user_pwd')],
-                            }"
+                            invisible="auth_type != 'user_pwd'"
+                            required="auth_type == 'user_pwd'"
                             password="True"
                         />
                         <field
                             name="api_key"
-                            attrs="{
-                                'invisible': [('auth_type', '!=', 'api_key')],
-                                'required': [('auth_type', '=', 'api_key')],
-                            }"
+                            invisible="auth_type != 'api_key'"
+                            required="auth_type == 'api_key'"
                             password="True"
                         />
                         <field
                             name="api_key_header"
-                            attrs="{
-                                'invisible': [('auth_type', '!=', 'api_key')],
-                                'required': [('auth_type', '=', 'api_key')],
-                            }"
+                            invisible="auth_type != 'api_key'"
+                            required="auth_type == 'api_key'"
                         />
                         <field
                             name="oauth2_flow"
-                            attrs="{'invisible': [('auth_type', '!=', 'oauth2')], 'required': [('auth_type', '=', 'oauth2')]}"
+                            invisible="auth_type != 'oauth2'"
+                            required="auth_type == 'oauth2'"
                         />
                         <field
                             name="redirect_url"
-                            attrs="{'invisible': [('auth_type', '!=', 'oauth2'), ('oauth2_flow', '!=', 'web_application')]}"
+                            invisible="auth_type != 'oauth2' and oauth2_flow != 'web_application'"
                         />
                         <field
                             name="oauth2_clientid"
-                            attrs="{'invisible': [('auth_type', '!=', 'oauth2')], 'required': [('auth_type', '=', 'oauth2')]}"
+                            invisible="auth_type != 'oauth2'"
+                            required="auth_type == 'oauth2'"
                         />
                         <field
                             name="oauth2_client_secret"
-                            attrs="{'invisible': [('auth_type', '!=', 'oauth2')], 'required': [('auth_type', '=', 'oauth2')]}"
+                            invisible="auth_type != 'oauth2'"
+                            required="auth_type == 'oauth2'"
                         />
                         <field
                             name="oauth2_scope"
-                            attrs="{'invisible': [('auth_type', '!=', 'oauth2'), ('oauth2_flow', '!=', 'web_application')], 'required': [('auth_type', '=', 'oauth2'), ('oauth2_flow', '=', 'authorization_code')]}"
+                            invisible="auth_type != 'oauth2' and oauth2_flow != 'web_application'"
+                            required="auth_type == 'oauth2' and oauth2_flow == 'authorization_code'"
                         />
                         <field
                             name="oauth2_authorization_url"
-                            attrs="{'invisible': [('auth_type', '!=', 'oauth2'), ('oauth2_flow', '!=', 'web_application')], 'required': [('auth_type', '=', 'oauth2'), ('oauth2_flow', '=', 'authorization_code')]}"
+                            invisible="auth_type != 'oauth2' and oauth2_flow != 'web_application'"
+                            required="auth_type == 'oauth2' and oauth2_flow == 'authorization_code'"
                         />
                         <field
                             name="oauth2_token_url"
-                            attrs="{'invisible': [('auth_type', '!=', 'oauth2')], 'required': [('auth_type', '=', 'oauth2')]}"
+                            invisible="auth_type != 'oauth2'"
+                            required="auth_type == 'oauth2'"
                         />
                         <field
                             name="oauth2_audience"
-                            attrs="{'invisible': [('auth_type', '!=', 'oauth2')]}"
+                            invisible="auth_type != 'oauth2'"
                         />
                     </group>
                 </sheet>

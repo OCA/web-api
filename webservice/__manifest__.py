@@ -3,12 +3,10 @@
 # @author Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-
 {
     "name": "WebService",
-    "summary": """
-        Defines webservice abstract definition to be used generally""",
-    "version": "16.0.1.4.0",
+    "summary": """Defines webservice abstract definition to be used generally""",
+    "version": "17.0.1.0.0",
     "license": "AGPL-3",
     "development_status": "Production/Stable",
     "maintainers": ["etobella"],
