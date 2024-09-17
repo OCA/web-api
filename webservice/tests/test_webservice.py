@@ -4,7 +4,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import responses
-from requests import auth, exceptions as http_exceptions
+from requests import auth
+from requests import exceptions as http_exceptions
 
 from odoo import exceptions
 
