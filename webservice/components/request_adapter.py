@@ -193,7 +193,6 @@ class WebApplicationOAuth2RestRequestsAdapter(Component):
         )
 
     def _fetch_token_from_authorization(self, authorization_code):
-
         oauth_params = self.collection.sudo().read(
             [
                 "oauth2_clientid",
