@@ -64,9 +64,9 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
             f"{self.url}oauth2/token",
             json={
                 "access_token": "cool_token",
-                "expires_at": expires_timestamp,
-                "expires_in": duration,
                 "token_type": "Bearer",
+                "expires_in": duration,
+                "expires_at": expires_timestamp,
             },
         )
         responses.add(responses.GET, f"{self.url}endpoint", body="OK")
@@ -159,7 +159,7 @@ class TestWebServiceOauth2WebApplication(CommonWebService):
                 "oauth2_client_secret = shh_secret",
                 f"oauth2_token_url = {cls.url}oauth2/token",
                 f"oauth2_audience = {cls.url}",
-                f"oauth2_authorization_url = {cls.url}/authorize",
+                f"oauth2_authorization_url = {cls.url}authorize",
             ]
         )
         cls.webservice = cls.env["webservice.backend"].create(
@@ -175,7 +175,7 @@ class TestWebServiceOauth2WebApplication(CommonWebService):
                 "oauth2_client_secret": "shh_secret",
                 "oauth2_token_url": f"{cls.url}oauth2/token",
                 "oauth2_audience": cls.url,
-                "oauth2_authorization_url": f"{cls.url}/authorize",
+                "oauth2_authorization_url": f"{cls.url}authorize",
             }
         )
         return res
@@ -189,7 +189,7 @@ class TestWebServiceOauth2WebApplication(CommonWebService):
         expected_action = {
             "type": "ir.actions.act_url",
             "target": "self",
-            "url": "https://localhost.demo.odoo//authorize?response_type=code&"
+            "url": "https://localhost.demo.odoo/authorize?response_type=code&"
             "client_id=some_client_id&"
             f"redirect_uri={quote(self.webservice.redirect_url, safe='')}&state=",
         }

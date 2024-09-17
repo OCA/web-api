@@ -13,6 +13,7 @@ class BaseWebServiceAdapter(AbstractComponent):
     @classmethod
     def _component_match(cls, work, usage=None, model_name=None, **kw):
         """Override to customize match.
+
         Registry lookup filtered by usage and model_name when landing here.
         Now, narrow match to `_match_attrs` attributes.
         """
