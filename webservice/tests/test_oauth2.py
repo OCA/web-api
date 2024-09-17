@@ -21,7 +21,6 @@ from .common import CommonWebService, mock_cursor
 class TestWebServiceOauth2BackendApplication(CommonWebService):
     @classmethod
     def _setup_records(cls):
-
         res = super()._setup_records()
         cls.url = "https://localhost.demo.odoo/"
         os.environ["SERVER_ENV_CONFIG"] = "\n".join(
