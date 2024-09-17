@@ -46,7 +46,7 @@ class OAuth2Controller(http.Controller):
         user = request.env["res.users"].sudo().browse(uid)
         cids = request.httprequest.cookies.get("cids", str(user.company_id.id))
         cids = [int(cid) for cid in cids.split(",")]
-        record_action = backend.get_access_action()
+        record_action = backend._get_access_action()
         url_params = {
             "model": backend._name,
             "id": backend.id,
