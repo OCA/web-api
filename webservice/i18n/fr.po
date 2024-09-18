@@ -23,7 +23,7 @@ msgid "API Key"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_api_key_env_default
 msgid "API Key Env Default"
 msgstr ""
 
@@ -33,18 +33,8 @@ msgid "API Key header"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_header_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_api_key_header_env_default
 msgid "API Key header Env Default"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_env_is_editable
-msgid "Api Key Env Is Editable"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_header_env_is_editable
-msgid "Api Key Header Env Is Editable"
 msgstr ""
 
 #. module: webservice
@@ -53,7 +43,7 @@ msgid "Audience"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_audience_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_audience_env_default
 msgid "Audience Env Default"
 msgstr ""
 
@@ -63,13 +53,8 @@ msgid "Auth Type"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__auth_type_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_auth_type_env_default
 msgid "Auth Type Env Default"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__auth_type_env_is_editable
-msgid "Auth Type Env Is Editable"
 msgstr ""
 
 #. module: webservice
@@ -78,7 +63,7 @@ msgid "Authorization URL"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_authorization_url_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_authorization_url_env_default
 msgid "Authorization URL Env Default"
 msgstr ""
 
@@ -93,7 +78,7 @@ msgid "Client ID"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_clientid_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_clientid_env_default
 msgid "Client ID Env Default"
 msgstr ""
 
@@ -103,7 +88,7 @@ msgid "Client Secret"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_client_secret_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_client_secret_env_default
 msgid "Client Secret Env Default"
 msgstr ""
 
@@ -118,13 +103,8 @@ msgid "Content Type"
 msgstr "Type de contenu"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_content_type_env_default
 msgid "Content Type Env Default"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type_env_is_editable
-msgid "Content Type Env Is Editable"
 msgstr ""
 
 #. module: webservice
@@ -163,11 +143,6 @@ msgid "JSON"
 msgstr "JSON"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend____last_update
-msgid "Last Modified on"
-msgstr "Dernière modification le"
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__write_uid
 msgid "Last Updated by"
 msgstr "Dernière mise à jour par"
@@ -193,38 +168,13 @@ msgid "OAuth2"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_audience_env_is_editable
-msgid "Oauth2 Audience Env Is Editable"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_authorization_url_env_is_editable
-msgid "Oauth2 Authorization Url Env Is Editable"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_client_secret_env_is_editable
-msgid "Oauth2 Client Secret Env Is Editable"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_clientid_env_is_editable
-msgid "Oauth2 Clientid Env Is Editable"
-msgstr ""
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_flow
 msgid "Oauth2 Flow"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_flow_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_flow_env_default
 msgid "Oauth2 Flow Env Default"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_flow_env_is_editable
-msgid "Oauth2 Flow Env Is Editable"
 msgstr ""
 
 #. module: webservice
@@ -233,13 +183,8 @@ msgid "Oauth2 Scope"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_scope_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_scope_env_default
 msgid "Oauth2 Scope Env Default"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_scope_env_is_editable
-msgid "Oauth2 Scope Env Is Editable"
 msgstr ""
 
 #. module: webservice
@@ -253,23 +198,13 @@ msgid "Oauth2 Token"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_token_url_env_is_editable
-msgid "Oauth2 Token Url Env Is Editable"
-msgstr ""
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__password
 msgid "Password"
 msgstr "Mot de passe"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__password_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_password_env_default
 msgid "Password Env Default"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__password_env_is_editable
-msgid "Password Env Is Editable"
 msgstr ""
 
 #. module: webservice
@@ -278,13 +213,8 @@ msgid "Protocol"
 msgstr "Protocole"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_protocol_env_default
 msgid "Protocol Env Default"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol_env_is_editable
-msgid "Protocol Env Is Editable"
 msgstr ""
 
 #. module: webservice
@@ -318,7 +248,7 @@ msgid "Token URL"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_token_url_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_token_url_env_default
 msgid "Token URL Env Default"
 msgstr ""
 
@@ -333,13 +263,8 @@ msgid "Url"
 msgstr "Url"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__url_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_url_env_default
 msgid "Url Env Default"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__url_env_is_editable
-msgid "Url Env Is Editable"
 msgstr ""
 
 #. module: webservice
@@ -353,13 +278,8 @@ msgid "Username & password"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__username_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_username_env_default
 msgid "Username Env Default"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__username_env_is_editable
-msgid "Username Env Is Editable"
 msgstr ""
 
 #. module: webservice
@@ -384,6 +304,81 @@ msgid ""
 msgstr ""
 
 #. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_api_key_env_is_editable
+msgid "X Api Key Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_api_key_header_env_is_editable
+msgid "X Api Key Header Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_auth_type_env_is_editable
+msgid "X Auth Type Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_content_type_env_is_editable
+msgid "X Content Type Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_audience_env_is_editable
+msgid "X Oauth2 Audience Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_authorization_url_env_is_editable
+msgid "X Oauth2 Authorization Url Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_client_secret_env_is_editable
+msgid "X Oauth2 Client Secret Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_clientid_env_is_editable
+msgid "X Oauth2 Clientid Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_flow_env_is_editable
+msgid "X Oauth2 Flow Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_scope_env_is_editable
+msgid "X Oauth2 Scope Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_token_url_env_is_editable
+msgid "X Oauth2 Token Url Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_password_env_is_editable
+msgid "X Password Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_protocol_env_is_editable
+msgid "X Protocol Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_url_env_is_editable
+msgid "X Url Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_username_env_is_editable
+msgid "X Username Env Is Editable"
+msgstr ""
+
+#. module: webservice
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/xml
 msgid "XML"
 msgstr "XLM"
@@ -397,7 +392,7 @@ msgstr ""
 
 #. module: webservice
 #: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_scope
-#: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_scope_env_default
+#: model:ir.model.fields,help:webservice.field_webservice_backend__x_oauth2_scope_env_default
 msgid "scope of the the authorization"
 msgstr ""
 
@@ -405,3 +400,6 @@ msgstr ""
 #: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_token
 msgid "the OAuth2 token (serialized JSON)"
 msgstr ""
+
+#~ msgid "Last Modified on"
+#~ msgstr "Dernière modification le"
