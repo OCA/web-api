@@ -1,0 +1,412 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* webservice
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2024-05-23 08:43+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
+"Language-Team: none\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__auth_type__api_key
+msgid "API Key"
+msgstr "Chiave API"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_env_default
+msgid "API Key Env Default"
+msgstr "Chiave API predefinita dell'ambiente"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_header
+msgid "API Key header"
+msgstr "Intestazione chiave API"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_header_env_default
+msgid "API Key header Env Default"
+msgstr "Intestazione chiave API predefinita dell'ambiente"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_env_is_editable
+msgid "Api Key Env Is Editable"
+msgstr "La chiave API ambene è modificabile"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_header_env_is_editable
+msgid "Api Key Header Env Is Editable"
+msgstr "L'intestazione chiave API ambene è modificabile"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_audience
+msgid "Audience"
+msgstr "Audience"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_audience_env_default
+msgid "Audience Env Default"
+msgstr "Audience predefinito dell'ambiente"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__auth_type
+msgid "Auth Type"
+msgstr "Tipo autorizzazione"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__auth_type_env_default
+msgid "Auth Type Env Default"
+msgstr "Tipo autoizzazione predefinito dell'ambiente"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__auth_type_env_is_editable
+msgid "Auth Type Env Is Editable"
+msgstr "Il tipo autrizzazione ambiente è modificabile"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_authorization_url
+msgid "Authorization URL"
+msgstr "URL autorizzazione"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_authorization_url_env_default
+msgid "Authorization URL Env Default"
+msgstr "URL autorizzazione predefinito dell'ambiente"
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__oauth2_flow__backend_application
+msgid "Backend Application (Client Credentials Grant)"
+msgstr "Applicazione backend (concessione credenziali client)"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_clientid
+msgid "Client ID"
+msgstr "ID client"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_clientid_env_default
+msgid "Client ID Env Default"
+msgstr "ID client predefinito dell'ambiente"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_client_secret
+msgid "Client Secret"
+msgstr "Chiave segreta client"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_client_secret_env_default
+msgid "Client Secret Env Default"
+msgstr "Chiave csegreta client predefinita dell'ambiente"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__company_id
+msgid "Company"
+msgstr "Azienda"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type
+msgid "Content Type"
+msgstr "Tipo di contenuto"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type_env_default
+msgid "Content Type Env Default"
+msgstr "Tipo contenuto predefinito dell'ambiente"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type_env_is_editable
+msgid "Content Type Env Is Editable"
+msgstr "Il tipo contenuto ambiente è modificabile"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__display_name
+msgid "Display Name"
+msgstr "Nome visualizzato"
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/x-www-form-urlencoded
+msgid "Form"
+msgstr "Maschera"
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__protocol__http
+msgid "HTTP Request"
+msgstr "Richiesta HTTP"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__id
+msgid "ID"
+msgstr "ID"
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/json
+msgid "JSON"
+msgstr "JSON"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend____last_update
+msgid "Last Modified on"
+msgstr "Ultima modifica il"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__write_uid
+msgid "Last Updated by"
+msgstr "Ultimo aggiornamento di"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__write_date
+msgid "Last Updated on"
+msgstr "Ultimo aggiornamento il"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__name
+msgid "Name"
+msgstr "Nome"
+
+#. module: webservice
+#: model_terms:ir.ui.view,arch_db:webservice.webservice_backend_form_view
+msgid "OAuth Authorize"
+msgstr "Autorizzazione OAuth"
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__auth_type__oauth2
+msgid "OAuth2"
+msgstr "OAuth2"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_audience_env_is_editable
+msgid "Oauth2 Audience Env Is Editable"
+msgstr "Audience OAuth2 ambiente è modificabile"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_authorization_url_env_is_editable
+msgid "Oauth2 Authorization Url Env Is Editable"
+msgstr "URL autorizzazione OAuth2 è modificabile"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_client_secret_env_is_editable
+msgid "Oauth2 Client Secret Env Is Editable"
+msgstr "Chiave segreta OAuth client è modificabile"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_clientid_env_is_editable
+msgid "Oauth2 Clientid Env Is Editable"
+msgstr "ID client OAuth2 ambiente è modificabile"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_flow
+msgid "Oauth2 Flow"
+msgstr "Flusso OAuth2"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_flow_env_default
+msgid "Oauth2 Flow Env Default"
+msgstr "Flusso OAuth2 predefinito dell'ambiente"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_flow_env_is_editable
+msgid "Oauth2 Flow Env Is Editable"
+msgstr "Flusso OAuth2 ambiente è modificabile"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_scope
+msgid "Oauth2 Scope"
+msgstr "Ambito OAuth2"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_scope_env_default
+msgid "Oauth2 Scope Env Default"
+msgstr "Ambito OAuth2 predefinito dell'ambiente"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_scope_env_is_editable
+msgid "Oauth2 Scope Env Is Editable"
+msgstr "Ambito OAuth2 ambiente è modificabile"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_state
+msgid "Oauth2 State"
+msgstr "Stato OAuth2"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_token
+msgid "Oauth2 Token"
+msgstr "Token OAuth2"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_token_url_env_is_editable
+msgid "Oauth2 Token Url Env Is Editable"
+msgstr "URL token OAuth2 ambiente è modificabile"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__password
+msgid "Password"
+msgstr "Password"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__password_env_default
+msgid "Password Env Default"
+msgstr "Password predefinita dell'ambiente"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__password_env_is_editable
+msgid "Password Env Is Editable"
+msgstr "Password ambiente è modificabile"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol
+msgid "Protocol"
+msgstr "Protcollo"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol_env_default
+msgid "Protocol Env Default"
+msgstr "Protocollo predefinito dell'ambiente"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol_env_is_editable
+msgid "Protocol Env Is Editable"
+msgstr "Protocollo ambiente è modificabile"
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__auth_type__none
+msgid "Public"
+msgstr "Pubblico"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__redirect_url
+msgid "Redirect Url"
+msgstr "URL inoltro"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__server_env_defaults
+msgid "Server Env Defaults"
+msgstr "Server predefinito dell'ambiente"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__tech_name
+msgid "Tech Name"
+msgstr "Nome tecnico"
+
+#. module: webservice
+#: model:ir.model.fields,help:webservice.field_webservice_backend__redirect_url
+msgid "The redirect URL to be used as part of the OAuth2 authorisation flow"
+msgstr ""
+"L'URL di inoltro da utilizzare come parte del flusso di autorizzazione OAuth2"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_token_url
+msgid "Token URL"
+msgstr "URL token"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_token_url_env_default
+msgid "Token URL Env Default"
+msgstr "URL token predefinito dell'ambiente"
+
+#. module: webservice
+#: model:ir.model.fields,help:webservice.field_webservice_backend__tech_name
+msgid "Unique name for technical purposes. Eg: server env keys."
+msgstr "Nome univoco per motivi tecnici. Es: chiavi server ambiente."
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__url
+msgid "Url"
+msgstr "URL"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__url_env_default
+msgid "Url Env Default"
+msgstr "URL predefinito dell'ambiente"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__url_env_is_editable
+msgid "Url Env Is Editable"
+msgstr "URL ambiene è modificabile"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__username
+msgid "Username"
+msgstr "Nome utente"
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__auth_type__user_pwd
+msgid "Username & password"
+msgstr "Nome utente e password"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__username_env_default
+msgid "Username Env Default"
+msgstr "Nome utente predefinito dell'ambiente"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__username_env_is_editable
+msgid "Username Env Is Editable"
+msgstr "Nome utente ambiente è modificabile"
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__oauth2_flow__web_application
+msgid "Web Application (Authorization Code Grant)"
+msgstr "Applicazione Web (Concessione codice autorizzazione)"
+
+#. module: webservice
+#: model:ir.actions.act_window,name:webservice.webservice_backend_act_window
+#: model:ir.model,name:webservice.model_webservice_backend
+#: model:ir.ui.menu,name:webservice.webservice_backend_menu
+msgid "WebService Backend"
+msgstr "Backend servizio web"
+
+#. module: webservice
+#. odoo-python
+#: code:addons/webservice/models/webservice_backend.py:0
+#, python-format
+msgid ""
+"Webservice '%(name)s' requires '%(auth_type)s' authentication. However, the "
+"following field(s) are not valued: %(fields)s"
+msgstr ""
+"Il webservice '%(name)s' richiede autentIcazione '%(auth_type)s'. Comunque, "
+"i seguenti campi non sono calorizzati: %(fields)s"
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/xml
+msgid "XML"
+msgstr "XML"
+
+#. module: webservice
+#: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_state
+msgid ""
+"random key generated when authorization flow starts to ensure that no CSRF "
+"attack happen"
+msgstr ""
+"chiave causale generata quando il flusso autorizzazione inizia per "
+"assicurare che non si verifichi un accatto CSRF"
+
+#. module: webservice
+#: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_scope
+#: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_scope_env_default
+msgid "scope of the the authorization"
+msgstr "ambito dell'autorizzazione"
+
+#. module: webservice
+#: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_token
+msgid "the OAuth2 token (serialized JSON)"
+msgstr "il token OAuth2 (JSON serializzato)"
