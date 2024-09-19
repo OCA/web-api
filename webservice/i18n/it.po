@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-05-23 08:43+0000\n"
+"PO-Revision-Date: 2024-09-19 09:06+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key
@@ -309,77 +309,77 @@ msgstr ""
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_api_key_env_is_editable
 msgid "X Api Key Env Is Editable"
-msgstr ""
+msgstr "La chiave API X ambiente è modificabile"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_api_key_header_env_is_editable
 msgid "X Api Key Header Env Is Editable"
-msgstr ""
+msgstr "La chiave API X testata è modificabile"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_auth_type_env_is_editable
 msgid "X Auth Type Env Is Editable"
-msgstr ""
+msgstr "Il tipo autorizzazione x ambiente è modificabile"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_content_type_env_is_editable
 msgid "X Content Type Env Is Editable"
-msgstr ""
+msgstr "Il tipo contenuto x ambiente è modificabile"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_audience_env_is_editable
 msgid "X Oauth2 Audience Env Is Editable"
-msgstr ""
+msgstr "Oauth2 pubblica x è modificabile"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_authorization_url_env_is_editable
 msgid "X Oauth2 Authorization Url Env Is Editable"
-msgstr ""
+msgstr "L'autorizzazione oauth2 x è modificabile"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_client_secret_env_is_editable
 msgid "X Oauth2 Client Secret Env Is Editable"
-msgstr ""
+msgstr "La chiave segreta client oauth2 x è modificabile"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_clientid_env_is_editable
 msgid "X Oauth2 Clientid Env Is Editable"
-msgstr ""
+msgstr "Clientid oauth2 x ambiente è modificabile"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_flow_env_is_editable
 msgid "X Oauth2 Flow Env Is Editable"
-msgstr ""
+msgstr "Il flusso oauth2 x ambiente è modificabile"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_scope_env_is_editable
 msgid "X Oauth2 Scope Env Is Editable"
-msgstr ""
+msgstr "L'ambito oauth2 x ambiente è modificabile"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_token_url_env_is_editable
 msgid "X Oauth2 Token Url Env Is Editable"
-msgstr ""
+msgstr "L'URL token oauth2 x è modificabile"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_password_env_is_editable
 msgid "X Password Env Is Editable"
-msgstr ""
+msgstr "La password x ambiente è modificabile"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_protocol_env_is_editable
 msgid "X Protocol Env Is Editable"
-msgstr ""
+msgstr "Il protocollo x ambiente è modificabile"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_url_env_is_editable
 msgid "X Url Env Is Editable"
-msgstr ""
+msgstr "L'URL x ambiente è modificabile"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_username_env_is_editable
 msgid "X Username Env Is Editable"
-msgstr ""
+msgstr "L'username x ambiente è modificabile"
 
 #. module: webservice
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/xml
