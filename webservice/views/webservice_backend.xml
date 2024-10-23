@@ -2,7 +2,6 @@
 <!-- Copyright 2020 Creu Blanca
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
-
     <record model="ir.ui.view" id="webservice_backend_form_view">
         <field name="name">webservice.backend.form (in webservice)</field>
         <field name="model">webservice.backend</field>
@@ -146,5 +145,4 @@
         <field name="action" ref="webservice_backend_act_window" />
         <field name="sequence" eval="100" />
     </record>
-
 </odoo>
