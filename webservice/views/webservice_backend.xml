@@ -117,7 +117,7 @@
         <field name="name">webservice.backend.tree (in webservice)</field>
         <field name="model">webservice.backend</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name" />
                 <field name="tech_name" />
                 <field name="url" />
@@ -127,14 +127,14 @@
                     groups="base.group_multi_company"
                     optional="hide"
                 />
-            </tree>
+            </list>
         </field>
     </record>
 
     <record model="ir.actions.act_window" id="webservice_backend_act_window">
         <field name="name">WebService Backend</field>
         <field name="res_model">webservice.backend</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="domain">[]</field>
         <field name="context">{}</field>
     </record>

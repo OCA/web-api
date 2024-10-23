@@ -59,5 +59,5 @@ class OAuth2Controller(http.Controller):
 
         if cids:
             url_params["cids"] = ",".join([str(cid) for cid in cids])
-        url = "/web?#%s" % url_encode(url_params)
+        url = f"/web?#{url_encode(url_params)}"
         return request.redirect(url)
