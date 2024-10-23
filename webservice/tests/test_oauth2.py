@@ -10,7 +10,7 @@ from urllib.parse import quote
 import responses
 from oauthlib.oauth2.rfc6749.errors import InvalidGrantError
 
-from odoo.tests.common import Form
+from odoo.tests import Form
 
 from odoo.addons.server_environment import server_env
 from odoo.addons.server_environment.models import server_env_mixin

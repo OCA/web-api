@@ -18,7 +18,7 @@ class CommonWebService(TransactionComponentCase):
         return dict(
             cls.env.context,
             tracking_disable=True,
-            test_queue_job_no_delay=True,
+            queue_job__no_delay=True,
         )
 
     @classmethod
