@@ -59,9 +59,12 @@ class BaseRestRequestsAdapter(Component):
 
     def _get_headers(self, content_type=False, headers=False, **kwargs):
         headers = headers or {}
-        result = {
-            "Content-Type": content_type or self.collection.content_type,
-        }
+        if content_type or self.collection.content_type:
+            result = {
+                "Content-Type": content_type or self.collection.content_type,
+            }
+        else:
+            result = {}
         handler = getattr(self, "_get_headers_for_" + self.collection.auth_type, None)
         if handler:
             headers.update(handler(**kwargs))
