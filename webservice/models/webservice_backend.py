@@ -63,7 +63,6 @@ class WebserviceBackend(models.Model):
             ("application/xml", "XML"),
             ("application/x-www-form-urlencoded", "Form"),
         ],
-        required=True,
     )
     company_id = fields.Many2one("res.company", string="Company")
 
