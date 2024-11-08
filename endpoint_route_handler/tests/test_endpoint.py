@@ -14,7 +14,7 @@ from .fake_controllers import CTRLFake
 @contextmanager
 def new_rollbacked_env():
     # Borrowed from `component`
-    registry = odoo.registry(odoo.tests.common.get_db_name())
+    registry = odoo.modules.registry.Registry(odoo.tests.common.get_db_name())
     uid = odoo.SUPERUSER_ID
     cr = registry.cursor()
     try:

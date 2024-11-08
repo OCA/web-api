@@ -44,6 +44,7 @@ class EndpointRouteHandler(models.AbstractModel):
         compute="_compute_endpoint_hash", help="Identify the route with its main params"
     )
     csrf = fields.Boolean(default=False)
+    readonly = fields.Boolean(default=False)
 
     # TODO: add flag to prevent route updates on save ->
     # should be handled by specific actions + filter in a tree view + btn on form
@@ -247,5 +248,6 @@ class EndpointRouteHandler(models.AbstractModel):
             methods=[self.request_method],
             routes=[route],
             csrf=self.csrf,
+            readonly=self.readonly,
         )
         return route, routing, self.endpoint_hash

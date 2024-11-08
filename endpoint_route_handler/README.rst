@@ -17,13 +17,13 @@ Endpoint route handler
     :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
     :alt: License: LGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fweb--api-lightgray.png?logo=github
-    :target: https://github.com/OCA/web-api/tree/17.0/endpoint_route_handler
+    :target: https://github.com/OCA/web-api/tree/18.0/endpoint_route_handler
     :alt: OCA/web-api
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/web-api-17-0/web-api-17-0-endpoint_route_handler
+    :target: https://translation.odoo-community.org/projects/web-api-18-0/web-api-18-0-endpoint_route_handler
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/web-api&target_branch=17.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/web-api&target_branch=18.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -116,31 +116,31 @@ You can see a real life example on shopfloor.app model.
 Known issues / Roadmap
 ======================
 
--  add api docs helpers
+- add api docs helpers
 
--  allow multiple HTTP methods on the same endpoint
+- allow multiple HTTP methods on the same endpoint
 
--  multiple values for route and methods
+- multiple values for route and methods
 
-      keep the same in the ui for now, later own we can imagine a
-      multi-value selection or just add text field w/ proper validation
-      and cleanup
+     keep the same in the ui for now, later own we can imagine a
+     multi-value selection or just add text field w/ proper validation
+     and cleanup
 
-      remove the route field in the table of endpoint_route
+     remove the route field in the table of endpoint_route
 
-      support a comma separated list of routes maybe support comma
-      separated list of methods use only routing.routes for generating
-      the rule sort and freeze its values to update the endpoint hash
+     support a comma separated list of routes maybe support comma
+     separated list of methods use only routing.routes for generating
+     the rule sort and freeze its values to update the endpoint hash
 
-      catch dup route exception on the sync to detect duplicated routes
-      and use the endpoint_hash to retrieve the real record (note: we
-      could store more info in the routing information which will stay
-      in the map)
+     catch dup route exception on the sync to detect duplicated routes
+     and use the endpoint_hash to retrieve the real record (note: we
+     could store more info in the routing information which will stay in
+     the map)
 
-      for customizing the rule behavior the endpoint the hook is to
-      override the registry lookup
+     for customizing the rule behavior the endpoint the hook is to
+     override the registry lookup
 
-      make EndpointRule class overridable on the registry
+     make EndpointRule class overridable on the registry
 
 NOTE in v16 we won't care anymore about odoo controller so the lookup of
 the controller can be simplified to a basic py obj that holds the
@@ -152,7 +152,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/web-api/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/web-api/issues/new?body=module:%20endpoint_route_handler%0Aversion:%2017.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/web-api/issues/new?body=module:%20endpoint_route_handler%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -167,8 +167,8 @@ Authors
 Contributors
 ------------
 
--  Simone Orsi <simone.orsi@camptocamp.com>
--  Nguyen Minh Chien <chien@trobz.com>
+- Simone Orsi <simone.orsi@camptocamp.com>
+- Nguyen Minh Chien <chien@trobz.com>
 
 Maintainers
 -----------
@@ -191,6 +191,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-simahawk| 
 
-This module is part of the `OCA/web-api <https://github.com/OCA/web-api/tree/17.0/endpoint_route_handler>`_ project on GitHub.
+This module is part of the `OCA/web-api <https://github.com/OCA/web-api/tree/18.0/endpoint_route_handler>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
