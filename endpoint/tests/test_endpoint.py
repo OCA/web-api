@@ -30,7 +30,7 @@ class TestEndpoint(CommonEndpoint):
 
     def test_endpoint_validation(self):
         with self.assertRaisesRegex(
-            exceptions.UserError, r"you must provide a piece of code"
+            exceptions.UserError, "you must provide a piece of code"
         ):
             self.env["endpoint.endpoint"].create(
                 {
@@ -42,7 +42,7 @@ class TestEndpoint(CommonEndpoint):
                 }
             )
         with self.assertRaisesRegex(
-            exceptions.UserError, r"Request content type is required for POST and PUT."
+            exceptions.UserError, "Request content type is required for POST and PUT."
         ):
             self.env["endpoint.endpoint"].create(
                 {
@@ -55,7 +55,7 @@ class TestEndpoint(CommonEndpoint):
                 }
             )
         with self.assertRaisesRegex(
-            exceptions.UserError, r"Request content type is required for POST and PUT."
+            exceptions.UserError, "Request content type is required for POST and PUT."
         ):
             self.endpoint.request_method = "POST"
 

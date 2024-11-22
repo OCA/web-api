@@ -117,8 +117,10 @@ class EndpointMixin(models.AbstractModel):
         with self.pool.cursor() as cr:
             cr.execute(
                 """
-                INSERT INTO ir_logging
-                (create_date, create_uid, type, dbname, name, level, message, path, line, func)
+                INSERT INTO ir_logging (
+                    create_date, create_uid, type, dbname, name, level,
+                    message, path, line, func
+                )
                 VALUES (NOW() at time zone 'UTC', %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
                 (
@@ -159,7 +161,9 @@ class EndpointMixin(models.AbstractModel):
 
     def _default_endpoint_options_handler(self):
         return {
-            "klass_dotted_path": "odoo.addons.endpoint.controllers.main.EndpointController",
+            "klass_dotted_path": (
+                "odoo.addons.endpoint.controllers.main.EndpointController"
+            ),
             "method_name": "auto_endpoint",
             "default_pargs": (self._name, self.route),
         }
@@ -188,7 +192,7 @@ class EndpointMixin(models.AbstractModel):
         # Switch user for the whole process
         self_with_user = self
         if self.exec_as_user_id:
-            self_with_user = self.with_user(user=self.exec_as_user_id)
+            self_with_user = self.sudo(user=self.exec_as_user_id)
         handler = self_with_user._get_handler()
         try:
             res = handler(request)
@@ -213,5 +217,5 @@ class EndpointMixin(models.AbstractModel):
         # Yet, we want to be able to duplicate a record from the UI.
         for rec, data in zip(self, result):
             if not data.get("route"):
-                data["route"] = f"{rec.route}/COPY_FIXME"
+                data["route"] = "{}/COPY_FIXME".format(rec.route)
         return result
