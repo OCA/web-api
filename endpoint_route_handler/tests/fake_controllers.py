@@ -16,14 +16,17 @@ class CTRLFake(http.Controller):
         return arg1, arg2
 
     def custom_handler(self, custom=None):
-        return f"Got: {custom}"
+        return "Got: {}".format(custom)
 
 
 class TestController(http.Controller):
     _path = "odoo.addons.endpoint_route_handler.tests.fake_controllers.TestController"
 
     def _do_something1(self, foo=None):
-        return f"Got: {foo}"
+        return "Got: {}".format(foo)
 
     def _do_something2(self, default_arg, foo=None):
-        return f"{default_arg} -> got: {foo}"
+        return "{default_arg} -> got: {foo}".format(
+            default_arg=default_arg,
+            foo=foo
+        )

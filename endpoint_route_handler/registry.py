@@ -204,7 +204,8 @@ class EndpointRegistry:
         return query_insert(self.cr, self._table, list(rows_mapping.values()))
 
     def get_rules_by_group(self, group):
-        rules = self.get_rules(where=f"WHERE route_group='{group}'")
+        where = "WHERE route_group='{group}'".format(group=group)
+        rules = self.get_rules(where=where)
         return rules
 
     def update_rules(self, rules, init=False):
@@ -291,10 +292,15 @@ class EndpointRule:
 
     def __repr__(self):
         # FIXME: use class name, remove key
+        route_group = self.route_group if self.route_group else "nogroup"
         return (
-            f"<{self.__class__.__name__}: {self.key}"
-            + (f" #{self.route_group}" if self.route_group else "nogroup")
+            "<{class_name}: {key}"
+            + " #{route_group}"
             + ">"
+        ).format(
+            class_name=self.__class__.__name__,
+            key=self.key,
+            route_group=route_group
         )
 
     @classmethod
@@ -375,16 +381,20 @@ class EndpointRule:
         try:
             mod = importlib.import_module(mod_path)
         except ImportError as exc:
-            raise EndpointHandlerNotFound(f"Module `{mod_path}` not found") from exc
+            raise EndpointHandlerNotFound(
+                "Module `{}` not found".format(mod_path)
+            ) from exc
         try:
             klass = getattr(mod, klass_name)
         except AttributeError as exc:
-            raise EndpointHandlerNotFound(f"Class `{klass_name}` not found") from exc
+            raise EndpointHandlerNotFound(
+                "Class `{}` not found".format(klass_name)
+            ) from exc
         method_name = self.handler_options.method_name
         try:
             method = getattr(klass(), method_name)
         except AttributeError as exc:
             raise EndpointHandlerNotFound(
-                f"Method name `{method_name}` not found"
+                "Method name `{}` not found".format(method_name)
             ) from exc
         return method

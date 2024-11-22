@@ -39,8 +39,8 @@ class EndpointRouteHandlerTool(models.TransientModel):
         return super()._unregister_controllers()
 
     @api.model
-    def new(self, values=None, origin=None, ref=None):
+    def new(self, values=None, ref=None):
         values = values or {}  # note: in core odoo they use `{}` as defaul arg :/
-        res = super().new(values=values, origin=origin, ref=ref)
+        res = super().new(values=values, ref=ref)
         res._refresh_endpoint_data()
         return res

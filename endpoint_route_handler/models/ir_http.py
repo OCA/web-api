@@ -3,11 +3,10 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import logging
-from itertools import chain
 
 import werkzeug
 
-from odoo import http, models, registry as registry_get
+from odoo import http, models
 
 from ..registry import EndpointRegistry
 
@@ -22,14 +21,6 @@ class IrHttp(models.AbstractModel):
         return EndpointRegistry.registry_for(cr)
 
     @classmethod
-    def _generate_routing_rules(cls, modules, converters):
-        # Override to inject custom endpoint rules.
-        return chain(
-            super()._generate_routing_rules(modules, converters),
-            cls._endpoint_routing_rules(),
-        )
-
-    @classmethod
     def _endpoint_routing_rules(cls):
         """Yield custom endpoint rules"""
         e_registry = cls._endpoint_route_registry(http.request.env.cr)
@@ -37,41 +28,36 @@ class IrHttp(models.AbstractModel):
             _logger.debug("LOADING %s", endpoint_rule)
             endpoint = endpoint_rule.endpoint
             for url in endpoint_rule.routing["routes"]:
-                yield (url, endpoint, endpoint_rule.routing)
+                yield url, endpoint, endpoint_rule.routing
 
     @classmethod
-    def routing_map(cls, key=None):
-        # When the request cursor is used to instantiate the EndpointRegistry
-        # in the call to routing_map, the READ REPEATABLE isolation level
-        # will ensure that any value read from the DB afterwards, will be the
-        # same than when the first SELECT is executed.
-        #
-        # This is breaking the oauth flow as the oauth token that is written
-        # at the beggining of the oauth process cannot be read by the cursor
-        # computing the session token, which will read an old value. Therefore
-        # when the session security check is performed, the session token
-        # is outdated as the new session token is computed using an up to date
-        # cursor.
-        #
-        # By using a dedicated cursor to instantiate the EndpointRegistry, we
-        # ensure no read is performed on the database using the request cursor
-        # which will in turn use the updated value of the oauth token to compute
-        # the session token, and the security check will not fail.
-        registry = registry_get(http.request.env.cr.dbname)
-        with registry.cursor() as cr:
-            last_version = cls._get_routing_map_last_version(cr)
-            if not hasattr(cls, "_routing_map"):
-                _logger.debug(
-                    "routing map just initialized, store last update for this env"
-                )
-                # routing map just initialized, store last update for this env
-                cls._endpoint_route_last_version = last_version
-            elif cls._endpoint_route_last_version < last_version:
-                _logger.info("Endpoint registry updated, reset routing map")
-                cls._routing_map = {}
-                cls._rewrite_len = {}
-                cls._endpoint_route_last_version = last_version
-        return super().routing_map(key=key)
+    def routing_map(cls):
+        last_version = cls._get_routing_map_last_version(http.request.env.cr)
+        if not hasattr(cls, "_routing_map"):
+            _logger.debug(
+                "routing map just initialized, store last update for this env"
+            )
+            # routing map just initialized, store last update for this env
+            cls._endpoint_route_last_version = last_version
+        elif cls._endpoint_route_last_version < last_version:
+            _logger.info("Endpoint registry updated, reset routing map")
+            cls._endpoint_route_last_version = last_version
+        res = super().routing_map()
+        # Inject custom endpoint rules
+        for url, endpoint, routing in cls._endpoint_routing_rules():
+            xtra_keys = (
+                'defaults subdomain build_only strict_slashes redirect_to alias host'
+            ).split()
+            kw = {k: routing[k] for k in xtra_keys if k in routing}
+            rule = werkzeug.routing.Rule(
+                url,
+                endpoint=endpoint,
+                methods=routing['methods'],
+                **kw
+            )
+            rule.merge_slashes = False
+            res.add(rule)
+        return res
 
     @classmethod
     def _get_routing_map_last_version(cls, cr):

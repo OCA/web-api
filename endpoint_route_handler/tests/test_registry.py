@@ -72,8 +72,8 @@ class TestRegistry(SavepointCase):
     def _make_rules(self, stop=5, start=1, **kw):
         res = []
         for i in range(start, stop):
-            key = f"route{i}"
-            route = f"/test/{i}"
+            key = "route{}".format(i)
+            route = "/test/{}".format(i)
             options = {
                 "handler": {
                     "klass_dotted_path": CTRLFake._path,

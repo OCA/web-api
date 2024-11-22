@@ -22,7 +22,6 @@ class EndpointRouteHandler(models.AbstractModel):
         required=True,
         index=True,
         compute="_compute_route",
-        inverse="_inverse_route",
         readonly=False,
         store=True,
         copy=False,
@@ -148,21 +147,27 @@ class EndpointRouteHandler(models.AbstractModel):
     def _routing_impacting_fields(self):
         return ("route", "auth_type", "request_method")
 
-    @api.depends("route")
     def _compute_route(self):
         for rec in self:
             rec.route = rec._clean_route()
 
-    def _inverse_route(self):
+    def write(self, vals):
+        if "route" not in vals:
+            return super().write(vals)
+        res = True
         for rec in self:
-            rec.route = rec._clean_route()
+            new_vals = vals.copy()
+            cleaned_route = rec._clean_route(vals["route"])
+            new_vals["route"] = cleaned_route
+            res = res and super(EndpointRouteHandler, rec).write(new_vals)
+        return res
 
     # TODO: move to something better? Eg: computed field?
     # Shall we use the route_group? TBD!
     _endpoint_route_prefix = ""
 
-    def _clean_route(self):
-        route = (self.route or "").strip()
+    def _clean_route(self, route_to_write=False):
+        route = (route_to_write or self.route or "").strip()
         if not route.startswith("/"):
             route = "/" + route
         prefix = self._endpoint_route_prefix
@@ -227,12 +232,13 @@ class EndpointRouteHandler(models.AbstractModel):
 
     def _default_endpoint_options_handler(self):
         self._logger.warning(
-            "No specific endpoint handler options defined for: %s, falling back to default",
+            "No specific endpoint handler options defined for: %s, "
+            "falling back to default",
             self._name,
         )
         base_path = "odoo.addons.endpoint_route_handler.controllers.main"
         return {
-            "klass_dotted_path": f"{base_path}.EndpointNotFoundController",
+            "klass_dotted_path": "{}.EndpointNotFoundController".format(base_path),
             "method_name": "auto_not_found",
             "default_pargs": (self.route,),
         }
