@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0\n"
+"Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -294,7 +294,6 @@ msgstr ""
 #. module: webservice
 #. odoo-python
 #: code:addons/webservice/models/webservice_backend.py:0
-#, python-format
 msgid ""
 "Webservice '%(name)s' requires '%(auth_type)s' authentication. However, the "
 "following field(s) are not valued: %(fields)s"
