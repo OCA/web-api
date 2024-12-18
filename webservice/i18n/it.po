@@ -298,7 +298,6 @@ msgstr "Backend servizio web"
 #. module: webservice
 #. odoo-python
 #: code:addons/webservice/models/webservice_backend.py:0
-#, python-format
 msgid ""
 "Webservice '%(name)s' requires '%(auth_type)s' authentication. However, the "
 "following field(s) are not valued: %(fields)s"
