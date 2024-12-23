@@ -17,7 +17,7 @@ class EndpointControllerMixin:
         if not endpoint:
             raise NotFound()
         endpoint._validate_request(request)
-        result = endpoint._handle_request(request)
+        result = endpoint._handle_request(request, params=params)
         return self._handle_result(result)
 
     def _handle_result(self, result):

@@ -76,8 +76,10 @@ class EndpointMixin(models.AbstractModel):
         * Response
         * werkzeug
         * exceptions
+        * params
 
-        Must generate either an instance of ``Response`` into ``response`` var or:
+        Must assign a ``result`` variable, with either an instance of ``Response``,
+        or a dict containiny any of the keys:
 
         * payload
         * headers
@@ -134,10 +136,11 @@ class EndpointMixin(models.AbstractModel):
                 ),
             )
 
-    def _handle_exec__code(self, request):
+    def _handle_exec__code(self, request, params=None):
         if not self._code_snippet_valued():
             return {}
         eval_ctx = self._get_code_snippet_eval_context(request)
+        eval_ctx["params"] = params or {}
         snippet = self.code_snippet
         safe_eval.safe_eval(snippet, eval_ctx, mode="exec", nocopy=True)
         result = eval_ctx.get("result")
@@ -184,14 +187,18 @@ class EndpointMixin(models.AbstractModel):
                 _("Missing handler for exec mode %s") % self.exec_mode
             )
 
-    def _handle_request(self, request):
+    def _handle_request(self, request, params=None):
         # Switch user for the whole process
         self_with_user = self
         if self.exec_as_user_id:
             self_with_user = self.with_user(user=self.exec_as_user_id)
         handler = self_with_user._get_handler()
         try:
-            res = handler(request)
+            # In case the handler does not support params
+            if params:
+                res = handler(request, params=params)
+            else:
+                res = handler(request)
         except self._bad_request_exceptions() as orig_exec:
             self._logger.error("_validate_request: BadRequest")
             raise werkzeug.exceptions.BadRequest() from orig_exec
