@@ -106,7 +106,6 @@ msgstr "Nome"
 #. module: endpoint_route_handler
 #. odoo-python
 #: code:addons/endpoint_route_handler/models/endpoint_route_handler.py:0
-#, python-format
 msgid ""
 "Non unique route(s): %(routes)s.\n"
 "Found in model(s): %(models)s.\n"
@@ -131,6 +130,12 @@ msgstr ""
 "Spento: record allineato con il registro, non c'è niente da fare."
 
 #. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__readonly
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__readonly
+msgid "Readonly"
+msgstr ""
+
+#. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__registry_sync
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__registry_sync
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_sync_mixin__registry_sync
@@ -152,7 +157,6 @@ msgstr "Metodo richiesta"
 #. module: endpoint_route_handler
 #. odoo-python
 #: code:addons/endpoint_route_handler/models/endpoint_route_handler.py:0
-#, python-format
 msgid "Request content type is required for POST and PUT."
 msgstr "Il tipo contenuto richiesta è obbligatorio per POST e PUT."
 
@@ -189,7 +193,6 @@ msgstr "Si può regiStrare un percorso endpoint solo una volta."
 #. module: endpoint_route_handler
 #. odoo-python
 #: code:addons/endpoint_route_handler/models/endpoint_route_handler.py:0
-#, python-format
 msgid "`%(name)s` uses a blacklisted routed = `%(route)s`"
 msgstr "`%(name)s` utilizza un percorso bloccato = `%(route)s`"
 
