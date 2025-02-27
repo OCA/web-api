@@ -30,6 +30,17 @@ class EndpointMixin(models.AbstractModel):
     )
     exec_as_user_id = fields.Many2one(comodel_name="res.users")
     company_id = fields.Many2one("res.company", string="Company")
+    url = fields.Char(
+        compute="_compute_url",
+        help="Handy link to share or access the endpoint's final URL. ",
+    )
+
+    def _compute_url(self):
+        # Use current URL to respect the domain used by the current user.
+        # `base.url` might be different from the one used by the user.
+        base_url = http.request.httprequest.url_root
+        for rec in self:
+            rec.url = f"{base_url.rstrip('/')}/{rec.route.lstrip('/')}"
 
     def _selection_exec_mode(self):
         return [("code", "Execute code")]

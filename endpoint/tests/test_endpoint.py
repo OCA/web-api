@@ -244,3 +244,7 @@ class TestEndpoint(CommonEndpoint):
     def test_duplicate(self):
         endpoint = self.endpoint.copy()
         self.assertTrue(endpoint.route.endswith("/COPY_FIXME"))
+
+    def test_url(self):
+        with self._get_mocked_request():
+            self.assertTrue(self.endpoint.url, "http://localhost/demo/one")

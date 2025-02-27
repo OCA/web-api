@@ -40,6 +40,9 @@
                         <h2>
                             <field name="route" />
                         </h2>
+                        <h3 class="oe_read_only">
+                            <field name="url" widget="url" />
+                        </h3>
                     </div>
                     <notebook>
                         <page name="main" string="Main">
