@@ -1,0 +1,198 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* endpoint_route_handler
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2025-04-13 16:24+0000\n"
+"Last-Translator: xtanuiha <feihu.zhang@live.com>\n"
+"Language-Team: none\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.10.4\n"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__active
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__active
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_sync_mixin__active
+msgid "Active"
+msgstr "激活"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__auth_type
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__auth_type
+msgid "Auth Type"
+msgstr "认证类型"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__create_uid
+msgid "Created by"
+msgstr "创建人"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__create_date
+msgid "Created on"
+msgstr "创建于"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__csrf
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__csrf
+msgid "Csrf"
+msgstr "跨站请求伪造"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__endpoint_hash
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__endpoint_hash
+msgid "Endpoint Hash"
+msgstr "端点哈希"
+
+#. module: endpoint_route_handler
+#: model:ir.model,name:endpoint_route_handler.model_endpoint_route_handler
+msgid "Endpoint Route handler"
+msgstr "端点路由处理器"
+
+#. module: endpoint_route_handler
+#: model:ir.model,name:endpoint_route_handler.model_endpoint_route_handler_tool
+msgid "Endpoint Route handler tool"
+msgstr "端点路由处理器工具"
+
+#. module: endpoint_route_handler
+#: model:ir.model,name:endpoint_route_handler.model_endpoint_route_sync_mixin
+msgid "Endpoint Route sync mixin"
+msgstr "端点路由同步混合"
+
+#. module: endpoint_route_handler
+#: model:ir.model,name:endpoint_route_handler.model_ir_http
+msgid "HTTP Routing"
+msgstr "HTTP路由"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__id
+msgid "ID"
+msgstr "ID"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler__endpoint_hash
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler_tool__endpoint_hash
+msgid "Identify the route with its main params"
+msgstr "用主要参数识别路由"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__write_uid
+msgid "Last Updated by"
+msgstr "最后更新人"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__write_date
+msgid "Last Updated on"
+msgstr "最后更新于"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__name
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__name
+msgid "Name"
+msgstr "名称"
+
+#. module: endpoint_route_handler
+#. odoo-python
+#: code:addons/endpoint_route_handler/models/endpoint_route_handler.py:0
+msgid ""
+"Non unique route(s): %(routes)s.\n"
+"Found in model(s): %(models)s.\n"
+msgstr ""
+"非唯一路由：%(routes)s。\n"
+"在模型中发现：%(models)s。\n"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler__registry_sync
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler_tool__registry_sync
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_sync_mixin__registry_sync
+msgid ""
+"ON: the record has been modified and registry was not notified.\n"
+"No change will be active until this flag is set to false via proper action.\n"
+"\n"
+"OFF: record in line with the registry, nothing to do."
+msgstr ""
+"开：记录已被修改且注册表未通知。\n"
+"在通过适当操作将此标志设置为false之前，任何更改都不会生效。\n"
+"\n"
+"关：记录与注册表一致，无需操作。"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__readonly
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__readonly
+msgid "Readonly"
+msgstr "只读"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__registry_sync
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__registry_sync
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_sync_mixin__registry_sync
+msgid "Registry Sync"
+msgstr "注册表同步"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__request_content_type
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__request_content_type
+msgid "Request Content Type"
+msgstr "请求内容类型"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__request_method
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__request_method
+msgid "Request Method"
+msgstr "请求方法"
+
+#. module: endpoint_route_handler
+#. odoo-python
+#: code:addons/endpoint_route_handler/models/endpoint_route_handler.py:0
+msgid "Request content type is required for POST and PUT."
+msgstr "POST和PUT需要请求内容类型。"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__route
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__route
+msgid "Route"
+msgstr "路由"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__route_group
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__route_group
+msgid "Route Group"
+msgstr "路由组"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__route_type
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__route_type
+msgid "Route Type"
+msgstr "路由类型"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler__route_group
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler_tool__route_group
+msgid "Use this to classify routes together"
+msgstr "使用此选项将路由分类在一起"
+
+#. module: endpoint_route_handler
+#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_endpoint_endpoint_route_unique
+#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_mixin_endpoint_route_unique
+#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_route_handler_endpoint_route_unique
+#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_route_handler_tool_endpoint_route_unique
+msgid "You can register an endpoint route only once."
+msgstr "您只能注册一次端点路由。"
+
+#. module: endpoint_route_handler
+#. odoo-python
+#: code:addons/endpoint_route_handler/models/endpoint_route_handler.py:0
+msgid "`%(name)s` uses a blacklisted routed = `%(route)s`"
+msgstr "`%(name)s` 使用了黑名单路由 = `%(route)s`"
