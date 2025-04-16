@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="webservice_backend_form_view">
+        <field name="name">webservice.backend.form (in webservice_soap)</field>
+        <field name="model">webservice.backend</field>
+        <field name="inherit_id" ref="webservice.webservice_backend_form_view" />
+        <field name="arch" type="xml">
+            <field name="url" position="after">
+            <field
+                name="soap_service_name"
+                attrs="{
+                    'invisible': [('protocol', '!=', 'soap')],
+                }"
+            />
+                <field
+                name="soap_port_name"
+                attrs="{
+                    'invisible': [('protocol', '!=', 'soap')],
+                }"
+            />
+            </field>
+        </field>
+    </record>
+</odoo>
