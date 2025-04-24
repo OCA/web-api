@@ -1,0 +1,1 @@
+Provide API key authorization in bearer mode for endpoints.

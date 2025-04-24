@@ -1,0 +1,2 @@
+- Simone Orsi \<<simone.orsi@camptocamp.com>\>
+- feihu.zhang \<<feihu.zhang@live.com>\>
