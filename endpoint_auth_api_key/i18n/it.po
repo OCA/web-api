@@ -1,0 +1,33 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* endpoint_auth_api_key
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2024-04-02 12:35+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
+"Language-Team: none\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
+
+#. module: endpoint_auth_api_key
+#: model:ir.model.fields,field_description:endpoint_auth_api_key.field_endpoint_endpoint__auth_api_key_group_ids
+#: model:ir.model.fields,field_description:endpoint_auth_api_key.field_endpoint_mixin__auth_api_key_group_ids
+msgid "Allowed API key groups"
+msgstr "Consenti gruppi chiavi API"
+
+#. module: endpoint_auth_api_key
+#: model:ir.model,name:endpoint_auth_api_key.model_endpoint_mixin
+msgid "Endpoint mixin"
+msgstr "Mixin endpoint"
+
+#. module: endpoint_auth_api_key
+#: model_terms:ir.ui.view,arch_db:endpoint_auth_api_key.endpoint_mixin_form_view
+msgid "Manage groups"
+msgstr "Gestione gruppi"
