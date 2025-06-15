@@ -1,0 +1,53 @@
+<odoo>
+    <record model="ir.ui.view" id="webservice_backend_form_view">
+        <field name="model">webservice.backend</field>
+        <field name="inherit_id" ref="webservice_base.webservice_backend_form_view" />
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button
+                    type="object"
+                    name="button_authorize"
+                    string="OAuth Authorize"
+                    invisible="auth_type != 'oauth2' or oauth2_flow != 'web_application'"
+                />
+            </header>
+            <group name="auth" position="inside">
+                <field
+                    name="oauth2_flow"
+                    invisible="auth_type != 'oauth2'"
+                    required="auth_type == 'oauth2'"
+                />
+                <field
+                    name="redirect_url"
+                    invisible="auth_type != 'oauth2' and oauth2_flow != 'web_application'"
+                />
+                <field
+                    name="oauth2_clientid"
+                    invisible="auth_type != 'oauth2'"
+                    required="auth_type == 'oauth2'"
+                />
+                <field
+                    name="oauth2_client_secret"
+                    invisible="auth_type != 'oauth2'"
+                    required="auth_type == 'oauth2'"
+                />
+                <field
+                    name="oauth2_scope"
+                    invisible="auth_type != 'oauth2' and oauth2_flow != 'web_application'"
+                    required="auth_type == 'oauth2' and oauth2_flow == 'authorization_code'"
+                />
+                <field
+                    name="oauth2_authorization_url"
+                    invisible="auth_type != 'oauth2' and oauth2_flow != 'web_application'"
+                    required="auth_type == 'oauth2' and oauth2_flow == 'authorization_code'"
+                />
+                <field
+                    name="oauth2_token_url"
+                    invisible="auth_type != 'oauth2'"
+                    required="auth_type == 'oauth2'"
+                />
+                <field name="oauth2_audience" invisible="auth_type != 'oauth2'" />
+            </group>
+        </field>
+    </record>
+</odoo>
