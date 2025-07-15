@@ -62,8 +62,12 @@ class EndpointRouteSyncMixin(models.AbstractModel):
         record_ids = record_ids or self.ids
         _logger.info("%s sync registry for %s", self._name, str(record_ids))
         records = self.browse(record_ids).exists()
-        records.filtered(lambda x: x.active)._register_controllers()
-        records.filtered(lambda x: not x.active)._unregister_controllers()
+        # update controllers and clear cache only once
+        records.filtered(lambda x: x.active)._register_controllers(clear_cache=False)
+        records.filtered(lambda x: not x.active)._unregister_controllers(
+            clear_cache=False
+        )
+        self.env.registry.clear_cache("routing")
 
     def _handle_registry_sync_post_commit(self, record_ids=None):
         """Handle registry sync after commit.
@@ -84,23 +88,30 @@ class EndpointRouteSyncMixin(models.AbstractModel):
             self._unregister_controllers()
         return super().unlink()
 
-    def _register_controllers(self, init=False, options=None):
+    def _register_controllers(self, init=False, options=None, clear_cache=True):
         if not self:
             return
         rules = self._prepare_endpoint_rules(options=options)
         self._endpoint_registry.update_rules(rules, init=init)
-        self.env.registry.clear_cache("routing")
+        if clear_cache:
+            self.env.registry.clear_cache("routing")
         _logger.debug(
             "%s registered controllers: %s",
             self._name,
             ", ".join([r.route for r in rules]),
         )
 
-    def _unregister_controllers(self):
+    def _unregister_controllers(self, clear_cache=True):
         if not self:
             return
         self._endpoint_registry.drop_rules(self._registered_endpoint_rule_keys())
-        self.env.registry.clear_cache("routing")
+        if clear_cache:
+            self.env.registry.clear_cache("routing")
+        _logger.debug(
+            "%s unregistered controllers: %s",
+            self._name,
+            ", ".join(self._registered_endpoint_rule_keys()),
+        )
 
     def _routing_impacting_fields(self, options=None):
         """Return list of fields that have impact on routing for current record."""
