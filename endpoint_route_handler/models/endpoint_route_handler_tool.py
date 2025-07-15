@@ -28,15 +28,17 @@ class EndpointRouteHandlerTool(models.TransientModel):
         self._compute_endpoint_hash()
         self._compute_route()
 
-    def _register_controllers(self, init=False, options=None):
+    def _register_controllers(self, init=False, options=None, clear_cache=True):
         if self:
             self._refresh_endpoint_data()
-        return super()._register_controllers(init=init, options=options)
+        return super()._register_controllers(
+            init=init, options=options, clear_cache=clear_cache
+        )
 
-    def _unregister_controllers(self):
+    def _unregister_controllers(self, clear_cache=True):
         if self:
             self._refresh_endpoint_data()
-        return super()._unregister_controllers()
+        return super()._unregister_controllers(clear_cache=clear_cache)
 
     @api.model
     def new(self, values=None, origin=None, ref=None):
