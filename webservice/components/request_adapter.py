@@ -56,6 +56,9 @@ class BaseRestRequestsAdapter(Component):
 
     def put(self, **kwargs):
         return self._request("put", **kwargs)
+    
+    def delete(self, **kwargs):
+        return self._request("delete", **kwargs)
 
     def _get_auth(self, auth=False, **kwargs):
         if auth:
