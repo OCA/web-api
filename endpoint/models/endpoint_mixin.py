@@ -105,7 +105,7 @@ class EndpointMixin(models.AbstractModel):
             'sha3_512', 'shake_128', 'shake_256', 'blake2b',
             'blake2s', 'md5', 'new'
         * hmac: Python 'hmac' library. Use 'new' to create HMAC objects.
-        * params
+        * querystring_params
 
         Must assign a ``result`` variable, with either an instance of ``Response``,
         or a dict containiny any of the keys:
@@ -189,11 +189,11 @@ class EndpointMixin(models.AbstractModel):
                 ),
             )
 
-    def _handle_exec__code(self, request, params=None):
+    def _handle_exec__code(self, request, querystring_params=None):
         if not self._code_snippet_valued():
             return {}
         eval_ctx = self._get_code_snippet_eval_context(request)
-        eval_ctx["params"] = params or {}
+        eval_ctx["querystring_params"] = querystring_params or {}
         snippet = self.code_snippet
         safe_eval.safe_eval(snippet, eval_ctx, mode="exec", nocopy=True)
         result = eval_ctx.get("result")
@@ -241,7 +241,7 @@ class EndpointMixin(models.AbstractModel):
                 _("Missing handler for exec mode %s") % self.exec_mode
             ) from e
 
-    def _handle_request(self, request, params=None):
+    def _handle_request(self, request, querystring_params=None):
         # Switch user for the whole process
         self_with_user = self
         if self.exec_as_user_id:
@@ -249,8 +249,8 @@ class EndpointMixin(models.AbstractModel):
         handler = self_with_user._get_handler()
         try:
             # In case the handler does not support params
-            if params:
-                res = handler(request, params=params)
+            if querystring_params:
+                res = handler(request, querystring_params=querystring_params)
             else:
                 res = handler(request)
         except self._bad_request_exceptions() as orig_exec:
