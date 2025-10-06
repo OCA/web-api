@@ -139,6 +139,7 @@ class BackendApplicationOAuth2RestRequestsAdapter(Component):
                 "oauth2_client_secret",
                 "oauth2_token_url",
                 "oauth2_audience",
+                "oauth2_scope",
                 "redirect_url",
             ]
         )[0]
@@ -149,6 +150,7 @@ class BackendApplicationOAuth2RestRequestsAdapter(Component):
                 cliend_id=oauth_params["oauth2_clientid"],
                 client_secret=oauth_params["oauth2_client_secret"],
                 audience=oauth_params.get("oauth2_audience") or "",
+                scope=oauth_params.get("oauth2_scope") or "",
             )
         return token
 
