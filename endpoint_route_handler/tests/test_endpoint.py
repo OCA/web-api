@@ -3,7 +3,8 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 from contextlib import contextmanager
 
-import odoo
+from odoo import api, modules
+from odoo.tests import common
 from odoo.tools import mute_logger
 
 from ..registry import EndpointRegistry
@@ -14,11 +15,11 @@ from .fake_controllers import CTRLFake
 @contextmanager
 def new_rollbacked_env():
     # Borrowed from `component`
-    registry = odoo.modules.registry.Registry(odoo.tests.common.get_db_name())
-    uid = odoo.SUPERUSER_ID
+    registry = modules.registry.Registry(common.get_db_name())
+    uid = api.SUPERUSER_ID
     cr = registry.cursor()
     try:
-        yield odoo.api.Environment(cr, uid, {})
+        yield api.Environment(cr, uid, {})
     finally:
         cr.rollback()  # we shouldn't have to commit anything
         cr.close()

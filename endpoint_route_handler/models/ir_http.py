@@ -38,8 +38,8 @@ class IrHttp(models.AbstractModel):
             for url in endpoint_rule.routing["routes"]:
                 yield (url, endpoint)
 
-    @tools.ormcache("key", "cls._endpoint_route_last_version()", cache="routing")
-    def routing_map(cls, key=None):
+    @tools.ormcache("key", "self._endpoint_route_last_version()", cache="routing")
+    def routing_map(self, key=None):
         res = super().routing_map(key=key)
         return res
 

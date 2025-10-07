@@ -7,7 +7,7 @@ import contextlib
 from odoo.tests.common import TransactionCase, tagged
 from odoo.tools import DotDict
 
-from odoo.addons.website.tools import MockRequest
+from odoo.addons.http_routing.tests.common import MockRequest
 
 
 @tagged("-at_install", "post_install")

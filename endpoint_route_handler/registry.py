@@ -103,13 +103,14 @@ class EndpointRegistry:
     def _setup_db_table(cls, cr):
         """Create routing table and indexes"""
         tools.sql.create_model_table(cr, cls._table, columns=cls._columns)
-        tools.sql.create_unique_index(
+        tools.sql.create_index(
             cr,
             "endpoint_route__key_uniq",
             cls._table,
             [
                 "key",
             ],
+            unique=True,
         )
         tools.sql.add_constraint(
             cr,

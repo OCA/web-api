@@ -4,7 +4,7 @@
 
 import logging
 
-from odoo import _, api, exceptions, fields, models
+from odoo import api, exceptions, fields, models
 
 ENDPOINT_ROUTE_CONSUMER_MODELS = {
     # by db
@@ -49,13 +49,10 @@ class EndpointRouteHandler(models.AbstractModel):
     # TODO: add flag to prevent route updates on save ->
     # should be handled by specific actions + filter in a tree view + btn on form
 
-    _sql_constraints = [
-        (
-            "endpoint_route_unique",
-            "unique(route)",
-            "You can register an endpoint route only once.",
-        )
-    ]
+    _endpoint_route_unique = models.Constraint(
+        "unique(route)",
+        "You can register an endpoint route only once.",
+    )
 
     @api.constrains("route")
     def _check_route_unique_across_models(self):
@@ -80,8 +77,12 @@ class EndpointRouteHandler(models.AbstractModel):
                 clashing_models.append(model)
         if clashing_models:
             raise exceptions.UserError(
-                _("Non unique route(s): %(routes)s.\nFound in model(s): %(models)s.\n")
-                % {"routes": ", ".join(routes), "models": ", ".join(clashing_models)}
+                self.env._(
+                    "Non unique route(s): %(routes)s.\n"
+                    "Found in model(s): %(models)s.\n",
+                    routes=", ".join(routes),
+                    models=", ".join(clashing_models),
+                )
             )
 
     def _get_endpoint_route_consumer_models(self):
@@ -174,8 +175,11 @@ class EndpointRouteHandler(models.AbstractModel):
         for rec in self:
             if rec.route in self._blacklist_routes:
                 raise exceptions.UserError(
-                    _("`%(name)s` uses a blacklisted routed = `%(route)s`")
-                    % {"name": rec.name, "route": rec.route}
+                    self.env._(
+                        "`%(name)s` uses a blacklisted routed = `%(route)s`",
+                        name=rec.name,
+                        route=rec.route,
+                    )
                 )
 
     @api.constrains("request_method", "request_content_type")
@@ -183,7 +187,7 @@ class EndpointRouteHandler(models.AbstractModel):
         for rec in self:
             if rec.request_method in ("POST", "PUT") and not rec.request_content_type:
                 raise exceptions.UserError(
-                    _("Request content type is required for POST and PUT.")
+                    self.env._("Request content type is required for POST and PUT.")
                 )
 
     def _prepare_endpoint_rules(self, options=None):
