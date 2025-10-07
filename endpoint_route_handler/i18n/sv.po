@@ -1,0 +1,202 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* endpoint_route_handler
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2025-10-07 15:42+0000\n"
+"Last-Translator: jakobkrabbe <jakob@syscare.se>\n"
+"Language-Team: none\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10.4\n"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__active
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__active
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_sync_mixin__active
+msgid "Active"
+msgstr "Aktiv"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__auth_type
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__auth_type
+msgid "Auth Type"
+msgstr "Autensieringstyp"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__create_uid
+msgid "Created by"
+msgstr "Skapad av"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__create_date
+msgid "Created on"
+msgstr "Skapad den"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__csrf
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__csrf
+#, fuzzy
+msgid "Csrf"
+msgstr "Csrf"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__display_name
+msgid "Display Name"
+msgstr "Visningsnamn"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__endpoint_hash
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__endpoint_hash
+msgid "Endpoint Hash"
+msgstr "Slutpunkt Hash"
+
+#. module: endpoint_route_handler
+#: model:ir.model,name:endpoint_route_handler.model_endpoint_route_handler
+msgid "Endpoint Route handler"
+msgstr "Hanterare för slutpunktsrutt"
+
+#. module: endpoint_route_handler
+#: model:ir.model,name:endpoint_route_handler.model_endpoint_route_handler_tool
+msgid "Endpoint Route handler tool"
+msgstr "Verktyg för hantering av slutpunktsrutt"
+
+#. module: endpoint_route_handler
+#: model:ir.model,name:endpoint_route_handler.model_endpoint_route_sync_mixin
+msgid "Endpoint Route sync mixin"
+msgstr "Synkronisering av slutpunktsruttmixning"
+
+#. module: endpoint_route_handler
+#: model:ir.model,name:endpoint_route_handler.model_ir_http
+#, fuzzy
+msgid "HTTP Routing"
+msgstr "HTTP Routing"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__id
+msgid "ID"
+msgstr "ID"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler__endpoint_hash
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler_tool__endpoint_hash
+msgid "Identify the route with its main params"
+msgstr "Identifiera rutten med dess huvudparametrar"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__write_uid
+msgid "Last Updated by"
+msgstr "Senast uppdaterad av"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__write_date
+msgid "Last Updated on"
+msgstr "Senast uppdaterad den"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__name
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__name
+msgid "Name"
+msgstr "Namn"
+
+#. module: endpoint_route_handler
+#. odoo-python
+#: code:addons/endpoint_route_handler/models/endpoint_route_handler.py:0
+msgid ""
+"Non unique route(s): %(routes)s.\n"
+"Found in model(s): %(models)s.\n"
+msgstr ""
+"Icke-unika rutter: %(routes)er.\n"
+"Hittades i modell(er): %(models)er.\n"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler__registry_sync
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler_tool__registry_sync
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_sync_mixin__registry_sync
+msgid ""
+"ON: the record has been modified and registry was not notified.\n"
+"No change will be active until this flag is set to false via proper action.\n"
+"\n"
+"OFF: record in line with the registry, nothing to do."
+msgstr ""
+"PÅ: posten har ändrats och registret har inte meddelats.\n"
+"Ingen ändring kommer att vara aktiv förrän denna flagga sätts till falskt "
+"genom korrekt åtgärd.\n"
+"\n"
+"AV: posten är i linje med registret, inget att göra."
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__readonly
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__readonly
+msgid "Readonly"
+msgstr "Skrivskyddad"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__registry_sync
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__registry_sync
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_sync_mixin__registry_sync
+msgid "Registry Sync"
+msgstr "Registersynkronisering"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__request_content_type
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__request_content_type
+msgid "Request Content Type"
+msgstr "Begär innehållstyp"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__request_method
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__request_method
+msgid "Request Method"
+msgstr "Begärd metod"
+
+#. module: endpoint_route_handler
+#. odoo-python
+#: code:addons/endpoint_route_handler/models/endpoint_route_handler.py:0
+msgid "Request content type is required for POST and PUT."
+msgstr "Innehållstypen för begäran krävs för POST och PUT."
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__route
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__route
+#, fuzzy
+msgid "Route"
+msgstr "Route"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__route_group
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__route_group
+msgid "Route Group"
+msgstr "Route Grupp"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__route_type
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__route_type
+msgid "Route Type"
+msgstr "Route typ"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler__route_group
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler_tool__route_group
+msgid "Use this to classify routes together"
+msgstr "Använd detta för att klassificera rutter tillsammans"
+
+#. module: endpoint_route_handler
+#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_endpoint_endpoint_route_unique
+#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_mixin_endpoint_route_unique
+#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_route_handler_endpoint_route_unique
+#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_route_handler_tool_endpoint_route_unique
+msgid "You can register an endpoint route only once."
+msgstr "Du kan bara registrera en slutpunktsrutt en gång."
+
+#. module: endpoint_route_handler
+#. odoo-python
+#: code:addons/endpoint_route_handler/models/endpoint_route_handler.py:0
+msgid "`%(name)s` uses a blacklisted routed = `%(route)s`"
+msgstr "`%(name)s` använder en svartlistad routed = `%(route)s`"
