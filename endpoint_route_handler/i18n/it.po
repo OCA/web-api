@@ -1,0 +1,202 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* endpoint_route_handler
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2025-01-31 14:06+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
+"Language-Team: none\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6.2\n"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__active
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__active
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_sync_mixin__active
+msgid "Active"
+msgstr "Attiva"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__auth_type
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__auth_type
+msgid "Auth Type"
+msgstr "Tipo autorizzazione"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__csrf
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__csrf
+msgid "Csrf"
+msgstr "CSRF"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__display_name
+msgid "Display Name"
+msgstr "Nome visualizzato"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__endpoint_hash
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__endpoint_hash
+msgid "Endpoint Hash"
+msgstr "Hash endpoint"
+
+#. module: endpoint_route_handler
+#: model:ir.model,name:endpoint_route_handler.model_endpoint_route_handler
+msgid "Endpoint Route handler"
+msgstr "Gestore percorso endpoint"
+
+#. module: endpoint_route_handler
+#: model:ir.model,name:endpoint_route_handler.model_endpoint_route_handler_tool
+msgid "Endpoint Route handler tool"
+msgstr "Strumento gestore percorso endpoint"
+
+#. module: endpoint_route_handler
+#: model:ir.model,name:endpoint_route_handler.model_endpoint_route_sync_mixin
+msgid "Endpoint Route sync mixin"
+msgstr "Mixin sincro percorso endpoint"
+
+#. module: endpoint_route_handler
+#: model:ir.model,name:endpoint_route_handler.model_ir_http
+msgid "HTTP Routing"
+msgstr "Instradamento HTTP"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__id
+msgid "ID"
+msgstr "ID"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler__endpoint_hash
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler_tool__endpoint_hash
+msgid "Identify the route with its main params"
+msgstr "Identifica la rotta con questi parametri principali"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__write_uid
+msgid "Last Updated by"
+msgstr "Ultimo aggiornamento di"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__write_date
+msgid "Last Updated on"
+msgstr "Ultimo aggiornamento il"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__name
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__name
+msgid "Name"
+msgstr "Nome"
+
+#. module: endpoint_route_handler
+#. odoo-python
+#: code:addons/endpoint_route_handler/models/endpoint_route_handler.py:0
+msgid ""
+"Non unique route(s): %(routes)s.\n"
+"Found in model(s): %(models)s.\n"
+msgstr ""
+"Percorso non univoco: %(routes)s.\n"
+"Trovato nel modello: %(models)s.\n"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler__registry_sync
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler_tool__registry_sync
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_sync_mixin__registry_sync
+msgid ""
+"ON: the record has been modified and registry was not notified.\n"
+"No change will be active until this flag is set to false via proper action.\n"
+"\n"
+"OFF: record in line with the registry, nothing to do."
+msgstr ""
+"Acceso: il record è stato modificato e il registro non è stato notificato.\n"
+"Nessuna modifica sarà attiva finchè questa opzione è impostata a falso "
+"attraverso un'azione opportuna.\n"
+"\n"
+"Spento: record allineato con il registro, non c'è niente da fare."
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__readonly
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__readonly
+msgid "Readonly"
+msgstr "Solo lettura"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__registry_sync
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__registry_sync
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_sync_mixin__registry_sync
+msgid "Registry Sync"
+msgstr "Sincro registro"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__request_content_type
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__request_content_type
+msgid "Request Content Type"
+msgstr "Tipo contenuto richiesta"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__request_method
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__request_method
+msgid "Request Method"
+msgstr "Metodo richiesta"
+
+#. module: endpoint_route_handler
+#. odoo-python
+#: code:addons/endpoint_route_handler/models/endpoint_route_handler.py:0
+msgid "Request content type is required for POST and PUT."
+msgstr "Il tipo contenuto richiesta è obbligatorio per POST e PUT."
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__route
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__route
+msgid "Route"
+msgstr "Percorso"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__route_group
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__route_group
+msgid "Route Group"
+msgstr "Gruppo percorso"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__route_type
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__route_type
+msgid "Route Type"
+msgstr "Tipo percorso"
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler__route_group
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler_tool__route_group
+msgid "Use this to classify routes together"
+msgstr "Utilizzarlo per classificare i percorsi insieme"
+
+#. module: endpoint_route_handler
+#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_endpoint_endpoint_route_unique
+#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_mixin_endpoint_route_unique
+#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_route_handler_endpoint_route_unique
+#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_route_handler_tool_endpoint_route_unique
+msgid "You can register an endpoint route only once."
+msgstr "Si può regiStrare un percorso endpoint solo una volta."
+
+#. module: endpoint_route_handler
+#. odoo-python
+#: code:addons/endpoint_route_handler/models/endpoint_route_handler.py:0
+msgid "`%(name)s` uses a blacklisted routed = `%(route)s`"
+msgstr "`%(name)s` utilizza un percorso bloccato = `%(route)s`"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Ultima modifica il"
