@@ -47,15 +47,8 @@ class EndpointRouteHandler(models.AbstractModel):
     readonly = fields.Boolean(default=False)
 
     # TODO: add flag to prevent route updates on save ->
-    # should be handled by specific actions + filter in a tree view + btn on form
+    _endpoint_route_unique = models.Constraint("unique(route)",   "You can register an endpoint route only once.")
 
-    _sql_constraints = [
-        (
-            "endpoint_route_unique",
-            "unique(route)",
-            "You can register an endpoint route only once.",
-        )
-    ]
 
     @api.constrains("route")
     def _check_route_unique_across_models(self):
