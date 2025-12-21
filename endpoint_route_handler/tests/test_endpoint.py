@@ -48,6 +48,12 @@ class TestEndpoint(CommonEndpoint):
         self.assertTrue(first_hash)
         new_route.route += "/new"
         self.assertNotEqual(new_route.endpoint_hash, first_hash)
+        self.assertIn("http", dict(new_route._selection_route_type()))
+        self.assertIn("POST", dict(new_route._selection_request_method()))
+        self.assertIn("bearer", dict(new_route._selection_auth_type()))
+        self.assertIn(
+            "application/json", dict(new_route._selection_request_content_type())
+        )
 
     @mute_logger("odoo.addons.base.models.ir_http")
     def test_as_tool_register_single_controller(self):

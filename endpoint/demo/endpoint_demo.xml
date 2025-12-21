@@ -81,4 +81,15 @@ result = {"response": Response(request.params.get("your_name", ""))}
 result = {"payload": "Method used:" + request.httprequest.method}
         </field>
     </record>
+
+    <record id="endpoint_demo_8" model="endpoint.endpoint">
+        <field name="name">Demo Endpoint 8</field>
+        <field name="route">/demo/auth_bearer</field>
+        <field name="request_method">GET</field>
+        <field name="exec_mode">code</field>
+        <field name="auth_type">bearer</field>
+        <field name="code_snippet">
+result = {"payload": "Method used:" + request.httprequest.method}
+        </field>
+    </record>
 </odoo>
