@@ -77,3 +77,7 @@ class EndpointHttpCase(HttpCase):
     def test_call7(self):
         response = self.url_open("/demo/bad_method", data="ok")
         self.assertEqual(response.status_code, 405)
+
+    def test_call8(self):
+        response = self.url_open("/demo/test/8")
+        self.assertEqual(response.json(), {"param1": "test", "param2": 8})
