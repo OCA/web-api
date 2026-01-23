@@ -149,7 +149,7 @@ class BackendApplicationOAuth2RestRequestsAdapter(Component):
             else:
                 new_token = self._fetch_new_token(old_token=token)
                 cr.execute(
-                    "UPDATE webservice_backend " "SET oauth2_token=%s " "WHERE id=%s",
+                    "UPDATE webservice_backend SET oauth2_token=%s WHERE id=%s",
                     (json.dumps(new_token), backend.id),
                 )
                 self._token = new_token
