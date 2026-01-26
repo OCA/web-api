@@ -19,7 +19,6 @@ class EndpointRouteHandler(models.AbstractModel):
     name = fields.Char(required=True)
     route = fields.Char(
         required=True,
-        index=True,
         compute="_compute_route",
         inverse="_inverse_route",
         readonly=False,
