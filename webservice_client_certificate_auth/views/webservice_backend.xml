@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="webservice_backend_form_view" model="ir.ui.view">
+        <field name="model">webservice.backend</field>
+        <field name="inherit_id" ref="webservice.webservice_backend_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='auth_type']" position="after">
+                <field
+                    name="client_certificate_path"
+                    invisible="auth_type != 'client_certificate'"
+                    required="auth_type == 'client_certificate'"
+                />
+                <field
+                    name="client_private_key_path"
+                    invisible="auth_type != 'client_certificate'"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>
