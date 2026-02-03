@@ -285,7 +285,7 @@ oauth2_authorization_url = {url}/authorize
         form_xmlid = "webservice.webservice_backend_form_view"
         for auth_type, oauth2_flow in [
             (tp, fl)
-            for tp in ws._fields["auth_type"].get_values(ws.env)
+            for tp in ["none", "user_pwd", "api_key", "oauth2"]
             for fl in ws._fields["oauth2_flow"].get_values(ws.env)
         ]:
             next_ws_id = ws.sudo().search([], order="id desc", limit=1).id + 1
