@@ -1,11 +1,11 @@
 # Copyright 2026 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import os
 from unittest import mock
 
 from odoo import exceptions
 
+from odoo.addons.server_environment.tests.common import ServerEnvironmentCase
 from odoo.addons.webservice.tests.common import CommonWebService
 
 
@@ -15,14 +15,6 @@ class TestClientCertAuth(CommonWebService):
         res = super()._setup_records()
         cls.url = "https://localhost.demo.odoo/"
         # Certificate and private key configuration
-        os.environ["SERVER_ENV_CONFIG"] = "\n".join(
-            [
-                "[webservice_backend.test_client_certificate_and_key]",
-                "auth_type = client_certificate",
-                "client_certificate_path = /path/client.cert",
-                "client_private_key_path = /path/client.key",
-            ]
-        )
         cls.backend_certificate_and_key = cls.env["webservice.backend"].create(
             {
                 "name": "Webservice Client Certificate & Key",
@@ -35,13 +27,6 @@ class TestClientCertAuth(CommonWebService):
             }
         )
         # Certificate only configuration (no private key)
-        os.environ["SERVER_ENV_CONFIG"] = "\n".join(
-            [
-                "[webservice_backend.test_client_certificate_only]",
-                "auth_type = client_certificate",
-                "client_certificate_path = /path/client.pem",
-            ]
-        )
         cls.backend_certificate_only = cls.env["webservice.backend"].create(
             {
                 "name": "Webservice Client Certificate Only",
@@ -93,4 +78,34 @@ class TestClientCertAuth(CommonWebService):
                     "url": "http://localhost",
                     "auth_type": "client_certificate",
                 }
+            )
+
+
+class TestClientCertAuthServerEnv(ServerEnvironmentCase):
+    def test_client_certificate_server_env(self):
+        client_certificate_config = """
+            [webservice_backend.test_server_env]
+            auth_type = client_certificate
+            client_certificate_path = /path/client.cert
+            client_private_key_path = /path/client.key
+        """
+        with self.load_config(public=client_certificate_config):
+            backend = self.env["webservice.backend"].create(
+                {
+                    "name": "Test Server Env",
+                    "tech_name": "test_server_env",
+                    "protocol": "http",
+                    "url": "https://localhost",
+                    "auth_type": "none",
+                }
+            )
+            backend.invalidate_recordset()
+            self.assertEqual(backend.auth_type, "client_certificate")
+            self.assertEqual(
+                backend.client_certificate_path,
+                "/path/client.cert",
+            )
+            self.assertEqual(
+                backend.client_private_key_path,
+                "/path/client.key",
             )
