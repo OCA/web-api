@@ -5,7 +5,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import logging
 
-from odoo import _, api, exceptions, fields, models
+from odoo import api, exceptions, fields, models
 from odoo.tools import config
 
 _logger = logging.getLogger(__name__)
@@ -87,14 +87,13 @@ class WebserviceBackend(models.Model):
         def get_selection_value(fname):
             return self._fields.get(fname).convert_to_export(self[fname], self)
 
-        return _(
+        return self.env._(
             "Webservice '%(name)s' requires '%(auth_type)s' authentication. "
-            "However, the following field(s) are not valued: %(fields)s"
-        ) % {
-            "name": self.name,
-            "auth_type": get_selection_value("auth_type"),
-            "fields": ", ".join([f.string for f in missing_fields]),
-        }
+            "However, the following field(s) are not valued: %(fields)s",
+            name=self.name,
+            auth_type=get_selection_value("auth_type"),
+            fields=", ".join([f.string for f in missing_fields]),
+        )
 
     def _valid_field_parameter(self, field, name):
         extra_params = ("auth_type",)

@@ -3,9 +3,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import json
 import logging
+from urllib.parse import urlencode
 
 from oauthlib.oauth2.rfc6749 import errors
-from werkzeug.urls import url_encode
 
 from odoo import http
 from odoo.http import request
@@ -59,5 +59,5 @@ class OAuth2Controller(http.Controller):
 
         if cids:
             url_params["cids"] = ",".join([str(cid) for cid in cids])
-        url = f"/web?#{url_encode(url_params)}"
+        url = f"/web?#{urlencode(url_params)}"
         return request.redirect(url)
