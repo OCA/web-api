@@ -6,6 +6,7 @@
 from odoo import api, models
 
 
+# pylint: disable=no-wizard-in-models
 class EndpointRouteHandlerTool(models.TransientModel):
     """Model meant to be used as a tool.
 
