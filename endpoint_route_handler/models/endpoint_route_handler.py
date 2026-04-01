@@ -80,10 +80,7 @@ class EndpointRouteHandler(models.AbstractModel):
                 clashing_models.append(model)
         if clashing_models:
             raise exceptions.UserError(
-                _(
-                    "Non unique route(s): %(routes)s.\n"
-                    "Found in model(s): %(models)s.\n"
-                )
+                _("Non unique route(s): %(routes)s.\nFound in model(s): %(models)s.\n")
                 % {"routes": ", ".join(routes), "models": ", ".join(clashing_models)}
             )
 
