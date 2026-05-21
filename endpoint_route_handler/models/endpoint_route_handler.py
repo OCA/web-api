@@ -43,6 +43,7 @@ class EndpointRouteHandler(models.AbstractModel):
     endpoint_hash = fields.Char(
         compute="_compute_endpoint_hash", help="Identify the route with its main params"
     )
+    cors = fields.Char(help="Comma-separated list of allowed origins", default="*")
     csrf = fields.Boolean(default=False)
     readonly = fields.Boolean(default=False)
 
@@ -248,6 +249,7 @@ class EndpointRouteHandler(models.AbstractModel):
             auth=self.auth_type,
             methods=[self.request_method],
             routes=[route],
+            cors=self.cors,
             csrf=self.csrf,
             readonly=self.readonly,
         )
