@@ -439,6 +439,13 @@ vals = {
 new_route = route_handler.new(vals)
 new_route._register_controller()
 </pre>
+<p>Available <tt class="docutils literal">auth_type</tt> values:</p>
+<ul class="simple">
+<li><tt class="docutils literal">public</tt>: no authentication required</li>
+<li><tt class="docutils literal">user_endpoint</tt>: session-based user authentication (default)</li>
+<li><tt class="docutils literal">bearer</tt>: API key authentication via <tt class="docutils literal">Authorization: Bearer</tt>
+header (uses Odoo’s built-in <tt class="docutils literal">res.users.apikeys</tt>)</li>
+</ul>
 <p>You can override options and define - for instance - a different
 controller method:</p>
 <pre class="literal-block">
@@ -476,8 +483,8 @@ separated list of methods use only routing.routes for generating
 the rule sort and freeze its values to update the endpoint hash</p>
 <p>catch dup route exception on the sync to detect duplicated routes
 and use the endpoint_hash to retrieve the real record (note: we
-could store more info in the routing information which will stay in
-the map)</p>
+could store more info in the routing information which will stay
+in the map)</p>
 <p>for customizing the rule behavior the endpoint the hook is to
 override the registry lookup</p>
 <p>make EndpointRule class overridable on the registry</p>

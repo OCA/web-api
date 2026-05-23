@@ -50,6 +50,12 @@ class TestEndpoint(CommonEndpoint):
         new_route.route += "/new"
         self.assertNotEqual(new_route.endpoint_hash, first_hash)
 
+    def test_auth_type_routing_info(self):
+        for auth_type in ("public", "user_endpoint", "bearer"):
+            new_route = make_new_route(self.env, auth_type=auth_type)
+            __, routing, __ = new_route._get_routing_info()
+            self.assertEqual(routing["auth"], auth_type)
+
     @mute_logger("odoo.addons.base.models.ir_http")
     def test_as_tool_register_single_controller(self):
         new_route = make_new_route(self.env)

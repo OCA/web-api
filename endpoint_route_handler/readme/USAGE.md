@@ -40,6 +40,13 @@ instance:
     new_route = route_handler.new(vals)
     new_route._register_controller()
 
+Available `auth_type` values:
+
+- `public`: no authentication required
+- `user_endpoint`: session-based user authentication (default)
+- `bearer`: API key authentication via `Authorization: Bearer` header
+  (uses Odoo's built-in `res.users.apikeys`)
+
 You can override options and define - for instance - a different
 controller method:
 
