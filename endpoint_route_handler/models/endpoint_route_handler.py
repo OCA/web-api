@@ -22,6 +22,7 @@ class EndpointRouteHandler(models.AbstractModel):
         index=True,
         compute="_compute_route",
         inverse="_inverse_route",
+        precompute=True,
         readonly=False,
         store=True,
         copy=False,
