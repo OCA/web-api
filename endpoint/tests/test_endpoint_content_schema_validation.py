@@ -153,6 +153,21 @@ class TestEndpointContentSchemaValidationHttp(HttpCase):
         self.assertEqual(payload["detail"][0]["type"], "type")
 
     @mute_logger("endpoint.endpoint")
+    def test_validation_error_preserves_cors_headers(self):
+        response = self.url_open(
+            "/demo/schema",
+            data=json.dumps({"data": "not-an-array"}),
+            headers={
+                "Content-Type": "application/json",
+                "Origin": "https://editor.swagger.io",
+            },
+        )
+        self.assertEqual(response.status_code, 400)
+        # Route-managed CORS headers (default cors="*") must survive on the
+        # validation-error response, not only on a successful one.
+        self.assertEqual(response.headers.get("Access-Control-Allow-Origin"), "*")
+
+    @mute_logger("endpoint.endpoint")
     def test_json_malformed_body(self):
         response = self.url_open(
             "/demo/schema",
