@@ -30,6 +30,18 @@ msgid "Auth Type"
 msgstr "Tipo autorizzazione"
 
 #. module: endpoint_route_handler
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler__cors
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler_tool__cors
+msgid "Comma-separated list of allowed origins"
+msgstr ""
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__cors
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__cors
+msgid "Cors"
+msgstr ""
+
+#. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__create_uid
 msgid "Created by"
 msgstr "Creato da"
