@@ -115,6 +115,28 @@ class TestEndpoint(CommonEndpoint):
             rmap = self.env["ir.http"].routing_map()
             self.assertIn(route, [x.rule for x in rmap._rules])
 
+    def test_route_version_memoized_per_request(self):
+        """The route version is memoized on the request and reset on demand."""
+        ir_http = self.env["ir.http"]
+        attr = ir_http._endpoint_route_version_attr
+        with self._get_mocked_request() as req:
+            # Nothing memoized yet.
+            self.assertNotIn(attr, req.__dict__)
+
+            # First access reads the version and memoizes it on the request.
+            version = ir_http._endpoint_route_last_version()
+            self.assertEqual(req.__dict__[attr], version)
+
+            # A memoized value is returned as-is: the source is not read
+            # again within the same request. Seed a sentinel to prove it.
+            req.__dict__[attr] = version + 999
+            self.assertEqual(ir_http._endpoint_route_last_version(), version + 999)
+
+            # Resetting drops the memo so the next access recomputes.
+            ir_http._endpoint_route_reset_last_version()
+            self.assertNotIn(attr, req.__dict__)
+            self.assertEqual(ir_http._endpoint_route_last_version(), version)
+
 
 class TestEndpointCrossEnv(CommonEndpoint):
     def setUp(self):
