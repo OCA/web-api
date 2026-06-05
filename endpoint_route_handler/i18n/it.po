@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-01-31 14:06+0000\n"
+"PO-Revision-Date: 2026-06-05 09:46+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__active
@@ -33,13 +33,13 @@ msgstr "Tipo autorizzazione"
 #: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler__cors
 #: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler_tool__cors
 msgid "Comma-separated list of allowed origins"
-msgstr ""
+msgstr "Elenco separato da virgola delle origini consentite"
 
 #. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__cors
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__cors
 msgid "Cors"
-msgstr ""
+msgstr "Cors"
 
 #. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__create_uid
