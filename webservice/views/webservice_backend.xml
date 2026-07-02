@@ -26,14 +26,31 @@
                     invisible="auth_type != 'oauth2' and oauth2_flow != 'web_application'"
                 />
                 <field
+                    name="oauth2_client_auth_method"
+                    invisible="auth_type != 'oauth2' or oauth2_flow != 'backend_application'"
+                    widget="radio"
+                />
+                <field
                     name="oauth2_clientid"
-                    invisible="auth_type != 'oauth2'"
-                    required="auth_type == 'oauth2'"
+                    invisible="auth_type != 'oauth2' or (oauth2_flow == 'backend_application' and oauth2_client_auth_method != 'client_secret_basic')"
+                    required="auth_type == 'oauth2' and (oauth2_flow != 'backend_application' or oauth2_client_auth_method == 'client_secret_basic')"
                 />
                 <field
                     name="oauth2_client_secret"
-                    invisible="auth_type != 'oauth2'"
-                    required="auth_type == 'oauth2'"
+                    invisible="auth_type != 'oauth2' or (oauth2_flow == 'backend_application' and oauth2_client_auth_method != 'client_secret_basic')"
+                    required="auth_type == 'oauth2' and (oauth2_flow != 'backend_application' or oauth2_client_auth_method == 'client_secret_basic')"
+                    password="True"
+                />
+                <field
+                    name="oauth2_client_auth_header"
+                    invisible="auth_type != 'oauth2' or oauth2_flow != 'backend_application' or oauth2_client_auth_method != 'custom_header'"
+                    required="auth_type == 'oauth2' and oauth2_flow == 'backend_application' and oauth2_client_auth_method == 'custom_header'"
+                />
+                <field
+                    name="oauth2_client_auth_value"
+                    invisible="auth_type != 'oauth2' or oauth2_flow != 'backend_application' or oauth2_client_auth_method != 'custom_header'"
+                    required="auth_type == 'oauth2' and oauth2_flow == 'backend_application' and oauth2_client_auth_method == 'custom_header'"
+                    password="True"
                 />
                 <field
                     name="oauth2_scope"
@@ -49,6 +66,12 @@
                     name="oauth2_token_url"
                     invisible="auth_type != 'oauth2'"
                     required="auth_type == 'oauth2'"
+                />
+                <field
+                    name="oauth2_token_method"
+                    invisible="auth_type != 'oauth2' or oauth2_flow != 'backend_application'"
+                    widget="radio"
+                    options="{'horizontal': true}"
                 />
                 <field name="oauth2_audience" invisible="auth_type != 'oauth2'" />
             </xpath>

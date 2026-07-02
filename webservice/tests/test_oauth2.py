@@ -1,6 +1,7 @@
 # Copyright 2023 Camptocamp SA
 # @author Alexandre Fayolle <alexandre.fayolle@camptocamp.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+import base64
 import json
 import time
 from urllib.parse import quote
@@ -8,6 +9,7 @@ from urllib.parse import quote
 import responses
 from oauthlib.oauth2.rfc6749.errors import InvalidGrantError
 
+from odoo import exceptions
 from odoo.tests import Form
 
 from .common import CommonWebService, mock_cursor
@@ -149,6 +151,135 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
             json.loads(self.webservice.oauth2_token)["access_token"],
             "old_token",
         )
+
+    @responses.activate
+    def test_fetch_token_client_secret_basic(self):
+        """Client credentials are sent as an HTTP Basic Authorization header.
+
+        Scenario:
+            1. Fetch a token with the default (HTTP Basic) authentication.
+        Expected:
+            - The token request carries a Basic Authorization header built from
+              the client id and secret.
+            - The client secret is not duplicated in the request body.
+        """
+        self.webservice.oauth2_client_auth_method = "client_secret_basic"
+        now = time.time()
+        duration = 3600
+        responses.add(
+            responses.POST,
+            f"{self.url}oauth2/token",
+            json={
+                "access_token": "cool_token",
+                "token_type": "Bearer",
+                "expires_in": duration,
+                "expires_at": now + duration,
+            },
+        )
+        responses.add(responses.GET, f"{self.url}endpoint", body="OK")
+        with mock_cursor(self.env.cr):
+            self.webservice.call("get", url=f"{self.url}endpoint")
+        token_request = responses.calls[0].request
+        expected = base64.b64encode(b"some_client_id:shh_secret").decode()
+        self.assertEqual(token_request.headers["Authorization"], f"Basic {expected}")
+        self.assertNotIn("client_secret", token_request.body or "")
+
+    @responses.activate
+    def test_fetch_token_custom_header_get(self):
+        """Client credentials are sent verbatim in a custom header over GET.
+
+        Scenario:
+            1. Configure the backend to authenticate with a custom Authorization
+               header and to request the token with a GET.
+            2. Trigger a call so a new token is fetched.
+        Expected:
+            - The token request uses the GET method.
+            - It carries the configured custom Authorization header, unaltered.
+        """
+        self.webservice.write(
+            {
+                "oauth2_client_auth_method": "custom_header",
+                "oauth2_token_method": "get",
+                "oauth2_client_auth_header": "Authorization",
+                "oauth2_client_auth_value": "SSWS some_static_token",
+            }
+        )
+        now = time.time()
+        duration = 3600
+        responses.add(
+            responses.GET,
+            f"{self.url}oauth2/token",
+            json={
+                "access_token": "cool_token",
+                "token_type": "Bearer",
+                "expires_in": duration,
+                "expires_at": now + duration,
+            },
+        )
+        responses.add(responses.GET, f"{self.url}endpoint", body="OK")
+        with mock_cursor(self.env.cr):
+            self.webservice.call("get", url=f"{self.url}endpoint")
+        token_request = responses.calls[0].request
+        self.assertEqual(token_request.method, "GET")
+        self.assertEqual(
+            token_request.headers["Authorization"], "SSWS some_static_token"
+        )
+
+    def test_client_secret_basic_auth_validation(self):
+        """HTTP Basic auth requires the client id and secret.
+
+        Scenario:
+            1. Create an OAuth2 backend with the HTTP Basic authentication but
+               without a client id and secret.
+        Expected:
+            - Validation fails asking for the client id and secret.
+        """
+        msg = (
+            r"requires 'OAuth2' authentication. However, the following "
+            r"field\(s\) are not valued: Client ID, Client Secret"
+        )
+        with self.assertRaisesRegex(exceptions.UserError, msg):
+            self.env["webservice.backend"].create(
+                {
+                    "name": "WebService OAuth2 basic missing creds",
+                    "tech_name": "test_oauth2_basic_missing",
+                    "auth_type": "oauth2",
+                    "protocol": "http",
+                    "url": self.url,
+                    "oauth2_flow": "backend_application",
+                    "oauth2_client_auth_method": "client_secret_basic",
+                    "oauth2_token_url": f"{self.url}oauth2/token",
+                }
+            )
+
+    def test_custom_header_auth_validation(self):
+        """Custom-header auth requires the header value, not the client id/secret.
+
+        Scenario:
+            1. Create an OAuth2 backend with the custom Authorization header
+               method, without a client id/secret and without a header value.
+        Expected:
+            - Validation fails asking only for the header value; the client id
+              and secret are not reported as missing.
+        """
+        msg = (
+            r"requires 'OAuth2' authentication. However, the following "
+            r"field\(s\) are not valued: Client Auth Header Value"
+        )
+        with self.assertRaisesRegex(exceptions.UserError, msg):
+            self.env["webservice.backend"].create(
+                {
+                    "name": "WebService OAuth2 custom header missing value",
+                    "tech_name": "test_oauth2_customhdr_missing",
+                    "auth_type": "oauth2",
+                    "protocol": "http",
+                    "url": self.url,
+                    "oauth2_flow": "backend_application",
+                    "oauth2_client_auth_method": "custom_header",
+                    "oauth2_client_auth_header": "Authorization",
+                    "oauth2_token_url": f"{self.url}oauth2/token",
+                }
+            )
 
 
 class TestWebServiceOauth2WebApplication(CommonWebService):
