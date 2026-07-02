@@ -29,6 +29,10 @@ class WebserviceBackend(models.Model):
             "oauth2_authorization_url": {},
             "oauth2_token_url": {},
             "oauth2_audience": {},
+            "oauth2_token_method": {},
+            "oauth2_client_auth_method": {},
+            "oauth2_client_auth_header": {},
+            "oauth2_client_auth_value": {},
         }
         webservice_fields.update(base_fields)
         return webservice_fields
