@@ -214,3 +214,33 @@ class TestWebService(CommonWebService):
             responses.calls[0].request.headers["Content-Type"], "application/xml"
         )
         self.assertEqual(responses.calls[0].request.headers["demo_header"], "HEADER")
+    @responses.activate
+    def test_web_service_content_only_default_true_with_warning(self):
+        """content_only defaults to True but should log a deprecation warning."""
+        responses.add(responses.GET, self.url, body="{}")
+        with self.assertLogs(
+            "odoo.addons.webservice.components.request_adapter", level="WARNING"
+        ) as log_catcher:
+            result = self.webservice.call("get")
+        self.assertEqual(result, b"{}")
+        self.assertTrue(
+            any(
+                "content_only" in message
+                for message in log_catcher.output
+            )
+        )
+
+    @responses.activate
+    def test_web_service_content_only_explicit_false(self):
+        """content_only=False should return the full Response object."""
+        responses.add(responses.GET, self.url, body="{}")
+        result = self.webservice.call("get", content_only=False)
+        self.assertEqual(result.content, b"{}")
+        self.assertEqual(result.status_code, 200)
+
+    @responses.activate
+    def test_web_service_content_only_explicit_true(self):
+        """content_only=True should return raw bytes without a warning."""
+        responses.add(responses.GET, self.url, body="{}")
+        result = self.webservice.call("get", content_only=True)
+        self.assertEqual(result, b"{}")
