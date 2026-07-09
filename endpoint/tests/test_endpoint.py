@@ -172,7 +172,7 @@ class TestEndpoint(CommonEndpoint):
             },
         )
         # check prefix
-        type(endpoint)._endpoint_route_prefix = "/foo"
+        self.patch(type(endpoint), "_endpoint_route_prefix", "/foo")
         endpoint._compute_route()
         __, info, __ = endpoint._get_routing_info()
         self.assertEqual(
@@ -187,7 +187,6 @@ class TestEndpoint(CommonEndpoint):
                 "readonly": False,
             },
         )
-        type(endpoint)._endpoint_route_prefix = ""
 
     @mute_logger("odoo.modules.registry")
     def test_unlink(self):
