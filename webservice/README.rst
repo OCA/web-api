@@ -84,6 +84,10 @@ endpoint can be configured as:
    Client Auth Header    = Authorization
    Client Auth Value     = SSWS <token>
 
+When a database is neutralized, stored webservice backend credentials
+(username, password, API key, OAuth2 client id/secret/token, custom
+OAuth2 auth header value) are cleared.
+
 Bug Tracker
 ===========
 
