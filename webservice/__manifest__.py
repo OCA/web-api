@@ -6,7 +6,7 @@
 {
     "name": "WebService",
     "summary": """Defines webservice abstract definition to be used generally""",
-    "version": "19.0.1.1.2",
+    "version": "19.0.1.1.3",
     "license": "AGPL-3",
     "development_status": "Production/Stable",
     "maintainers": ["etobella"],
