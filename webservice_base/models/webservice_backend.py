@@ -2,18 +2,17 @@
 # Copyright 2022 Camptocamp SA
 # @author Simone Orsi <simahawk@gmail.com>
 # @author Alexandre Fayolle <alexandre.fayolle@camptocamp.com>
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 import logging
 
 from odoo import _, api, exceptions, fields, models
-from odoo.tools import config
 
 _logger = logging.getLogger(__name__)
 
 
 class WebserviceBackend(models.Model):
     _name = "webservice.backend"
-    _inherit = ["collection.base"]
+    _inherit = ["webservice.request.adapter"]
     _description = "WebService Backend"
 
     name = fields.Char(required=True)
@@ -29,35 +28,12 @@ class WebserviceBackend(models.Model):
         ],
         required=True,
     )
+    connect_timeout = fields.Integer(default=5, help="In seconds")
+    read_timeout = fields.Integer(default=30, help="In seconds")
     username = fields.Char(auth_type="user_pwd")
     password = fields.Char(auth_type="user_pwd")
     api_key = fields.Char(string="API Key", auth_type="api_key")
     api_key_header = fields.Char(string="API Key header", auth_type="api_key")
-    oauth2_flow = fields.Selection(
-        [
-            ("backend_application", "Backend Application (Client Credentials Grant)"),
-            ("web_application", "Web Application (Authorization Code Grant)"),
-        ],
-        readonly=False,
-    )
-    oauth2_clientid = fields.Char(string="Client ID", auth_type="oauth2")
-    oauth2_client_secret = fields.Char(string="Client Secret", auth_type="oauth2")
-    oauth2_token_url = fields.Char(string="Token URL", auth_type="oauth2")
-    oauth2_authorization_url = fields.Char(string="Authorization URL")
-    oauth2_audience = fields.Char(
-        string="Audience"
-        # no auth_type because not required
-    )
-    oauth2_scope = fields.Char(help="scope of the the authorization")
-    oauth2_token = fields.Char(help="the OAuth2 token (serialized JSON)")
-    redirect_url = fields.Char(
-        compute="_compute_redirect_url",
-        help="The redirect URL to be used as part of the OAuth2 authorisation flow",
-    )
-    oauth2_state = fields.Char(
-        help="random key generated when authorization flow starts "
-        "to ensure that no CSRF attack happen"
-    )
     content_type = fields.Selection(
         [
             ("application/json", "JSON"),
@@ -83,19 +59,31 @@ class WebserviceBackend(models.Model):
             if missing:
                 raise exceptions.UserError(rec._msg_missing_auth_param(missing))
 
+    @api.constrains("auth_type")
+    def _check_auth_type(self):
+        all_fields = self._fields.items()
+        auth_fields = [x for x in all_fields if hasattr(x[1], "auth_type")]
+        for rec in self:
+            needed_fields = [x for x in auth_fields if x[1].auth_type == rec.auth_type]
+            missing_fields = [x for x in needed_fields if not rec[x[0]]]
+            if needed_fields and missing_fields:
+                missing = [x[1] for x in missing_fields]
+                raise exceptions.UserError(rec._msg_missing_auth_param(missing))
+
     def _msg_missing_auth_param(self, missing_fields):
         def get_selection_value(fname):
             return self._fields.get(fname).convert_to_export(self[fname], self)
 
         return _(
             "Webservice '%(name)s' requires '%(auth_type)s' authentication. "
-            "However, the following field(s) are not valued: %(fields)s"
+            "However, the following field(s) are not set: %(fields)s"
         ) % {
             "name": self.name,
             "auth_type": get_selection_value("auth_type"),
             "fields": ", ".join([f.string for f in missing_fields]),
         }
 
+    # TODO: remove?
     def _valid_field_parameter(self, field, name):
         extra_params = ("auth_type",)
         return name in extra_params or super()._valid_field_parameter(field, name)
@@ -114,34 +102,4 @@ class WebserviceBackend(models.Model):
             )
 
     def _get_adapter_protocol(self):
-        protocol = self.protocol
-        if self.auth_type.startswith("oauth2"):
-            protocol += f"+{self.auth_type}-{self.oauth2_flow}"
-        return protocol
-
-    @api.depends("auth_type", "oauth2_flow")
-    def _compute_redirect_url(self):
-        get_param = self.env["ir.config_parameter"].sudo().get_param
-        base_url = get_param("web.base.url")
-        if base_url.startswith("http://") and not config["test_enable"]:
-            _logger.warning(
-                "web.base.url is configured in http. Oauth2 requires using https"
-            )
-            base_url = base_url[len("http://") :]
-        if not base_url.startswith("https://"):
-            base_url = f"https://{base_url}"
-        for rec in self:
-            if rec.auth_type == "oauth2" and rec.oauth2_flow == "web_application":
-                rec.redirect_url = f"{base_url}/webservice/{rec.id}/oauth2/redirect"
-            else:
-                rec.redirect_url = False
-
-    def button_authorize(self):
-        _logger.info("Button OAuth2 Authorize")
-        authorize_url = self._get_adapter().redirect_to_authorize()
-        _logger.info("Redirecting to %s", authorize_url)
-        return {
-            "type": "ir.actions.act_url",
-            "url": authorize_url,
-            "target": "self",
-        }
+        return self.protocol
