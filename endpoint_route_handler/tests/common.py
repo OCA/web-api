@@ -38,6 +38,8 @@ class CommonEndpoint(TransactionCase):
     def _get_mocked_request(
         self, env=None, httprequest=None, extra_headers=None, request_attrs=None
     ):
+        registry = (env or self.env).registry
+        original_init_modules = registry._init_modules
         with MockRequest(env or self.env) as mocked_request:
             mocked_request.httprequest = (
                 DotDict(httprequest) if httprequest else mocked_request.httprequest
@@ -51,3 +53,7 @@ class CommonEndpoint(TransactionCase):
             mocked_request.make_response = lambda data, **kw: data
             mocked_request.registry._init_modules = set()
             yield mocked_request
+        # Restore the real _init_modules.
+        # Without this, routing_map() keeps being built with an empty module
+        # set and post_install HttpCase tests in other modules get 404s.
+        registry._init_modules = original_init_modules
