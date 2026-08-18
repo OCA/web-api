@@ -6,6 +6,7 @@ import logging
 from functools import partial
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError
 
 from ..registry import EndpointRegistry
 
@@ -43,6 +44,8 @@ class EndpointRouteSyncMixin(models.AbstractModel):
         if any([x in vals for x in self._routing_impacting_fields() + ("active",)]):
             # Mark as out of sync
             vals["registry_sync"] = False
+        if vals.get("registry_sync"):
+            self._validate_registry_sync()
         res = super().write(vals)
         if vals.get("registry_sync"):
             # NOTE: this is not done on create to allow bulk reload of the envs
@@ -50,6 +53,34 @@ class EndpointRouteSyncMixin(models.AbstractModel):
             # on one or more records in a row.
             self._add_after_commit_hook(self.ids)
         return res
+
+    def _registry_sync_errors(self):
+        """Return errors preventing this record from being registered."""
+        self.ensure_one()
+        return []
+
+    def _validate_registry_sync(self, active_only=True):
+        """Prevent invalid records from reaching the route registry."""
+        invalid_records = []
+        records = self.filtered("active") if active_only else self
+        for record in records:
+            errors = record._registry_sync_errors()
+            if errors:
+                invalid_records.append(
+                    self.env._(
+                        "%(name)s:\n- %(errors)s",
+                        name=record.display_name,
+                        errors="\n- ".join(errors),
+                    )
+                )
+        if invalid_records:
+            raise UserError(
+                self.env._(
+                    "The registry cannot be synchronized because some active "
+                    "records are invalid:\n\n%(errors)s",
+                    errors="\n\n".join(invalid_records),
+                )
+            )
 
     @api.model
     def _add_after_commit_hook(self, record_ids):
@@ -91,6 +122,7 @@ class EndpointRouteSyncMixin(models.AbstractModel):
     def _register_controllers(self, init=False, options=None, clear_cache=True):
         if not self:
             return
+        self._validate_registry_sync(active_only=False)
         rules = self._prepare_endpoint_rules(options=options)
         self._endpoint_registry.update_rules(rules, init=init)
         if clear_cache:

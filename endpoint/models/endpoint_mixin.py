@@ -3,6 +3,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import json
+import symtable
 import textwrap
 
 import jsonschema
@@ -41,6 +42,46 @@ hashlib = safe_eval.wrap_module(
 hmac = safe_eval.wrap_module(
     __import__("hmac"),
     ["new", "compare_digest"],
+)
+
+_SAFE_EVAL_BUILTINS = frozenset(
+    {
+        "Exception",
+        "False",
+        "None",
+        "True",
+        "abs",
+        "all",
+        "any",
+        "bool",
+        "bytes",
+        "chr",
+        "dict",
+        "divmod",
+        "enumerate",
+        "filter",
+        "float",
+        "int",
+        "isinstance",
+        "len",
+        "list",
+        "map",
+        "max",
+        "min",
+        "ord",
+        "range",
+        "reduce",
+        "repr",
+        "round",
+        "set",
+        "sorted",
+        "str",
+        "sum",
+        "tuple",
+        "unicode",
+        "xrange",
+        "zip",
+    }
 )
 
 
@@ -97,6 +138,76 @@ class EndpointMixin(models.AbstractModel):
                     "Exec mode is set to `Code`: you must provide a piece of code"
                 )
             )
+
+    def _registry_sync_errors(self):
+        errors = super()._registry_sync_errors()
+        snippet = self.code_snippet or ""
+        try:
+            syntax_error = safe_eval.test_python_expr(snippet, mode="exec")
+        except NameError as error:
+            syntax_error = str(error)
+        if syntax_error:
+            errors.append(
+                self.env._("Invalid code snippet: %(error)s", error=syntax_error)
+            )
+            return errors
+
+        unavailable_names = self._code_snippet_unavailable_names(snippet)
+        if unavailable_names:
+            errors.append(
+                self.env._(
+                    "The code snippet uses unavailable variable(s): %(names)s. "
+                    "Available system variables are: %(available_names)s.",
+                    names=", ".join(unavailable_names),
+                    available_names=", ".join(
+                        sorted(self._code_snippet_system_variable_names())
+                    ),
+                )
+            )
+        return errors
+
+    def _code_snippet_system_variable_names(self):
+        return {
+            "Response",
+            "datetime",
+            "dateutil",
+            "endpoint",
+            "env",
+            "exceptions",
+            "hashlib",
+            "hmac",
+            "json",
+            "log",
+            "request",
+            "time",
+            "user",
+            "werkzeug",
+        }
+
+    def _code_snippet_unavailable_names(self, snippet):
+        """Find global names that safe_eval will not provide at runtime."""
+        symbol_table = symtable.symtable(snippet, "<endpoint>", "exec")
+        referenced_globals = set()
+
+        def collect_globals(table):
+            for symbol in table.get_symbols():
+                if symbol.is_referenced() and symbol.is_global():
+                    referenced_globals.add(symbol.get_name())
+            for child in table.get_children():
+                collect_globals(child)
+
+        collect_globals(symbol_table)
+        assigned_names = {
+            symbol.get_name()
+            for symbol in symbol_table.get_symbols()
+            if symbol.is_assigned() or symbol.is_imported()
+        }
+        available_names = (
+            self._code_snippet_system_variable_names()
+            | _SAFE_EVAL_BUILTINS
+            | assigned_names
+        )
+        return sorted(referenced_globals - available_names)
 
     def _get_request_content_schema_applicable_for_types(self):
         """Content types for which ``request_content_schema`` applies."""
