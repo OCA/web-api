@@ -41,7 +41,7 @@ class EndpoinAuthApikeytHttpCase(HttpCase):
     def test_call_no_key(self):
         route = "/demo/api/key"
         response = self._make_request(route)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
     def test_call_good_key(self):
         route = "/demo/api/key"
