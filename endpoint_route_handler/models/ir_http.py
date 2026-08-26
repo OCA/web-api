@@ -17,9 +17,8 @@ _logger = logging.getLogger(__name__)
 class IrHttp(models.AbstractModel):
     _inherit = "ir.http"
 
-    @classmethod
-    def _endpoint_route_registry(cls, env):
-        return EndpointRegistry.registry_for(env.cr)
+    def _endpoint_route_registry(self, cr=None):
+        return EndpointRegistry.registry_for(cr or self.env.cr)
 
     def _generate_routing_rules(self, modules, converters):
         # Override to inject custom endpoint rules.
@@ -28,10 +27,9 @@ class IrHttp(models.AbstractModel):
             self._endpoint_routing_rules(),
         )
 
-    @classmethod
-    def _endpoint_routing_rules(cls):
+    def _endpoint_routing_rules(self):
         """Yield custom endpoint rules"""
-        e_registry = cls._endpoint_route_registry(http.request.env)
+        e_registry = self._endpoint_route_registry()
         for endpoint_rule in e_registry.get_rules():
             _logger.debug("LOADING %s", endpoint_rule)
             endpoint = endpoint_rule.endpoint
@@ -43,14 +41,11 @@ class IrHttp(models.AbstractModel):
         res = super().routing_map(key=key)
         return res
 
-    @classmethod
-    def _endpoint_route_last_version(cls):
-        res = cls._get_routing_map_last_version(http.request.env)
-        return res
+    def _endpoint_route_last_version(self):
+        return self._get_routing_map_last_version()
 
-    @classmethod
-    def _get_routing_map_last_version(cls, env):
-        return cls._endpoint_route_registry(env).last_version()
+    def _get_routing_map_last_version(self):
+        return self._endpoint_route_registry().last_version()
 
     @classmethod
     def _auth_method_user_endpoint(cls):
