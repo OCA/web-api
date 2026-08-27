@@ -377,8 +377,11 @@ ul.auto-toc {
 <p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Production/Stable" src="https://img.shields.io/badge/maturity-Production%2FStable-green.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/web-api/tree/19.0/webservice"><img alt="OCA/web-api" src="https://img.shields.io/badge/github-OCA%2Fweb--api-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/web-api-19-0/web-api-19-0-webservice"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/web-api&amp;target_branch=19.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
 <p>This module creates WebService frameworks to be used globally.</p>
 <p>The module introduces support for HTTP Request protocol. The webservice
-HTTP call returns by default the content of the response. A context
-‘content_only’ can be passed to get the full response object.</p>
+HTTP call returns the full <tt class="docutils literal">requests.Response</tt> object.</p>
+<p>It builds on top of <tt class="docutils literal">webservice_core</tt> (which provides the
+<tt class="docutils literal">webservice.backend</tt> model with public/username-password/API key
+authentication) to add OAuth2 authentication and <tt class="docutils literal">server_environment</tt>
+support.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
@@ -437,7 +440,16 @@ Client Auth Value     = SSWS &lt;token&gt;
 </pre>
 <p>When a database is neutralized, stored webservice backend credentials
 (username, password, API key, OAuth2 client id/secret/token, custom
-OAuth2 auth header value) are cleared.</p>
+OAuth2 auth header value) are cleared. On upgrade from a version prior
+to <tt class="docutils literal">18.0.2.0.1</tt>, a <tt class="docutils literal">webservice.request_content_only</tt> system
+parameter is created automatically (see that version’s migration script)
+to preserve the previous default behavior of HTTP calls, which returned
+only the response content instead of the full <tt class="docutils literal">requests.Response</tt>
+object.</p>
+<p>If your code relies on that implicit default, keep the parameter for
+now. Once it’s adapted to use the full response object (see <em>Usage</em>),
+delete the parameter under <em>Settings &gt; Technical &gt; System Parameters</em> -
+new installs never get it set.</p>
 </div>
 </div>
 </div>
@@ -474,8 +486,8 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <p>OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.</p>
-<p>Current <a class="reference external" href="https://odoo-community.org/page/maintainer-role">maintainer</a>:</p>
-<p><a class="reference external image-reference" href="https://github.com/etobella"><img alt="etobella" src="https://github.com/etobella.png?size=40px" /></a></p>
+<p>Current <a class="reference external" href="https://odoo-community.org/page/maintainer-role">maintainers</a>:</p>
+<p><a class="reference external image-reference" href="https://github.com/etobella"><img alt="etobella" src="https://github.com/etobella.png?size=40px" /></a> <a class="reference external image-reference" href="https://github.com/simahawk"><img alt="simahawk" src="https://github.com/simahawk.png?size=40px" /></a></p>
 <p>This module is part of the <a class="reference external" href="https://github.com/OCA/web-api/tree/19.0/webservice">OCA/web-api</a> project on GitHub.</p>
 <p>You are welcome to contribute. To learn how please visit <a class="reference external" href="https://odoo-community.org/page/Contribute">https://odoo-community.org/page/Contribute</a>.</p>
 </div>

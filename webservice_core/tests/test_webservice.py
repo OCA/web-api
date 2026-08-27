@@ -3,11 +3,13 @@
 # @author Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import psycopg2
 import responses
 from requests import auth
 from requests import exceptions as http_exceptions
 
 from odoo import exceptions
+from odoo.tools.misc import mute_logger
 
 from .common import CommonWebService
 
@@ -83,7 +85,8 @@ class TestWebService(CommonWebService):
     def test_web_service_get(self):
         responses.add(responses.GET, self.url, body="{}")
         result = self.webservice.call("get")
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
+        self.assertEqual(result.status_code, 200)
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
@@ -94,7 +97,7 @@ class TestWebService(CommonWebService):
         endpoint = "api/test"
         responses.add(responses.GET, self.url + endpoint, body="{}")
         result = self.webservice.call("get", url="api/test")
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
@@ -105,7 +108,7 @@ class TestWebService(CommonWebService):
         endpoint = "api/test"
         responses.add(responses.GET, self.url + endpoint, body="{}")
         result = self.webservice.call("get", url="https://localhost.demo.odoo/api/test")
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
@@ -115,7 +118,7 @@ class TestWebService(CommonWebService):
     def test_web_service_post(self):
         responses.add(responses.POST, self.url, body="{}")
         result = self.webservice.call("post", data="demo_response")
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
         )
@@ -125,7 +128,7 @@ class TestWebService(CommonWebService):
     def test_web_service_put(self):
         responses.add(responses.PUT, self.url, body="{}")
         result = self.webservice.call("put", data="demo_response")
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
         )
@@ -138,7 +141,7 @@ class TestWebService(CommonWebService):
         )
         responses.add(responses.GET, self.url, body="{}")
         result = self.webservice.call("get")
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
@@ -153,7 +156,7 @@ class TestWebService(CommonWebService):
         )
         responses.add(responses.GET, self.url, body="{}")
         result = self.webservice.call("get", auth=("user2", "pass2"))
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
@@ -168,7 +171,7 @@ class TestWebService(CommonWebService):
         )
         responses.add(responses.POST, self.url, body="{}")
         result = self.webservice.call("post")
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
@@ -179,7 +182,7 @@ class TestWebService(CommonWebService):
     def test_web_service_headers(self):
         responses.add(responses.GET, self.url, body="{}")
         result = self.webservice.call("get", headers={"demo_header": "HEADER"})
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
@@ -193,7 +196,7 @@ class TestWebService(CommonWebService):
         result = self.webservice.call(
             "post", url=url, headers={"demo_header": "HEADER"}
         )
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
@@ -208,9 +211,104 @@ class TestWebService(CommonWebService):
             url_params={"endpoint": "custom/path"},
             headers={"demo_header": "HEADER"},
         )
-        self.assertEqual(result, b"{}")
+        self.assertEqual(result.content, b"{}")
         self.assertEqual(len(responses.calls), 2)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
         )
         self.assertEqual(responses.calls[0].request.headers["demo_header"], "HEADER")
+
+
+class TestWebServiceTechName(CommonWebService):
+    def test_tech_name_auto_generated_on_create(self):
+        backend = self.env["webservice.backend"].create(
+            {
+                "name": "Á weird nämë plenty of CR@P!",
+                "protocol": "http",
+                "url": "https://localhost.demo.odoo/",
+                "auth_type": "none",
+            }
+        )
+        self.assertEqual(backend.tech_name, "a_weird_name_plenty_of_cr_p")
+
+    def test_tech_name_kept_if_already_set_on_create(self):
+        backend = self.env["webservice.backend"].create(
+            {
+                "name": "WebService",
+                "tech_name": "custom_tech_name",
+                "protocol": "http",
+                "url": "https://localhost.demo.odoo/",
+                "auth_type": "none",
+            }
+        )
+        self.assertEqual(backend.tech_name, "custom_tech_name")
+
+    def test_tech_name_kept_if_write_does_not_touch_name(self):
+        backend = self.env["webservice.backend"].create(
+            {
+                "name": "WebService",
+                "tech_name": "custom_tech_name",
+                "protocol": "http",
+                "url": "https://localhost.demo.odoo/",
+                "auth_type": "none",
+            }
+        )
+        backend.write({"url": "https://other.demo.odoo/"})
+        self.assertEqual(backend.tech_name, "custom_tech_name")
+
+    def test_tech_name_regenerated_on_write_when_name_changes_without_tech_name(self):
+        backend = self.env["webservice.backend"].create(
+            {
+                "name": "WebService",
+                "tech_name": "custom_tech_name",
+                "protocol": "http",
+                "url": "https://localhost.demo.odoo/",
+                "auth_type": "none",
+            }
+        )
+        # Mirrors server_env_tech_name_mixin: `_handle_tech_name` only looks
+        # at the vals of the current write, not at the record's current
+        # value, so omitting `tech_name` while changing `name` regenerates it.
+        backend.write({"name": "WebService renamed"})
+        self.assertEqual(backend.tech_name, "webservice_renamed")
+
+    @mute_logger("odoo.sql_db")
+    def test_tech_name_uniq(self):
+        self.env["webservice.backend"].create(
+            {
+                "name": "WebService",
+                "tech_name": "dup_tech_name",
+                "protocol": "http",
+                "url": "https://localhost.demo.odoo/",
+                "auth_type": "none",
+            }
+        )
+        with self.assertRaises(psycopg2.IntegrityError):
+            self.env["webservice.backend"].create(
+                {
+                    "name": "WebService 2",
+                    "tech_name": "dup_tech_name",
+                    "protocol": "http",
+                    "url": "https://localhost.demo.odoo/",
+                    "auth_type": "none",
+                }
+            )
+
+    def test_tech_name_onchange(self):
+        # `Form` needs `onchange()`, which is only implemented by the `web`
+        # module: call the onchange methods directly to stay `base`-only.
+        backend = self.env["webservice.backend"].new(
+            {"name": "Á weird nämë plenty of CR@P!"}
+        )
+        backend._onchange_name_for_tech_name()
+        backend._onchange_tech_name()
+        # tech name auto generated and normalized
+        self.assertEqual(backend.tech_name, "a_weird_name_plenty_of_cr_p")
+        backend.tech_name = "better name"
+        backend._onchange_tech_name()
+        # tech name normalized on change too
+        self.assertEqual(backend.tech_name, "better_name")
+        backend.name = "WebService renamed"
+        backend._onchange_name_for_tech_name()
+        # name changes no longer affect tech_name once it's set
+        self.assertEqual(backend.tech_name, "better_name")
