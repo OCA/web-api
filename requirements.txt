@@ -1,4 +1,6 @@
 # generated from manifests external_dependencies
 oauthlib
+openupgradelib
+requests
 requests-oauthlib
 responses
