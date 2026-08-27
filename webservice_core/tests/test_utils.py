@@ -5,7 +5,7 @@
 
 from odoo.tests.common import BaseCase
 
-from odoo.addons.webservice.utils import sanitize_url_for_log
+from odoo.addons.webservice_core.utils import sanitize_url_for_log
 
 
 class TestUtils(BaseCase):

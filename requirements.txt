@@ -2,5 +2,7 @@
 PyYAML
 jsonschema
 oauthlib
+openupgradelib
+requests
 requests-oauthlib
 responses
