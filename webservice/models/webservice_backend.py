@@ -100,6 +100,30 @@ class WebserviceBackend(models.Model):
         extra_params = ("auth_type",)
         return name in extra_params or super()._valid_field_parameter(field, name)
 
+    @api.onchange("auth_type")
+    def _onchange_auth_type(self):
+        # Keep `oauth2_flow` in sync in the UI as the user edits `auth_type`,
+        # regardless of whether `server_environment` is installed (see
+        # `create`/`write` below for the same guarantee on any other write).
+        if self.auth_type != "oauth2":
+            self.oauth2_flow = False
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        records.filtered(
+            lambda r: r.auth_type != "oauth2" and r.oauth2_flow
+        ).oauth2_flow = False
+        return records
+
+    def write(self, vals):
+        res = super().write(vals)
+        if "auth_type" in vals:
+            self.filtered(
+                lambda r: r.auth_type != "oauth2" and r.oauth2_flow
+            ).oauth2_flow = False
+        return res
+
     def call(self, method, *args, **kwargs):
         _logger.debug("backend %s: call %s %s %s", self.name, method, args, kwargs)
         response = getattr(self._get_adapter(), method)(*args, **kwargs)
