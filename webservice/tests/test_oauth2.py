@@ -271,3 +271,64 @@ class TestWebServiceOauth2WebApplication(CommonWebService):
             self.assertEqual(
                 ws.oauth2_flow, oauth2_flow if ws.auth_type == "oauth2" else False
             )
+
+
+class TestWebServiceOauth2FlowReset(CommonWebService):
+    """``oauth2_flow`` must be reset on any write, not only via the UI.
+
+    This is a plain ORM-level guarantee independent of ``server_environment``
+    (see ``webservice_server_env`` for the extra guarantee that applies when
+    that module is installed).
+    """
+
+    @classmethod
+    def _setup_records(cls):
+        res = super()._setup_records()
+        cls.url = "https://localhost.demo.odoo/"
+        cls.webservice = cls.env["webservice.backend"].create(
+            {
+                "name": "WebService OAuth2",
+                "tech_name": "test_oauth2_reset",
+                "auth_type": "oauth2",
+                "protocol": "http",
+                "url": cls.url,
+                "oauth2_flow": "backend_application",
+                "content_type": "application/xml",
+                "oauth2_clientid": "some_client_id",
+                "oauth2_client_secret": "shh_secret",
+                "oauth2_token_url": f"{cls.url}oauth2/token",
+                "oauth2_audience": cls.url,
+            }
+        )
+        return res
+
+    def test_write_resets_oauth2_flow_when_auth_type_changes(self):
+        self.webservice.write({"auth_type": "none"})
+        self.assertFalse(self.webservice.oauth2_flow)
+
+    def test_write_keeps_oauth2_flow_when_auth_type_stays_oauth2(self):
+        self.webservice.write({"oauth2_client_secret": "new_secret"})
+        self.assertEqual(self.webservice.oauth2_flow, "backend_application")
+
+    def test_create_resets_oauth2_flow_for_non_oauth2_auth_type(self):
+        ws = self.env["webservice.backend"].create(
+            {
+                "name": "WebService No Auth",
+                "tech_name": "test_oauth2_reset_create",
+                "auth_type": "none",
+                "protocol": "http",
+                "url": self.url,
+                # Inconsistent on purpose: no `create`/`write` should ever
+                # leave this set together with a non-oauth2 `auth_type`.
+                "oauth2_flow": "backend_application",
+            }
+        )
+        self.assertFalse(ws.oauth2_flow)
+
+    def test_onchange_resets_oauth2_flow(self):
+        ws = self.webservice.new(
+            {"auth_type": "oauth2", "oauth2_flow": "backend_application"}
+        )
+        ws.auth_type = "none"
+        ws._onchange_auth_type()
+        self.assertFalse(ws.oauth2_flow)
