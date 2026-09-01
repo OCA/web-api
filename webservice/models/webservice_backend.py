@@ -12,7 +12,7 @@ _logger = logging.getLogger(__name__)
 
 class WebserviceBackend(models.Model):
     _name = "webservice.backend"
-    _inherit = ["collection.base", "server.env.techname.mixin", "server.env.mixin"]
+    _inherit = ["collection.base"]
     _description = "WebService Backend"
 
     name = fields.Char(required=True)
@@ -100,6 +100,30 @@ class WebserviceBackend(models.Model):
         extra_params = ("auth_type",)
         return name in extra_params or super()._valid_field_parameter(field, name)
 
+    @api.onchange("auth_type")
+    def _onchange_auth_type(self):
+        # Keep `oauth2_flow` in sync in the UI as the user edits `auth_type`,
+        # regardless of whether `server_environment` is installed (see
+        # `create`/`write` below for the same guarantee on any other write).
+        if self.auth_type != "oauth2":
+            self.oauth2_flow = False
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        records.filtered(
+            lambda r: r.auth_type != "oauth2" and r.oauth2_flow
+        ).oauth2_flow = False
+        return records
+
+    def write(self, vals):
+        res = super().write(vals)
+        if "auth_type" in vals:
+            self.filtered(
+                lambda r: r.auth_type != "oauth2" and r.oauth2_flow
+            ).oauth2_flow = False
+        return res
+
     def call(self, method, *args, **kwargs):
         _logger.debug("backend %s: call %s %s %s", self.name, method, args, kwargs)
         response = getattr(self._get_adapter(), method)(*args, **kwargs)
@@ -145,33 +169,3 @@ class WebserviceBackend(models.Model):
             "url": authorize_url,
             "target": "self",
         }
-
-    @property
-    def _server_env_fields(self):
-        base_fields = super()._server_env_fields
-        webservice_fields = {
-            "protocol": {},
-            "url": {},
-            "auth_type": {},
-            "username": {},
-            "password": {},
-            "api_key": {},
-            "api_key_header": {},
-            "content_type": {},
-            "oauth2_flow": {},
-            "oauth2_scope": {},
-            "oauth2_clientid": {},
-            "oauth2_client_secret": {},
-            "oauth2_authorization_url": {},
-            "oauth2_token_url": {},
-            "oauth2_audience": {},
-        }
-        webservice_fields.update(base_fields)
-        return webservice_fields
-
-    def _compute_server_env(self):
-        # OVERRIDE: reset ``oauth2_flow`` when ``auth_type`` is not "oauth2", even if
-        # defined otherwise in server env vars
-        res = super()._compute_server_env()
-        self.filtered(lambda r: r.auth_type != "oauth2").oauth2_flow = None
-        return res
