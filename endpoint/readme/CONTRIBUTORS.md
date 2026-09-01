@@ -1,3 +1,5 @@
 - Simone Orsi \<<simone.orsi@camptocamp.com>\>
 - Iván Todorovich \<<ivan.todorovich@camptocamp.com>\>
 - Alex Garcia \<<alex@studio73.es>\>
+- [Quartile](https://www.quartile.co):
+  - Yoshi Tashiro

@@ -9,6 +9,7 @@ from werkzeug.exceptions import NotFound
 
 from odoo import http
 from odoo.http import Response, request
+from odoo.tools.json import json_default
 
 
 class EndpointControllerMixin:
@@ -28,12 +29,21 @@ class EndpointControllerMixin:
         payload = result.get("payload", "")
         status = result.get("status_code", 200)
         headers = result.get("headers", {})
-        return self._make_json_response(payload, headers=headers, status=status)
+        return self._make_json_response(
+            payload,
+            headers=headers,
+            status=status,
+            json_default=result.get("json_default"),
+        )
 
     # TODO: probably not needed anymore as controllers are automatically registered
     def _make_json_response(self, payload, headers=None, status=200, **kw):
         # TODO: guess out type?
-        data = json.dumps(payload)
+        # An endpoint can pass its own encoder hook, which then replaces Odoo's
+        # for the whole payload: it is expected to delegate to json_default for
+        # the types it does not render itself.
+        default = kw.get("json_default") or json_default
+        data = json.dumps(payload, default=default)
         if headers is None:
             headers = {}
         headers["Content-Type"] = "application/json"

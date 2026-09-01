@@ -80,3 +80,16 @@ class EndpointHttpCase(HttpCase):
     def test_call7(self):
         response = self.url_open("/demo/bad_method", data="ok")
         self.assertEqual(response.status_code, 405)
+
+    def test_call_payload_native_types(self):
+        """Values the plain json encoder cannot handle must not break a payload.
+
+        A Domain lands in a payload whenever a snippet passes an ORM helper's
+        return value through; dates come from any record field.
+        """
+        response = self.url_open("/demo/native_types")
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content.decode())
+        self.assertIsInstance(data["rule_domain"], list)
+        self.assertEqual(data["a_date"], "2026-01-15")
+        self.assertEqual(data["a_datetime"], "2026-01-15 10:30:00")

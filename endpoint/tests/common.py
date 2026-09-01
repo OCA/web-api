@@ -137,6 +137,23 @@ def _setup_demo_records(env):
             ),
         }
     )
+    endpoints += env["endpoint.endpoint"].create(
+        {
+            "name": "Demo Endpoint 10",
+            "route": "/demo/native_types",
+            "request_method": "GET",
+            "auth_type": "public",
+            "exec_as_user_id": demo_user.id,
+            "exec_mode": "code",
+            "code_snippet": (
+                'result = {"payload": {'
+                '"rule_domain": env["ir.rule"]._compute_domain("res.partner"), '
+                '"a_date": datetime.date(2026, 1, 15), '
+                '"a_datetime": datetime.datetime(2026, 1, 15, 10, 30, 0)'
+                "}}"
+            ),
+        }
+    )
     return endpoints
 
 
