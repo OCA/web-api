@@ -26,7 +26,14 @@ class BaseRestRequestsAdapter(Component):
     # TODO: url and url_params could come from work_ctx
     def _request(self, method, url=None, url_params=None, **kwargs):
         url = self._get_url(url=url, url_params=url_params)
-        content_only = kwargs.pop("content_only", True)
+        content_only = kwargs.pop("content_only", None)
+        if content_only is None:
+            _logger.warning(
+                "The default value of 'content_only' will change from "
+                "True to False in a future version. "
+                "Please set it explicitly to avoid unexpected behavior."
+            )
+            content_only = True
         # TODO: turn on/off debug from webservice setting?
         url_to_log = self._sanitize_url_for_log(url)
         _logger.info("%s call to %s", method, url_to_log)
@@ -179,6 +186,14 @@ class BackendApplicationOAuth2RestRequestsAdapter(Component):
 
     def _request(self, method, url=None, url_params=None, **kwargs):
         url = self._get_url(url=url, url_params=url_params)
+        content_only = kwargs.pop("content_only", None)
+        if content_only is None:
+            _logger.warning(
+                "The default value of 'content_only' will change from "
+                "True to False in a future version. "
+                "Please set it explicitly to avoid unexpected behavior."
+            )
+            content_only = True
         new_kwargs = kwargs.copy()
         new_kwargs.update(
             {
@@ -191,7 +206,9 @@ class BackendApplicationOAuth2RestRequestsAdapter(Component):
             # pylint: disable=E8106
             request = session.request(method, url, **new_kwargs)
             request.raise_for_status()
-            return request.content
+            if content_only:
+                return request.content
+            return request
 
 
 class WebApplicationOAuth2RestRequestsAdapter(Component):
