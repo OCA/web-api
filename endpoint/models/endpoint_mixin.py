@@ -3,6 +3,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import json
+import symtable
 import textwrap
 
 import jsonschema
@@ -42,6 +43,10 @@ hmac = safe_eval.wrap_module(
     __import__("hmac"),
     ["new", "compare_digest"],
 )
+
+# ``safe_eval`` injects these built-ins at runtime. Keep validation aligned with
+# Odoo instead of maintaining a second, potentially outdated list here.
+_SAFE_EVAL_BUILTINS = frozenset(safe_eval._BUILTINS)
 
 
 @disable_rpc()  # Block ALL RPC calls
@@ -97,6 +102,62 @@ class EndpointMixin(models.AbstractModel):
                     "Exec mode is set to `Code`: you must provide a piece of code"
                 )
             )
+
+    def _registry_sync_errors(self):
+        errors = super()._registry_sync_errors()
+        snippet = self.code_snippet or ""
+        syntax_error = safe_eval.test_python_expr(snippet, mode="exec")
+        if syntax_error:
+            errors.append(
+                self.env._("Invalid code snippet: %(error)s", error=syntax_error)
+            )
+            return errors
+
+        unavailable_names = self._code_snippet_unavailable_names(snippet)
+        if unavailable_names:
+            errors.append(
+                self.env._(
+                    "The code snippet uses unavailable variable(s): %(names)s. "
+                    "Available system variables are: %(available_names)s.",
+                    names=", ".join(unavailable_names),
+                    available_names=", ".join(
+                        sorted(self._code_snippet_system_variable_names())
+                    ),
+                )
+            )
+        return errors
+
+    def _code_snippet_system_variable_names(self):
+        # Derive names from the actual evaluation context so this validation
+        # stays accurate when another system variable is added.
+        return set(self._get_code_snippet_eval_context(request=None))
+
+    def _code_snippet_unavailable_names(self, snippet):
+        """Find global names that safe_eval will not provide at runtime."""
+        symbol_table = symtable.symtable(snippet, "<endpoint>", "exec")
+        referenced_globals = set()
+
+        # ``symtable`` distinguishes global lookups from local names in nested
+        # functions and comprehensions, avoiding warnings for valid variables.
+        def collect_globals(table):
+            for symbol in table.get_symbols():
+                if symbol.is_referenced() and symbol.is_global():
+                    referenced_globals.add(symbol.get_name())
+            for child in table.get_children():
+                collect_globals(child)
+
+        collect_globals(symbol_table)
+        assigned_names = {
+            symbol.get_name()
+            for symbol in symbol_table.get_symbols()
+            if symbol.is_assigned() or symbol.is_imported()
+        }
+        available_names = (
+            self._code_snippet_system_variable_names()
+            | _SAFE_EVAL_BUILTINS
+            | assigned_names
+        )
+        return sorted(referenced_globals - available_names)
 
     def _get_request_content_schema_applicable_for_types(self):
         """Content types for which ``request_content_schema`` applies."""
