@@ -42,6 +42,14 @@ class TestEndpoint(CommonEndpoint):
         EndpointRegistry.wipe_registry_for(self.env.cr)
         super().tearDown()
 
+    def test_routing_map_no_request(self):
+        # Crons, `odoo shell` and core tests build the routing map with no
+        # request bound. website's TestWebsiteTechnicalPage does, through
+        # website.technical.page.get_static_routes(). No mocked request here
+        # on purpose.
+        self.env.registry.clear_cache("routing")
+        self.assertTrue(self.env["ir.http"].routing_map())
+
     def test_as_tool_base_data(self):
         new_route = make_new_route(self.env)
         self.assertEqual(new_route.route, "/my/test/route")
