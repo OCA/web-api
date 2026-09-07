@@ -29,10 +29,16 @@ class IrHttp(models.AbstractModel):
         )
 
     @classmethod
+    def _endpoint_routing_rules_kwargs(cls):
+        return {}
+
+    @classmethod
     def _endpoint_routing_rules(cls):
         """Yield custom endpoint rules"""
         e_registry = cls._endpoint_route_registry(http.request.env)
-        for endpoint_rule in e_registry.get_rules():
+        for endpoint_rule in e_registry.get_rules(
+            **cls._endpoint_routing_rules_kwargs()
+        ):
             _logger.debug("LOADING %s", endpoint_rule)
             endpoint = endpoint_rule.endpoint
             for url in endpoint_rule.routing["routes"]:
