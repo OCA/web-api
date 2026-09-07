@@ -83,4 +83,16 @@ result = {"payload": "Method used:" + request.httprequest.method}
         </field>
     </record>
 
+    <record id="endpoint_demo_8" model="endpoint.endpoint">
+        <field name="name">Demo Endpoint 8</field>
+        <field name="route">/demo/&lt;string:param1&gt;/&lt;int:param2&gt;</field>
+        <field name="request_method">GET</field>
+        <field name="exec_mode">code</field>
+        <field name="auth_type">public</field>
+        <field name="exec_as_user_id" ref="base.user_demo" />
+        <field name="code_snippet">
+result = {"payload": querystring_params}
+        </field>
+    </record>
+
 </odoo>
