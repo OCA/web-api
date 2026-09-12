@@ -4,6 +4,7 @@
 
 import json
 import os
+from datetime import datetime, timedelta
 from unittest import skipIf
 
 from odoo.tests.common import HttpCase
@@ -77,3 +78,25 @@ class EndpointHttpCase(HttpCase):
     def test_call7(self):
         response = self.url_open("/demo/bad_method", data="ok")
         self.assertEqual(response.status_code, 405)
+
+    def test_call8(self):
+        response = self.url_open("/demo/auth_bearer")
+        self.assertEqual(response.status_code, 401)
+
+        response = self.url_open(
+            "/demo/auth_bearer", headers={"Authorization": "Bearer bad_key"}
+        )
+        self.assertEqual(response.status_code, 401)
+
+        expiration_date = datetime.today() + timedelta(days=1)
+        demo_user = self.env.ref("base.user_demo")
+        api_key = (
+            self.env["res.users.apikeys"]
+            .with_user(demo_user)
+            ._generate(None, "Test api key", expiration_date)
+        )
+        demo_user.api_key_ids.flush_model()
+        response = self.url_open(
+            "/demo/auth_bearer", headers={"Authorization": f"Bearer {api_key}"}
+        )
+        self.assertEqual(response.status_code, 200)

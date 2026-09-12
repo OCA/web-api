@@ -111,7 +111,7 @@ class EndpointRouteHandler(models.AbstractModel):
         return [("http", "HTTP"), ("json", "JSON")]
 
     def _selection_auth_type(self):
-        return [("public", "Public"), ("user_endpoint", "User")]
+        return [("public", "Public"), ("user_endpoint", "User"), ("bearer", "Bearer")]
 
     def _selection_request_method(self):
         return [

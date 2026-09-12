@@ -71,7 +71,11 @@
                             </group>
                         </page>
                         <page name="code" string="Code" invisible="exec_mode != 'code'">
-                            <field name="code_snippet" widget="ace" />
+                            <field
+                                name="code_snippet"
+                                widget="ace"
+                                options="{'mode':'python'}"
+                            />
                         </page>
                         <page
                             name="code_help"
@@ -125,6 +129,13 @@
                     name="inactive"
                     domain="[('active', '=', False)]"
                 />
+                <group>
+                    <filter
+                        name="group_route_group"
+                        string="Group"
+                        context="{'group_by':'route_group'}"
+                    />
+                </group>
             </search>
         </field>
     </record>

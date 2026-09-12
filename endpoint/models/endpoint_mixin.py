@@ -229,6 +229,8 @@ class EndpointMixin(models.AbstractModel):
         ):
             self._logger.error("_validate_request: UnsupportedMediaType")
             raise werkzeug.exceptions.UnsupportedMediaType()
+        if self.auth_type == "bearer":
+            request.env["ir.http"]._auth_method_bearer()
 
     def _get_handler(self):
         try:
