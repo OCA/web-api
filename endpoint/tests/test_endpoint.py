@@ -4,13 +4,17 @@
 
 import json
 import textwrap
+from datetime import date
 from unittest import mock
 
 import psycopg2
 import werkzeug
 
 from odoo import exceptions
+from odoo.http import Response
 from odoo.tools.misc import mute_logger
+
+from odoo.addons.endpoint.controllers.main import EndpointController
 
 from .common import CommonEndpoint
 
@@ -247,3 +251,27 @@ class TestEndpoint(CommonEndpoint):
     def test_duplicate(self):
         endpoint = self.endpoint.copy()
         self.assertTrue(endpoint.route.endswith("/COPY_FIXME"))
+
+    def _json_response(self, result):
+        """Render a result through the controller, as a request would."""
+        with self._get_mocked_request() as req:
+            req.make_response = lambda data, **kw: Response(data, **kw)
+            return json.loads(EndpointController()._handle_result(result).data)
+
+    def test_handle_result_json_default(self):
+        """A result can carry its own encoder for values json cannot render.
+
+        The result dict is the only channel available: the controller sees
+        what the endpoint returned, not the endpoint itself.
+        """
+        payload = {"val": date(2026, 1, 15)}
+        self.assertEqual(
+            self._json_response(
+                {"payload": payload, "json_default": lambda val: "hooked"}
+            ),
+            {"val": "hooked"},
+        )
+        # Without a hook, values fall back to Odoo's own encoder.
+        self.assertEqual(
+            self._json_response({"payload": payload}), {"val": "2026-01-15"}
+        )

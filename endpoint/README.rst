@@ -82,6 +82,9 @@ Contributors
 ------------
 
 - Simone Orsi <simone.orsi@camptocamp.com>
+- `Quartile <https://www.quartile.co>`__:
+
+  - Yoshi Tashiro
 
 Maintainers
 -----------
