@@ -43,10 +43,44 @@ class IrHttp(models.AbstractModel):
         res = super().routing_map(key=key)
         return res
 
+    # Sentinel stored in the request `__dict__` to memoize the version.
+    _endpoint_route_version_attr = "_endpoint_route_last_version"
+
     @classmethod
     def _endpoint_route_last_version(cls):
-        res = cls._get_routing_map_last_version(http.request.env)
-        return res
+        # This is part of the `routing_map` ormcache key, so it runs on
+        # every routing map access (e.g. once per `url_for` while rendering
+        # a website page). The version only changes when routes are
+        # (un)registered, which resets the memo via
+        # `_endpoint_route_reset_last_version`. Memoize it on the request
+        # object to avoid one SQL round-trip per call.
+        # NB: use `__dict__` rather than `getattr`: on a mocked request
+        # `getattr` would auto-create a child mock instead of falling back
+        # to the default, defeating the memoization.
+        # NB: `http.request` is a werkzeug `LocalProxy`; when no request is
+        # bound it is falsy (but not `None`), hence the truthiness check.
+        request = http.request
+        if not request:
+            return cls._get_routing_map_last_version(http.request.env)
+        version = request.__dict__.get(cls._endpoint_route_version_attr)
+        if version is None:
+            version = cls._get_routing_map_last_version(request.env)
+            request.__dict__[cls._endpoint_route_version_attr] = version
+        return version
+
+    @classmethod
+    def _endpoint_route_reset_last_version(cls):
+        """Drop the memoized version so the next access reads it afresh.
+
+        Must be called whenever routes are (un)registered within a request,
+        as the version changes and any value memoized earlier is now stale.
+        """
+        # `http.request` is a werkzeug `LocalProxy`: falsy (but not `None`)
+        # when no request is bound, e.g. when (un)registering routes outside
+        # of an HTTP request (tests, crons, module install).
+        request = http.request
+        if request:
+            request.__dict__.pop(cls._endpoint_route_version_attr, None)
 
     @classmethod
     def _get_routing_map_last_version(cls, env):
