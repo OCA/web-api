@@ -52,8 +52,11 @@ class CommonEndpoint(TransactionCase):
                 setattr(mocked_request, k, v)
             mocked_request.make_response = lambda data, **kw: data
             mocked_request.registry._init_modules = set()
-            yield mocked_request
-        # Restore the real _init_modules.
-        # Without this, routing_map() keeps being built with an empty module
-        # set and post_install HttpCase tests in other modules get 404s.
-        registry._init_modules = original_init_modules
+            try:
+                yield mocked_request
+            finally:
+                # Restore the real _init_modules.
+                # Without this, routing_map() keeps being built with an empty
+                # module set and post_install HttpCase tests in other modules
+                # get 404s.
+                registry._init_modules = original_init_modules
