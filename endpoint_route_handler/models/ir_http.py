@@ -28,10 +28,9 @@ class IrHttp(models.AbstractModel):
             self._endpoint_routing_rules(),
         )
 
-    @classmethod
-    def _endpoint_routing_rules(cls):
+    def _endpoint_routing_rules(self):
         """Yield custom endpoint rules"""
-        e_registry = cls._endpoint_route_registry(http.request.env)
+        e_registry = self._endpoint_route_registry(self.env)
         for endpoint_rule in e_registry.get_rules():
             _logger.debug("LOADING %s", endpoint_rule)
             endpoint = endpoint_rule.endpoint
@@ -43,9 +42,8 @@ class IrHttp(models.AbstractModel):
         res = super().routing_map(key=key)
         return res
 
-    @classmethod
-    def _endpoint_route_last_version(cls):
-        res = cls._get_routing_map_last_version(http.request.env)
+    def _endpoint_route_last_version(self):
+        res = self._get_routing_map_last_version(self.env)
         return res
 
     @classmethod
