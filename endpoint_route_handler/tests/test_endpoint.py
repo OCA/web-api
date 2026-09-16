@@ -3,7 +3,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 from contextlib import contextmanager
 
-from odoo import api, modules
+from odoo import api, exceptions, modules
 from odoo.tests import common
 from odoo.tools import mute_logger
 
@@ -49,6 +49,26 @@ class TestEndpoint(CommonEndpoint):
         self.assertTrue(first_hash)
         new_route.route += "/new"
         self.assertNotEqual(new_route.endpoint_hash, first_hash)
+
+    def test_invalid_route_cannot_be_registered(self):
+        for route, error in (
+            ("/my/test/<date:value>", "converter 'date' does not exist"),
+            ("/my/test/<value", "malformed url rule"),
+        ):
+            with self.subTest(route=route):
+                new_route = make_new_route(self.env, route=route)
+                with self.assertRaisesRegex(exceptions.UserError, error):
+                    new_route._register_controllers()
+
+    def test_inactive_invalid_route_can_be_synchronized(self):
+        new_route = make_new_route(
+            self.env,
+            route="/my/test/<date:value>",
+            active=False,
+        )
+        new_route._validate_registry_sync()
+        with self.assertRaisesRegex(exceptions.UserError, "converter 'date'"):
+            new_route._register_controllers()
 
     def test_auth_type_routing_info(self):
         for auth_type in ("public", "user_endpoint", "bearer"):

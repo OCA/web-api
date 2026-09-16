@@ -4,6 +4,8 @@
 
 import logging
 
+import werkzeug
+
 from odoo import api, exceptions, fields, models
 
 ENDPOINT_ROUTE_CONSUMER_MODELS = {
@@ -187,6 +189,28 @@ class EndpointRouteHandler(models.AbstractModel):
                     )
                 )
 
+    def _registry_sync_errors(self):
+        errors = super()._registry_sync_errors()
+        try:
+            # Binding the rule performs the same converter lookup as Odoo's
+            # routing map without modifying the live endpoint registry.
+            routing_map = werkzeug.routing.Map(
+                strict_slashes=False,
+                converters=self.env["ir.http"]._get_converters(),
+            )
+            rule = werkzeug.routing.Rule(self.route)
+            rule.merge_slashes = False
+            routing_map.add(rule)
+        except (LookupError, TypeError, ValueError) as error:
+            errors.append(
+                self.env._(
+                    "Invalid route %(route)s: %(error)s",
+                    route=self.route,
+                    error=error,
+                )
+            )
+        return errors
+
     @api.constrains("request_method", "request_content_type")
     def _check_request_method(self):
         for rec in self:
@@ -207,6 +231,8 @@ class EndpointRouteHandler(models.AbstractModel):
     # TODO: consider if useful or not for single records
     def _register_single_controller(self, options=None, key=None, init=False):
         """Shortcut to register one single controller."""
+        # Programmatic callers can bypass registry_sync and must be protected too.
+        self._validate_registry_sync(active_only=False)
         rule = self._make_controller_rule(options=options, key=key)
         self._endpoint_registry.update_rules([rule], init=init)
         self.env.registry.clear_cache("routing")

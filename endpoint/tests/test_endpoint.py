@@ -250,6 +250,83 @@ class TestEndpoint(CommonEndpoint):
                 partial_func.func.__name__, "_handle_registry_sync_post_commit"
             )
 
+    def test_invalid_route_can_be_saved_but_not_synchronized(self):
+        endpoint = self.env["endpoint.endpoint"].create(
+            {
+                "name": "Invalid route",
+                "route": "/invalid/<date:value>",
+                "exec_mode": "code",
+                "code_snippet": 'result = {"payload": "ok"}',
+                "request_method": "GET",
+                "auth_type": "user_endpoint",
+            }
+        )
+        registry = endpoint._endpoint_registry
+        key = endpoint._endpoint_registry_unique_key()
+        self.assertEqual(registry._get_rule(key), None)
+
+        with (
+            self.assertRaisesRegex(exceptions.UserError, "converter 'date'"),
+            self.env.cr.savepoint(),
+        ):
+            endpoint.registry_sync = True
+        self.assertEqual(registry._get_rule(key), None)
+
+        endpoint.route = "/valid/<string:value>"
+        endpoint._handle_registry_sync()
+        self.assertEqual(registry._get_rule(key).route, "/valid/<string:value>")
+
+    def test_inactive_invalid_route_can_be_removed_from_registry(self):
+        endpoint = self.env["endpoint.endpoint"].create(
+            {
+                "name": "Route to remove",
+                "route": "/route/to/remove",
+                "exec_mode": "code",
+                "code_snippet": 'result = {"payload": "ok"}',
+                "request_method": "GET",
+                "auth_type": "user_endpoint",
+            }
+        )
+        registry = endpoint._endpoint_registry
+        key = endpoint._endpoint_registry_unique_key()
+        endpoint._handle_registry_sync()
+        self.assertIsNotNone(registry._get_rule(key))
+
+        endpoint.write({"route": "/invalid/<date:value>", "active": False})
+        endpoint._handle_registry_sync()
+        self.assertEqual(registry._get_rule(key), None)
+
+    def test_invalid_code_can_be_saved_but_not_synchronized(self):
+        endpoint = self.env["endpoint.endpoint"].create(
+            {
+                "name": "Invalid code",
+                "route": "/invalid/code",
+                "exec_mode": "code",
+                "code_snippet": "result = date(request.params.get('since'))",
+                "request_method": "GET",
+                "auth_type": "user_endpoint",
+            }
+        )
+        with self.assertRaisesRegex(exceptions.UserError, "unavailable.*date"):
+            endpoint._handle_registry_sync()
+
+        endpoint.code_snippet = "result = {"
+        with self.assertRaisesRegex(exceptions.UserError, "Invalid code snippet"):
+            endpoint._handle_registry_sync()
+
+    def test_locally_defined_code_variables_are_available(self):
+        self.endpoint.code_snippet = textwrap.dedent(
+            """
+            value = request.params.get("value")
+            result = {"payload": value}
+            """
+        )
+        self.assertEqual(self.endpoint._registry_sync_errors(), [])
+
+    def test_safe_eval_builtins_are_available(self):
+        self.endpoint.code_snippet = "result = {'count': len(request.params)}"
+        self.assertEqual(self.endpoint._registry_sync_errors(), [])
+
     def test_duplicate(self):
         endpoint = self.endpoint.copy()
         self.assertTrue(endpoint.route.endswith("/COPY_FIXME"))
