@@ -3,32 +3,37 @@
 
 from odoo.addons.server_environment.uninstall import restore_env_managed_columns
 
+ENV_MANAGED_FIELDS = [
+    "protocol",
+    "url",
+    "auth_type",
+    "username",
+    "password",
+    "api_key",
+    "api_key_header",
+    "content_type",
+    "oauth2_flow",
+    "oauth2_scope",
+    "oauth2_clientid",
+    "oauth2_client_secret",
+    "oauth2_authorization_url",
+    "oauth2_token_url",
+    "oauth2_audience",
+    "oauth2_token_method",
+    "oauth2_client_auth_method",
+    "oauth2_client_auth_header",
+    "oauth2_client_auth_value",
+]
+
+
+def post_init_hook(env):
+    env["webservice.backend"]._preserve_not_env_managed_data(ENV_MANAGED_FIELDS)
+
 
 def uninstall_hook(env):
-    """Restore database columns dropped by server.env.mixin.
-
-    When the module is uninstalled, the columns managed by the server
-    environment mixin must be restored and repopulated with current values,
-    so the database remains usable.
-    """
+    """Restore database columns dropped by server.env.mixin."""
     restore_env_managed_columns(
         env,
         "webservice.backend",
-        [
-            "protocol",
-            "url",
-            "auth_type",
-            "username",
-            "password",
-            "api_key",
-            "api_key_header",
-            "content_type",
-            "oauth2_flow",
-            "oauth2_scope",
-            "oauth2_clientid",
-            "oauth2_client_secret",
-            "oauth2_authorization_url",
-            "oauth2_token_url",
-            "oauth2_audience",
-        ],
+        ENV_MANAGED_FIELDS,
     )
