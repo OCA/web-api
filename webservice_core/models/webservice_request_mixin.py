@@ -163,7 +163,6 @@ class WebserviceRequestMixin(models.AbstractModel):
 
     def _request(self, method, url=None, url_params=None, **kwargs):
         url = self._get_url(url=url, url_params=url_params)
-        content_only = kwargs.pop("content_only", True)
         url_to_log = self._sanitize_url_for_log(url)
         _logger.info("%s call to %s", method, url_to_log)
         new_kwargs = kwargs.copy()
@@ -179,8 +178,6 @@ class WebserviceRequestMixin(models.AbstractModel):
         # pylint: disable=E8106
         request = requests.request(method, url, **new_kwargs)
         request.raise_for_status()
-        if content_only:
-            return request.content
         return request
 
     def _sanitize_url_for_log(self, url):
