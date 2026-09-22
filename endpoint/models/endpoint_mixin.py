@@ -55,6 +55,13 @@ class EndpointMixin(models.AbstractModel):
     )
     exec_as_user_id = fields.Many2one(comodel_name="res.users")
     company_id = fields.Many2one("res.company", string="Company")
+    full_url_display = fields.Char(
+        compute="_compute_full_url_display",
+        help="Absolute URL of this endpoint, ready to copy/paste. Resolved "
+        "from the current request when available (matching what you're "
+        "actually browsing), otherwise falls back to the 'web.base.url' "
+        "system parameter.",
+    )
 
     def _selection_exec_mode(self):
         return [("code", "Execute code")]
@@ -62,6 +69,20 @@ class EndpointMixin(models.AbstractModel):
     def _compute_code_snippet_docs(self):
         for rec in self:
             rec.code_snippet_docs = textwrap.dedent(rec._default_code_snippet_docs())
+
+    @api.depends("route")
+    def _compute_full_url_display(self):
+        base_url = self._get_current_base_url()
+        for rec in self:
+            rec.full_url_display = f"{base_url}{rec.route}" if rec.route else False
+
+    def _get_current_base_url(self):
+        # Prefer the host the caller is actually browsing on: `web.base.url`
+        # is a manually maintained system parameter and easily out of sync
+        # (wrong scheme, stale domain after a move, ...).
+        if http.request:
+            return http.request.httprequest.url_root.rstrip("/")
+        return self.env["ir.config_parameter"].sudo().get_param("web.base.url")
 
     @api.constrains("exec_mode")
     def _check_exec_mode(self):
