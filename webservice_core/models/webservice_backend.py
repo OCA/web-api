@@ -3,7 +3,7 @@
 # @author Simone Orsi <simahawk@gmail.com>
 # @author Alexandre Fayolle <alexandre.fayolle@camptocamp.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class WebserviceBackend(models.Model):
@@ -28,6 +28,10 @@ class WebserviceBackend(models.Model):
 
     def _get_base_url(self):
         return self.url
+
+    @api.depends("url")
+    def _compute_full_url_display(self):
+        return super()._compute_full_url_display()
 
     def _compute_endpoint_count(self):
         data = self.env["webservice.endpoint"]._read_group(

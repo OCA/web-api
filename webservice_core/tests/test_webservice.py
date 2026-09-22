@@ -34,6 +34,9 @@ class TestWebService(CommonWebService):
         )
         return res
 
+    def test_full_url_display(self):
+        self.assertEqual(self.webservice.full_url_display, self.url)
+
     def test_web_service_not_found(self):
         with self.assertRaises(http_exceptions.ConnectionError):
             self.webservice.call("get")

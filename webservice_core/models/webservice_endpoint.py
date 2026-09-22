@@ -84,6 +84,13 @@ class WebserviceEndpoint(models.Model):
     def _get_base_url(self):
         return self.backend_id.url
 
+    def _get_display_url(self):
+        return self._compose_url(self.path)
+
+    @api.depends("path", "backend_id.url")
+    def _compute_full_url_display(self):
+        return super()._compute_full_url_display()
+
     def _call_prepare(self, **kwargs):
         # Precedence: call-time kwarg > endpoint config > backend config.
         # Each `_call_prepare` lets existing `kwargs` win over its own

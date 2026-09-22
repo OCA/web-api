@@ -69,6 +69,11 @@ class WebserviceRequestMixin(models.AbstractModel):
         "An explicit `timeout` kwarg passed to `call()` wins over this. "
         "Left empty, the call waits indefinitely.",
     )
+    full_url_display = fields.Char(
+        compute="_compute_full_url_display",
+        help="Best-effort absolute URL, ready to copy/paste. "
+        "Any '{placeholder}' token is left unresolved: fill it in before use.",
+    )
     header_ids = fields.One2many(
         "webservice.header",
         "res_id",
@@ -276,19 +281,37 @@ class WebserviceRequestMixin(models.AbstractModel):
         return {self.api_key_header: self.api_key}
 
     def _get_url(self, url=None, url_params=None, **kwargs):
-        base = self._get_base_url()
-        if not url:
-            url = base
-        elif not url.startswith(base):
-            if not url.startswith("http"):
-                url = f"{base.rstrip('/')}/{url.lstrip('/')}"
-            else:
-                # TODO: if url is given, we should validate the domain
-                # to avoid abusing a webservice backend for different calls.
-                pass
-
+        url = self._compose_url(url)
         url_params = url_params or kwargs
         return url.format(**url_params)
+
+    def _compose_url(self, url=None):
+        base = self._get_base_url()
+        if not url:
+            return base
+        if not url.startswith(base):
+            if not url.startswith("http"):
+                return f"{base.rstrip('/')}/{url.lstrip('/')}"
+            # TODO: if url is given, we should validate the domain
+            # to avoid abusing a webservice backend for different calls.
+        return url
+
+    @api.depends()
+    def _compute_full_url_display(self):
+        for rec in self:
+            rec.full_url_display = rec._get_display_url()
+
+    def _get_display_url(self):
+        """Best-effort absolute URL for display/copy in the UI.
+
+        Unlike ``_get_url()``, ``{placeholder}`` tokens are never resolved
+        here: there is no call-time value to fill them with, so they are
+        left as-is for the user to replace.
+
+        Models with a relative part of their own (e.g. an endpoint's
+        ``path``) should override this to compose it with ``_compose_url()``.
+        """
+        return self._get_base_url()
 
     def _resolve_query_params(self, params, url_params):
         url_params = url_params or {}

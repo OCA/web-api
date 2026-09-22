@@ -11,6 +11,18 @@
             <form>
                 <header />
                 <sheet>
+                    <div
+                        class="alert alert-info py-1"
+                        role="alert"
+                        invisible="not full_url_display"
+                    >
+                        <field
+                            name="full_url_display"
+                            nolabel="1"
+                            readonly="1"
+                            widget="CopyClipboardURL"
+                        />
+                    </div>
                     <div class="oe_button_box" name="button_box">
                         <button
                             type="object"
