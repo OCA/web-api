@@ -18,6 +18,14 @@
                     invisible="active"
                 />
                 <sheet>
+                    <div class="alert alert-info py-1" role="alert" invisible="not id">
+                        <field
+                            name="full_url_display"
+                            nolabel="1"
+                            readonly="1"
+                            widget="CopyClipboardURL"
+                        />
+                    </div>
                     <div
                         class="alert alert-warning"
                         role="alert"
