@@ -17,17 +17,6 @@ msgstr ""
 "X-Generator: Weblate 5.15.2\n"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key
-#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__auth_type__api_key
-msgid "API Key"
-msgstr "Chiave API"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_header
-msgid "API Key header"
-msgstr "Intestazione chiave API"
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_audience
 msgid "Audience"
 msgstr "Audience"
@@ -56,66 +45,6 @@ msgstr "ID client"
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_client_secret
 msgid "Client Secret"
 msgstr "Chiave segreta client"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__company_id
-msgid "Company"
-msgstr "Azienda"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type
-msgid "Content Type"
-msgstr "Tipo di contenuto"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__create_uid
-msgid "Created by"
-msgstr "Creato da"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__create_date
-msgid "Created on"
-msgstr "Creato il"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__display_name
-msgid "Display Name"
-msgstr "Nome visualizzato"
-
-#. module: webservice
-#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/x-www-form-urlencoded
-msgid "Form"
-msgstr "Maschera"
-
-#. module: webservice
-#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__protocol__http
-msgid "HTTP Request"
-msgstr "Richiesta HTTP"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__id
-msgid "ID"
-msgstr "ID"
-
-#. module: webservice
-#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/json
-msgid "JSON"
-msgstr "JSON"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__write_uid
-msgid "Last Updated by"
-msgstr "Ultimo aggiornamento di"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__write_date
-msgid "Last Updated on"
-msgstr "Ultimo aggiornamento il"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__name
-msgid "Name"
-msgstr "Nome"
 
 #. module: webservice
 #: model_terms:ir.ui.view,arch_db:webservice.webservice_backend_form_view
@@ -148,29 +77,9 @@ msgid "Oauth2 Token"
 msgstr "Token OAuth2"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__password
-msgid "Password"
-msgstr "Password"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol
-msgid "Protocol"
-msgstr "Protcollo"
-
-#. module: webservice
-#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__auth_type__none
-msgid "Public"
-msgstr "Pubblico"
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__redirect_url
 msgid "Redirect Url"
 msgstr "URL inoltro"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__tech_name
-msgid "Tech Name"
-msgstr "Nome tecnico"
 
 #. module: webservice
 #. odoo-python
@@ -197,51 +106,14 @@ msgid "Token URL"
 msgstr "URL token"
 
 #. module: webservice
-#: model:ir.model.fields,help:webservice.field_webservice_backend__tech_name
-msgid "Unique name for technical purposes. Eg: server env keys."
-msgstr "Nome univoco per motivi tecnici. Es: chiavi server ambiente."
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__url
-msgid "Url"
-msgstr "URL"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__username
-msgid "Username"
-msgstr "Nome utente"
-
-#. module: webservice
-#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__auth_type__user_pwd
-msgid "Username & password"
-msgstr "Nome utente e password"
-
-#. module: webservice
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__oauth2_flow__web_application
 msgid "Web Application (Authorization Code Grant)"
 msgstr "Applicazione Web (Concessione codice autorizzazione)"
 
 #. module: webservice
-#: model:ir.actions.act_window,name:webservice.webservice_backend_act_window
 #: model:ir.model,name:webservice.model_webservice_backend
-#: model:ir.ui.menu,name:webservice.webservice_backend_menu
 msgid "WebService Backend"
 msgstr "Backend servizio web"
-
-#. module: webservice
-#. odoo-python
-#: code:addons/webservice/models/webservice_backend.py:0
-msgid ""
-"Webservice '%(name)s' requires '%(auth_type)s' authentication. However, the "
-"following field(s) are not valued: %(fields)s"
-msgstr ""
-"Il webservice '%(name)s' richiede autentIcazione '%(auth_type)s'. Comunque, "
-"i seguenti campi non sono calorizzati: %(fields)s"
-
-#. module: webservice
-#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/xml
-msgid "XML"
-msgstr "XML"
 
 #. module: webservice
 #: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_state
@@ -261,6 +133,82 @@ msgstr "ambito dell'autorizzazione"
 #: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_token
 msgid "the OAuth2 token (serialized JSON)"
 msgstr "il token OAuth2 (JSON serializzato)"
+
+#~ msgid "API Key"
+#~ msgstr "Chiave API"
+
+#~ msgid "API Key header"
+#~ msgstr "Intestazione chiave API"
+
+#~ msgid "Company"
+#~ msgstr "Azienda"
+
+#~ msgid "Content Type"
+#~ msgstr "Tipo di contenuto"
+
+#~ msgid "Created by"
+#~ msgstr "Creato da"
+
+#~ msgid "Created on"
+#~ msgstr "Creato il"
+
+#~ msgid "Display Name"
+#~ msgstr "Nome visualizzato"
+
+#~ msgid "Form"
+#~ msgstr "Maschera"
+
+#~ msgid "HTTP Request"
+#~ msgstr "Richiesta HTTP"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "JSON"
+#~ msgstr "JSON"
+
+#~ msgid "Last Updated by"
+#~ msgstr "Ultimo aggiornamento di"
+
+#~ msgid "Last Updated on"
+#~ msgstr "Ultimo aggiornamento il"
+
+#~ msgid "Name"
+#~ msgstr "Nome"
+
+#~ msgid "Password"
+#~ msgstr "Password"
+
+#~ msgid "Protocol"
+#~ msgstr "Protcollo"
+
+#~ msgid "Public"
+#~ msgstr "Pubblico"
+
+#~ msgid "Tech Name"
+#~ msgstr "Nome tecnico"
+
+#~ msgid "Unique name for technical purposes. Eg: server env keys."
+#~ msgstr "Nome univoco per motivi tecnici. Es: chiavi server ambiente."
+
+#~ msgid "Url"
+#~ msgstr "URL"
+
+#~ msgid "Username"
+#~ msgstr "Nome utente"
+
+#~ msgid "Username & password"
+#~ msgstr "Nome utente e password"
+
+#~ msgid ""
+#~ "Webservice '%(name)s' requires '%(auth_type)s' authentication. However, "
+#~ "the following field(s) are not valued: %(fields)s"
+#~ msgstr ""
+#~ "Il webservice '%(name)s' richiede autentIcazione '%(auth_type)s'. "
+#~ "Comunque, i seguenti campi non sono calorizzati: %(fields)s"
+
+#~ msgid "XML"
+#~ msgstr "XML"
 
 #~ msgid "API Key Env Default"
 #~ msgstr "Chiave API predefinita dell'ambiente"

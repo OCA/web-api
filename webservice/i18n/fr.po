@@ -17,17 +17,6 @@ msgstr ""
 "X-Generator: Weblate 4.3.2\n"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key
-#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__auth_type__api_key
-msgid "API Key"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_header
-msgid "API Key header"
-msgstr ""
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_audience
 msgid "Audience"
 msgstr ""
@@ -56,66 +45,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_client_secret
 msgid "Client Secret"
 msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__company_id
-msgid "Company"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type
-msgid "Content Type"
-msgstr "Type de contenu"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__create_uid
-msgid "Created by"
-msgstr "Créé par"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__create_date
-msgid "Created on"
-msgstr "Crée le"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__display_name
-msgid "Display Name"
-msgstr "Afficher Nom"
-
-#. module: webservice
-#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/x-www-form-urlencoded
-msgid "Form"
-msgstr "Formulaire"
-
-#. module: webservice
-#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__protocol__http
-msgid "HTTP Request"
-msgstr "Requête HTTP"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__id
-msgid "ID"
-msgstr "ID"
-
-#. module: webservice
-#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/json
-msgid "JSON"
-msgstr "JSON"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__write_uid
-msgid "Last Updated by"
-msgstr "Dernière mise à jour par"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__write_date
-msgid "Last Updated on"
-msgstr "Dernière mise à jour le"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__name
-msgid "Name"
-msgstr "Nom"
 
 #. module: webservice
 #: model_terms:ir.ui.view,arch_db:webservice.webservice_backend_form_view
@@ -148,28 +77,8 @@ msgid "Oauth2 Token"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__password
-msgid "Password"
-msgstr "Mot de passe"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol
-msgid "Protocol"
-msgstr "Protocole"
-
-#. module: webservice
-#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__auth_type__none
-msgid "Public"
-msgstr ""
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__redirect_url
 msgid "Redirect Url"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__tech_name
-msgid "Tech Name"
 msgstr ""
 
 #. module: webservice
@@ -192,49 +101,14 @@ msgid "Token URL"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,help:webservice.field_webservice_backend__tech_name
-msgid "Unique name for technical purposes. Eg: server env keys."
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__url
-msgid "Url"
-msgstr "Url"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__username
-msgid "Username"
-msgstr "nom d'utilisateur :"
-
-#. module: webservice
-#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__auth_type__user_pwd
-msgid "Username & password"
-msgstr ""
-
-#. module: webservice
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__oauth2_flow__web_application
 msgid "Web Application (Authorization Code Grant)"
 msgstr ""
 
 #. module: webservice
-#: model:ir.actions.act_window,name:webservice.webservice_backend_act_window
 #: model:ir.model,name:webservice.model_webservice_backend
-#: model:ir.ui.menu,name:webservice.webservice_backend_menu
 msgid "WebService Backend"
 msgstr ""
-
-#. module: webservice
-#. odoo-python
-#: code:addons/webservice/models/webservice_backend.py:0
-msgid ""
-"Webservice '%(name)s' requires '%(auth_type)s' authentication. However, the "
-"following field(s) are not valued: %(fields)s"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/xml
-msgid "XML"
-msgstr "XLM"
 
 #. module: webservice
 #: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_state
@@ -252,6 +126,54 @@ msgstr ""
 #: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_token
 msgid "the OAuth2 token (serialized JSON)"
 msgstr ""
+
+#~ msgid "Content Type"
+#~ msgstr "Type de contenu"
+
+#~ msgid "Created by"
+#~ msgstr "Créé par"
+
+#~ msgid "Created on"
+#~ msgstr "Crée le"
+
+#~ msgid "Display Name"
+#~ msgstr "Afficher Nom"
+
+#~ msgid "Form"
+#~ msgstr "Formulaire"
+
+#~ msgid "HTTP Request"
+#~ msgstr "Requête HTTP"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "JSON"
+#~ msgstr "JSON"
+
+#~ msgid "Last Updated by"
+#~ msgstr "Dernière mise à jour par"
+
+#~ msgid "Last Updated on"
+#~ msgstr "Dernière mise à jour le"
+
+#~ msgid "Name"
+#~ msgstr "Nom"
+
+#~ msgid "Password"
+#~ msgstr "Mot de passe"
+
+#~ msgid "Protocol"
+#~ msgstr "Protocole"
+
+#~ msgid "Url"
+#~ msgstr "Url"
+
+#~ msgid "Username"
+#~ msgstr "nom d'utilisateur :"
+
+#~ msgid "XML"
+#~ msgstr "XLM"
 
 #~ msgid "Last Modified on"
 #~ msgstr "Dernière modification le"
