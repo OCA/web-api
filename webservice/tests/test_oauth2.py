@@ -69,7 +69,7 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
             delta=1,  # Accept a diff of 1s
         )
         self.assertEqual(responses.calls[1].response.content.decode(), "OK")
-        self.assertEqual(result.decode(), "OK")
+        self.assertEqual(result.content.decode(), "OK")
 
     @responses.activate
     def test_update_token(self):
@@ -111,7 +111,7 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
             delta=1,  # Accept a diff of 1s
         )
         self.assertEqual(responses.calls[1].response.content.decode(), "OK")
-        self.assertEqual(result.decode(), "OK")
+        self.assertEqual(result.content.decode(), "OK")
 
     @responses.activate
     def test_update_token_with_error(self):

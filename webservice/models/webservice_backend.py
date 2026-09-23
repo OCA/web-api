@@ -10,6 +10,14 @@ from odoo.tools import config
 
 _logger = logging.getLogger(__name__)
 
+# Backward-compat switch for the `content_only` default removal on `_request`.
+# Existing databases get it set (see `webservice`'s `18.0.2.0.1` upgrade
+# script) to keep returning only the response content; new installs get the
+# full `requests.Response` object with no param set. Safe to delete once
+# calling code has been adapted; the code checking it can then be dropped
+# too.
+CONTENT_ONLY_COMPAT_PARAM = "webservice.request_content_only"
+
 
 class WebserviceBackend(models.Model):
     _name = "webservice.backend"
@@ -88,6 +96,50 @@ class WebserviceBackend(models.Model):
                 usage="webservice.request",
                 webservice_protocol=self._get_adapter_protocol(),
             )
+
+    def _request(self, method, url=None, url_params=None, **kwargs):
+        self._pop_deprecated_content_only_kwarg(kwargs)
+        response = super()._request(method, url=url, url_params=url_params, **kwargs)
+        if self._get_request_content_only():
+            return response.content
+        return response
+
+    def _pop_deprecated_content_only_kwarg(self, kwargs):
+        """Drop the removed ``content_only`` call argument, warning if used.
+
+        It used to switch between returning the raw response content or the
+        full ``requests.Response`` object per call. It's gone: the full
+        response is always returned now, controlled only (and temporarily)
+        by the ``CONTENT_ONLY_COMPAT_PARAM`` system parameter for the whole
+        database - not something to keep sprinkling through call sites.
+        """
+        if "content_only" in kwargs:
+            kwargs.pop("content_only")
+            _logger.warning(
+                "%s: the 'content_only' argument is no longer supported "
+                "and was ignored; the full response object is always "
+                "returned now. Remove it from the calling code.",
+                self.display_name,
+            )
+
+    def _get_request_content_only(self):
+        """Whether to return only the response content (legacy behavior).
+
+        See ``CONTENT_ONLY_COMPAT_PARAM``.
+        """
+        content_only = bool(
+            self.env["ir.config_parameter"].sudo().get_param(CONTENT_ONLY_COMPAT_PARAM)
+        )
+        if content_only:
+            _logger.warning(
+                "%s: returning only the response content because the "
+                "'%s' system parameter is set (kept for backward "
+                "compatibility after upgrade). Delete it once the calling "
+                "code is adapted to use the full response object.",
+                self.display_name,
+                CONTENT_ONLY_COMPAT_PARAM,
+            )
+        return content_only
 
     def _get_adapter_protocol(self):
         protocol = self.protocol

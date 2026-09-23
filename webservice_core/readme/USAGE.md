@@ -2,7 +2,9 @@ Look up the backend (e.g. by its technical name) and call it:
 
 ```python
 backend = env["webservice.backend"].search([("tech_name", "=", "my_api")])
-result = backend.call("get")  # -> bytes: the response content
+result = backend.call("get")  # -> requests.Response
+result.content
+result.status_code
 ```
 
 `call(method, *args, **kwargs)` accepts any of the standard HTTP verbs
@@ -48,11 +50,3 @@ for a single call (same format `requests` itself accepts, e.g. a
 backend.call("get", auth=("other_user", "other_password"))
 ```
 
-**Full response**: `call()` returns `response.content` by default. Pass
-`content_only=False` to get the full `requests.Response` object instead
-(status code, headers, etc.):
-
-```python
-response = backend.call("get", content_only=False)
-response.status_code
-```
