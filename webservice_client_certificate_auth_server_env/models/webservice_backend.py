@@ -1,0 +1,19 @@
+# Copyright 2026 Camptocamp SA
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
+from odoo import models
+
+
+class WebserviceBackend(models.Model):
+    _inherit = "webservice.backend"
+
+    @property
+    def _server_env_fields(self):
+        env_fields = super()._server_env_fields
+        env_fields.update(
+            {
+                "client_certificate_path": {},
+                "client_private_key_path": {},
+            }
+        )
+        return env_fields
