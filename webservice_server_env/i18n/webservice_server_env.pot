@@ -25,7 +25,9 @@ msgstr ""
 
 #. module: webservice_server_env
 #: model:ir.model.fields,help:webservice_server_env.field_webservice_backend__tech_name
-msgid "Unique name for technical purposes. Eg: server env keys."
+msgid ""
+"Unique name for technical purposes. Automatically generated from the name if"
+" left empty."
 msgstr ""
 
 #. module: webservice_server_env
