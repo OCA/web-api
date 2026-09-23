@@ -1,6 +1,6 @@
 [project]
 name = "odoo-addons-oca-web-api"
-version = "18.0.20260828.0"
+version = "18.0.20260923.0"
 dependencies = [
     "odoo-addon-endpoint==18.0.*",
     "odoo-addon-endpoint_auth_api_key==18.0.*",
@@ -9,6 +9,7 @@ dependencies = [
     "odoo-addon-endpoint_jsonifier==18.0.*",
     "odoo-addon-endpoint_route_handler==18.0.*",
     "odoo-addon-webservice==18.0.*",
+    "odoo-addon-webservice_core==18.0.*",
     "odoo-addon-webservice_server_env==18.0.*",
 ]
 classifiers=[
