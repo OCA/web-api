@@ -28,10 +28,15 @@ msgstr "Nome tecnico"
 
 #. module: webservice_server_env
 #: model:ir.model.fields,help:webservice_server_env.field_webservice_backend__tech_name
-msgid "Unique name for technical purposes. Eg: server env keys."
-msgstr "Nome univoco per motivi tecnici. Es: chiavi server ambiente."
+msgid ""
+"Unique name for technical purposes. Automatically generated from the name if "
+"left empty."
+msgstr ""
 
 #. module: webservice_server_env
 #: model:ir.model,name:webservice_server_env.model_webservice_backend
 msgid "WebService Backend"
 msgstr "Backend servizio web"
+
+#~ msgid "Unique name for technical purposes. Eg: server env keys."
+#~ msgstr "Nome univoco per motivi tecnici. Es: chiavi server ambiente."
