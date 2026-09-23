@@ -1,0 +1,179 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* webservice_core
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__api_key
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__api_key
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_backend__auth_type__api_key
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_request_mixin__auth_type__api_key
+msgid "API Key"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__api_key_header
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__api_key_header
+msgid "API Key header"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__auth_type
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__auth_type
+msgid "Auth Type"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__company_id
+msgid "Company"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__content_type
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__content_type
+msgid "Content Type"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_backend__content_type__application/x-www-form-urlencoded
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_request_mixin__content_type__application/x-www-form-urlencoded
+msgid "Form"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_backend__protocol__http
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_request_mixin__protocol__http
+msgid "HTTP Request"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__id
+msgid "ID"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_backend__content_type__application/json
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_request_mixin__content_type__application/json
+msgid "JSON"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__name
+msgid "Name"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__password
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__password
+msgid "Password"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__protocol
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__protocol
+msgid "Protocol"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_backend__auth_type__none
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_request_mixin__auth_type__none
+msgid "Public"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__tech_name
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__tech_name
+msgid "Tech Name"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,help:webservice_core.field_webservice_backend__tech_name
+#: model:ir.model.fields,help:webservice_core.field_webservice_request_mixin__tech_name
+msgid ""
+"Unique name for technical purposes. Automatically generated from the name if"
+" left empty."
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__url
+msgid "Url"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__username
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__username
+msgid "Username"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_backend__auth_type__user_pwd
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_request_mixin__auth_type__user_pwd
+msgid "Username & password"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.actions.act_window,name:webservice_core.webservice_backend_act_window
+#: model:ir.model,name:webservice_core.model_webservice_backend
+#: model:ir.ui.menu,name:webservice_core.webservice_backend_menu
+msgid "WebService Backend"
+msgstr ""
+
+#. module: webservice_core
+#. odoo-python
+#: code:addons/webservice_core/models/webservice_request_mixin.py:0
+msgid ""
+"Webservice '%(name)s' requires '%(auth_type)s' authentication. However, the "
+"following field(s) are not valued: %(fields)s"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model,name:webservice_core.model_webservice_request_mixin
+msgid "Webservice Request Mixin"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_backend__content_type__application/xml
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_request_mixin__content_type__application/xml
+msgid "XML"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.constraint,message:webservice_core.constraint_webservice_backend_tech_name_uniq
+#: model:ir.model.constraint,message:webservice_core.constraint_webservice_request_mixin_tech_name_uniq
+msgid "`tech_name` must be unique!"
+msgstr ""
