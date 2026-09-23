@@ -12,8 +12,7 @@ from oauthlib.oauth2 import BackendApplicationClient, WebApplicationClient
 from requests_oauthlib import OAuth2Session
 
 from odoo.addons.component.core import Component
-
-from ..utils import sanitize_url_for_log
+from odoo.addons.webservice_core.utils import sanitize_url_for_log
 
 _logger = logging.getLogger(__name__)
 
