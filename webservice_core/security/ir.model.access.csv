@@ -1,2 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_webservice_backend_edit,webservice_backend edit,model_webservice_backend,base.group_system,1,1,1,1
+access_webservice_endpoint_edit,webservice_endpoint edit,model_webservice_endpoint,base.group_system,1,1,1,1
+access_webservice_header_edit,webservice_header edit,model_webservice_header,base.group_system,1,1,1,1
+access_webservice_querystring_param_edit,webservice_querystring_param edit,model_webservice_querystring_param,base.group_system,1,1,1,1

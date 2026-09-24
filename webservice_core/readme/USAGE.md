@@ -2,9 +2,7 @@ Look up the backend (e.g. by its technical name) and call it:
 
 ```python
 backend = env["webservice.backend"].search([("tech_name", "=", "my_api")])
-result = backend.call("get")  # -> requests.Response
-result.content
-result.status_code
+result = backend.call("get")  # -> the full requests.Response object
 ```
 
 `call(method, *args, **kwargs)` accepts any of the standard HTTP verbs
@@ -35,11 +33,23 @@ backend.call("get", url_params={"endpoint": "orders"})
 ```
 
 **Headers**: pass `headers` to add/override headers for that call; they are
-merged on top of the backend's own `Content-Type` and auth-derived headers
-(e.g. the API key header):
+merged on top of the backend's own static headers (configured in the
+"Headers" tab), `Content-Type` and auth-derived headers (e.g. the API key
+header) - the `headers` kwarg wins on matching keys:
 
 ```python
 backend.call("get", headers={"X-Request-Id": "42"})
+```
+
+**Querystring params**: sent via `requests`' `params=`, not to be confused
+with `url_params` above, which fills `{placeholder}` tokens in the URL path
+itself. Configure static defaults in the "Querystring Params" tab - a
+value there may itself contain a `{placeholder}`, resolved against the
+same `url_params` used for the URL. An explicit `params` kwarg passed to
+`call()` wins over the static configuration on matching keys:
+
+```python
+backend.call("get", params={"verbose": "1"})
 ```
 
 **Auth override**: pass `auth` to bypass the backend's configured auth type
@@ -50,3 +60,11 @@ for a single call (same format `requests` itself accepts, e.g. a
 backend.call("get", auth=("other_user", "other_password"))
 ```
 
+**Response**: `call()` always returns the full `requests.Response` object
+(status code, headers, content, ...):
+
+```python
+response = backend.call("get")
+response.status_code
+response.content
+```

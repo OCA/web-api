@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- Copyright 2020 Creu Blanca
+     Copyright 2026 Camptocamp SA
+     @author Simone Orsi <simahawk@gmail.com>
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
     <record model="ir.ui.view" id="webservice_backend_form_view">
@@ -9,6 +11,20 @@
             <form>
                 <header />
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            type="object"
+                            name="action_view_endpoints"
+                            class="oe_stat_button"
+                            icon="fa-plug"
+                        >
+                            <field
+                                name="endpoint_count"
+                                widget="statinfo"
+                                string="Endpoints"
+                            />
+                        </button>
+                    </div>
                     <div class="oe_title">
                         <label for="name" class="oe_edit_only" />
                         <h1>
@@ -50,6 +66,24 @@
                             required="auth_type == 'api_key'"
                         />
                     </group>
+                    <notebook>
+                        <page name="headers" string="Headers">
+                            <field name="header_ids">
+                                <list editable="bottom">
+                                    <field name="name" />
+                                    <field name="value" />
+                                </list>
+                            </field>
+                        </page>
+                        <page name="querystring_params" string="Querystring Params">
+                            <field name="querystring_param_ids">
+                                <list editable="bottom">
+                                    <field name="name" />
+                                    <field name="value" />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
