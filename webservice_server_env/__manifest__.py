@@ -13,6 +13,6 @@
     "maintainers": ["etobella"],
     "author": "Creu Blanca, Camptocamp, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/web-api",
-    "depends": ["web", "webservice", "server_environment"],
+    "depends": ["web", "webservice"],
     "auto_install": True,
 }
