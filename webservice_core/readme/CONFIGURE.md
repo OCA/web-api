@@ -10,6 +10,9 @@ Go to *Settings > Technical > WebService Backend* (requires the
   *Usage*), e.g. `https://api.example.com/{endpoint}`.
 - **Content-Type**: optional default `Content-Type` header for every call.
 
+Under the **Headers** and **Querystring Params** tabs you can configure
+static defaults, merged into every call (see *Usage*).
+
 Then configure authentication via **Auth Type**:
 
 - **Public**: no credentials needed.
@@ -20,3 +23,7 @@ Then configure authentication via **Auth Type**:
 
 Required fields depend on the selected auth type; the form only shows and
 requires the ones that apply, and saving enforces it.
+
+Each `webservice.endpoint` (see *Description*) has its own Content-Type,
+Headers and Querystring Params, overriding the backend's own for
+that specific endpoint - set only what needs to differ.
