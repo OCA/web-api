@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Camptocamp SA
+     @author Simone Orsi <simahawk@gmail.com>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="webservice_endpoint_form_view">
+        <field name="name">webservice.endpoint.form (in webservice_core)</field>
+        <field name="model">webservice.endpoint</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                        <label for="tech_name" class="oe_edit_only" />
+                        <h2>
+                            <field name="tech_name" />
+                        </h2>
+                    </div>
+                    <group name="config">
+                        <field name="backend_id" />
+                        <field
+                            name="company_id"
+                            groups="base.group_multi_company"
+                            readonly="1"
+                        />
+                        <field name="active" invisible="1" />
+                        <field name="http_method" />
+                        <field name="path" />
+                    </group>
+                    <field
+                        name="description"
+                        placeholder="What this endpoint is for..."
+                    />
+                    <notebook>
+                        <page name="headers" string="Headers">
+                            <field name="header_ids">
+                                <list editable="bottom">
+                                    <field name="name" />
+                                    <field name="value" />
+                                </list>
+                            </field>
+                        </page>
+                        <page name="querystring_params" string="Querystring Params">
+                            <field name="querystring_param_ids">
+                                <list editable="bottom">
+                                    <field name="name" />
+                                    <field name="value" />
+                                </list>
+                            </field>
+                        </page>
+                        <page name="auth" string="Authentication">
+                            <group name="auth">
+                                <field name="override_auth" />
+                                <field
+                                    name="auth_type"
+                                    invisible="not override_auth"
+                                    required="override_auth"
+                                />
+                                <field
+                                    name="username"
+                                    invisible="not override_auth or auth_type != 'user_pwd'"
+                                    required="override_auth and auth_type == 'user_pwd'"
+                                />
+                                <field
+                                    name="password"
+                                    invisible="not override_auth or auth_type != 'user_pwd'"
+                                    required="override_auth and auth_type == 'user_pwd'"
+                                    password="True"
+                                />
+                                <field
+                                    name="api_key"
+                                    invisible="not override_auth or auth_type != 'api_key'"
+                                    required="override_auth and auth_type == 'api_key'"
+                                    password="True"
+                                />
+                                <field
+                                    name="api_key_header"
+                                    invisible="not override_auth or auth_type != 'api_key'"
+                                    required="override_auth and auth_type == 'api_key'"
+                                />
+                                <field
+                                    name="content_type"
+                                    invisible="not override_auth"
+                                />
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="webservice_endpoint_search_view">
+        <field name="name">webservice.endpoint.search (in webservice_core)</field>
+        <field name="model">webservice.endpoint</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="tech_name" />
+                <field name="backend_id" />
+                <filter
+                    name="inactive"
+                    string="Archived"
+                    domain="[('active', '=', False)]"
+                />
+                <group expand="0" string="Group By">
+                    <filter
+                        name="group_by_backend"
+                        string="Backend"
+                        context="{'group_by': 'backend_id'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="webservice_endpoint_tree_view">
+        <field name="name">webservice.endpoint.tree (in webservice_core)</field>
+        <field name="model">webservice.endpoint</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+                <field name="tech_name" />
+                <field name="backend_id" />
+                <field name="http_method" />
+                <field name="path" />
+                <field name="override_auth" />
+                <field
+                    name="company_id"
+                    groups="base.group_multi_company"
+                    optional="hide"
+                />
+            </list>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="webservice_endpoint_act_window">
+        <field name="name">WebService Endpoint</field>
+        <field name="res_model">webservice.endpoint</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="webservice_endpoint_menu">
+        <field name="name">WebService Endpoint</field>
+        <field name="parent_id" ref="base.menu_custom" />
+        <field name="action" ref="webservice_endpoint_act_window" />
+        <field name="sequence" eval="101" />
+    </record>
+</odoo>
