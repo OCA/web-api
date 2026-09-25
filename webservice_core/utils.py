@@ -4,6 +4,27 @@
 
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
+from requests.auth import AuthBase
+
+
+class StaticHeaderAuth(AuthBase):
+    """Requests auth handler injecting a static header into the request.
+
+    Useful to authenticate against endpoints expecting the credentials in a
+    non-standard Authorization header (e.g. ``Authorization: SSWS <token>``).
+    Passing it as ``auth`` (rather than via ``headers``) also prevents
+    requests-oauthlib from auto-generating an HTTP Basic ``Authorization``
+    header out of the client id, which would otherwise override ours.
+    """
+
+    def __init__(self, header, value):
+        self._header = header
+        self._value = value
+
+    def __call__(self, request):
+        request.headers[self._header] = self._value
+        return request
+
 
 def sanitize_url_for_log(url, blacklisted_keys=None):
     """Sanitize url to avoid loggin sensitive data"""
