@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-09-10 12:46+0000\n"
+"PO-Revision-Date: 2026-09-28 09:43+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -32,6 +32,8 @@ msgid ""
 "Unique name for technical purposes. Automatically generated from the name if "
 "left empty."
 msgstr ""
+"Nome univoco per scopi tecnici. Generato automaticamente a partire dal nome "
+"se lasciato vuoto."
 
 #. module: webservice_server_env
 #: model:ir.model,name:webservice_server_env.model_webservice_backend
