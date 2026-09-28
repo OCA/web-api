@@ -19,6 +19,10 @@ ENV_MANAGED_FIELDS = [
     "oauth2_authorization_url",
     "oauth2_token_url",
     "oauth2_audience",
+    "oauth2_token_method",
+    "oauth2_client_auth_method",
+    "oauth2_client_auth_header",
+    "oauth2_client_auth_value",
 ]
 
 

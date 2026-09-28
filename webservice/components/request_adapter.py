@@ -12,7 +12,7 @@ from oauthlib.oauth2 import BackendApplicationClient, WebApplicationClient
 from requests_oauthlib import OAuth2Session
 
 from odoo.addons.component.core import Component
-from odoo.addons.webservice_core.utils import sanitize_url_for_log
+from odoo.addons.webservice_core.utils import StaticHeaderAuth, sanitize_url_for_log
 
 _logger = logging.getLogger(__name__)
 
@@ -159,22 +159,49 @@ class BackendApplicationOAuth2RestRequestsAdapter(Component):
         # be used (and use it in that case)
         oauth_params = self.collection.sudo().read(
             [
+                "oauth2_client_auth_method",
                 "oauth2_clientid",
                 "oauth2_client_secret",
+                "oauth2_client_auth_header",
+                "oauth2_client_auth_value",
                 "oauth2_token_url",
+                "oauth2_token_method",
                 "oauth2_audience",
                 "redirect_url",
             ]
         )[0]
         client = self.get_client(oauth_params)
         with OAuth2Session(client=client) as session:
-            token = session.fetch_token(
-                token_url=oauth_params["oauth2_token_url"],
-                cliend_id=oauth_params["oauth2_clientid"],
-                client_secret=oauth_params["oauth2_client_secret"],
-                audience=oauth_params.get("oauth2_audience") or "",
-            )
+            token = session.fetch_token(**self._token_fetch_kwargs(oauth_params))
         return token
+
+    def _token_fetch_kwargs(self, oauth_params):
+        """Build the ``OAuth2Session.fetch_token`` keyword arguments.
+
+        Both the HTTP method used for the token request and the way the client
+        credentials are presented to the token endpoint depend on the backend
+        configuration, so that non fully spec-compliant endpoints can be used.
+        """
+        kwargs = {
+            "method": oauth_params["oauth2_token_method"].upper(),
+            "token_url": oauth_params["oauth2_token_url"],
+            "audience": oauth_params.get("oauth2_audience") or "",
+        }
+        match oauth_params["oauth2_client_auth_method"]:
+            case "client_secret_basic":
+                kwargs["client_id"] = oauth_params["oauth2_clientid"]
+                kwargs["client_secret"] = oauth_params["oauth2_client_secret"]
+            case "custom_header":
+                kwargs["auth"] = StaticHeaderAuth(
+                    oauth_params["oauth2_client_auth_header"],
+                    oauth_params["oauth2_client_auth_value"],
+                )
+            case _:
+                raise ValueError(
+                    "Unsupported OAuth2 client authentication method: "
+                    f"{oauth_params['oauth2_client_auth_method']!r}"
+                )
+        return kwargs
 
     def _request(self, method, url=None, url_params=None, **kwargs):
         url = self._get_url(url=url, url_params=url_params)
