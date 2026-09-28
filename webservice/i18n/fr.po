@@ -37,13 +37,69 @@ msgid "Backend Application (Client Credentials Grant)"
 msgstr ""
 
 #. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_client_auth_header
+msgid "Client Auth Header"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_client_auth_value
+msgid "Client Auth Header Value"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_client_auth_method
+msgid "Client Authentication"
+msgstr ""
+
+#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_clientid
 msgid "Client ID"
 msgstr ""
 
 #. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__oauth2_client_auth_method__client_secret_basic
+msgid "Client ID & Secret (HTTP Basic)"
+msgstr ""
+
+#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_client_secret
 msgid "Client Secret"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__oauth2_client_auth_method__custom_header
+msgid "Custom Authorization header"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_client_auth_value
+msgid ""
+"Full, static header value sent to the token endpoint when the client "
+"authentication method is a custom Authorization header (e.g. 'SSWS <token>')."
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__oauth2_token_method__get
+msgid "GET"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_token_method
+msgid ""
+"HTTP method used to request the token from the token endpoint. Most "
+"providers use POST; some expose the token endpoint as GET."
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_client_auth_header
+msgid ""
+"Header name used to send the client credentials when the client "
+"authentication method is a custom Authorization header."
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_client_auth_method
+msgid "How the client credentials are presented to the token endpoint."
 msgstr ""
 
 #. module: webservice
@@ -77,6 +133,11 @@ msgid "Oauth2 Token"
 msgstr ""
 
 #. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__oauth2_token_method__post
+msgid "POST"
+msgstr ""
+
+#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__redirect_url
 msgid "Redirect Url"
 msgstr ""
@@ -93,6 +154,11 @@ msgstr ""
 #. module: webservice
 #: model:ir.model.fields,help:webservice.field_webservice_backend__redirect_url
 msgid "The redirect URL to be used as part of the OAuth2 authorisation flow"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_token_method
+msgid "Token Request Method"
 msgstr ""
 
 #. module: webservice
