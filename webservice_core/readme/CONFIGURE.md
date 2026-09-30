@@ -29,3 +29,6 @@ requires the ones that apply, and saving enforces it.
 Each `webservice.endpoint` (see *Description*) has its own Content-Type,
 Timeout, Headers and Querystring Params, overriding the backend's own for
 that specific endpoint - set only what needs to differ.
+
+When a database is neutralized, stored credentials (username, password, API
+key) of webservice backends and endpoints are cleared.
