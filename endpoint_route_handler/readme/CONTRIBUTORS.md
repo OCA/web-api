@@ -1,2 +1,3 @@
 - Simone Orsi \<<simone.orsi@camptocamp.com>\>
 - Nguyen Minh Chien \<<chien@trobz.com>\>
+- Omar Assouma \<<omar.assouma@dataone.eu>\>
