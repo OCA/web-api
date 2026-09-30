@@ -95,6 +95,7 @@ class EndpointRouteSyncMixin(models.AbstractModel):
         self._endpoint_registry.update_rules(rules, init=init)
         if clear_cache:
             self.env.registry.clear_cache("routing")
+            self.env["ir.http"]._endpoint_route_reset_last_version()
         _logger.debug(
             "%s registered controllers: %s",
             self._name,
@@ -107,6 +108,7 @@ class EndpointRouteSyncMixin(models.AbstractModel):
         self._endpoint_registry.drop_rules(self._registered_endpoint_rule_keys())
         if clear_cache:
             self.env.registry.clear_cache("routing")
+            self.env["ir.http"]._endpoint_route_reset_last_version()
         _logger.debug(
             "%s unregistered controllers: %s",
             self._name,
