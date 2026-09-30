@@ -20,3 +20,6 @@ Then configure authentication via **Auth Type**:
 
 Required fields depend on the selected auth type; the form only shows and
 requires the ones that apply, and saving enforces it.
+
+When a database is neutralized, stored webservice backend credentials
+(username, password, API key) are cleared.
