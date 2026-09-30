@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- get_partners -->
+    <record id="demo_endpoint_get_partners" model="endpoint.endpoint">
+        <field name="name">get_partners</field>
+        <field name="route">/json2/contacts/get_partners</field>
+        <field name="route_group">contacts</field>
+        <field name="exec_mode">json2</field>
+        <field name="request_method">POST</field>
+        <field name="request_content_type">application/json</field>
+        <field name="auth_type">bearer</field>
+        <field
+            name="json2_description"
+        >Return partner records matching the given domain.</field>
+        <field name="json2_model_id" ref="base.model_res_partner" />
+        <field name="json2_method">search_read</field>
+        <field name="json2_response_fields">name
+email
+phone
+city
+country_id.name country
+write_date</field>
+        <field name="json2_default_domain">[["active", "=", true]]</field>
+        <field name="json2_group_ids" eval="[Command.link(ref('base.group_user'))]" />
+    </record>
+    <record id="demo_param_get_partners_domain" model="endpoint.json2.param">
+        <field name="endpoint_id" ref="demo_endpoint_get_partners" />
+        <field name="name">domain</field>
+        <field name="param_type">list</field>
+        <field name="required" eval="False" />
+        <field name="default_value">[]</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="demo_param_get_partners_limit" model="endpoint.json2.param">
+        <field name="endpoint_id" ref="demo_endpoint_get_partners" />
+        <field name="name">limit</field>
+        <field name="param_type">integer</field>
+        <field name="required" eval="False" />
+        <field name="default_value">80</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="demo_param_get_partners_fields" model="endpoint.json2.param">
+        <field name="endpoint_id" ref="demo_endpoint_get_partners" />
+        <field name="name">fields</field>
+        <field name="param_type">list</field>
+        <field name="required" eval="False" />
+        <field name="sequence">30</field>
+    </record>
+
+    <!-- update_partner_name (code snippet example) -->
+    <record id="demo_endpoint_update_partner_name" model="endpoint.endpoint">
+        <field name="name">update_partner_name</field>
+        <field name="route">/json2/contacts/update_partner_name</field>
+        <field name="route_group">contacts</field>
+        <field name="exec_mode">json2</field>
+        <field name="request_method">POST</field>
+        <field name="request_content_type">application/json</field>
+        <field name="auth_type">bearer</field>
+        <field
+            name="json2_description"
+        >Update a partner's name by ref (code snippet example).</field>
+        <field name="json2_model_id" ref="base.model_res_partner" />
+        <field name="json2_response_fields">ref
+name</field>
+        <field name="json2_code_snippet">
+partner = Model.search([("ref", "=", params["ref"])], limit=1)
+if not partner:
+    raise exceptions.NotFound("Partner not found: " + params["ref"])
+partner.write({"name": params["new_name"]})
+result = {"ref": partner.ref, "name": partner.name}
+</field>
+        <field name="json2_group_ids" eval="[Command.link(ref('base.group_user'))]" />
+    </record>
+    <record id="demo_param_update_partner_ref" model="endpoint.json2.param">
+        <field name="endpoint_id" ref="demo_endpoint_update_partner_name" />
+        <field name="name">ref</field>
+        <field name="param_type">string</field>
+        <field name="required" eval="True" />
+        <field name="sequence">10</field>
+    </record>
+    <record id="demo_param_update_partner_new_name" model="endpoint.json2.param">
+        <field name="endpoint_id" ref="demo_endpoint_update_partner_name" />
+        <field name="name">new_name</field>
+        <field name="param_type">string</field>
+        <field name="required" eval="True" />
+        <field name="sequence">20</field>
+    </record>
+
+    <!-- create_portal_user (code snippet example) -->
+    <record id="demo_endpoint_create_portal_user" model="endpoint.endpoint">
+        <field name="name">create_portal_user</field>
+        <field name="route">/json2/contacts/create_portal_user</field>
+        <field name="route_group">contacts</field>
+        <field name="exec_mode">json2</field>
+        <field name="request_method">POST</field>
+        <field name="request_content_type">application/json</field>
+        <field name="auth_type">bearer</field>
+        <field
+            name="json2_description"
+        >Create a portal user with the given name and email (code snippet example).</field>
+        <field name="json2_model_id" ref="base.model_res_users" />
+        <field name="json2_response_fields">login
+name</field>
+        <field name="json2_code_snippet">
+existing = Model.search([("login", "=", params["email"])], limit=1)
+if existing:
+    raise exceptions.BadRequest("User already exists: " + params["email"])
+partner_vals = {"name": params["name"], "email": params["email"]}
+if params.get("company_name"):
+    partner_vals["company_name"] = params["company_name"]
+partner = env["res.partner"].create(partner_vals)
+group_portal = env.ref("base.group_portal")
+user = Model.create({
+    "partner_id": partner.id,
+    "login": params["email"],
+    "group_ids": [Command.set([group_portal.id])],
+})
+result = {"id": user.id, "login": user.login, "partner_id": partner.id}
+</field>
+        <field name="json2_group_ids" eval="[Command.link(ref('base.group_user'))]" />
+    </record>
+    <record id="demo_param_create_portal_user_name" model="endpoint.json2.param">
+        <field name="endpoint_id" ref="demo_endpoint_create_portal_user" />
+        <field name="name">name</field>
+        <field name="param_type">string</field>
+        <field name="required" eval="True" />
+        <field name="sequence">10</field>
+    </record>
+    <record id="demo_param_create_portal_user_email" model="endpoint.json2.param">
+        <field name="endpoint_id" ref="demo_endpoint_create_portal_user" />
+        <field name="name">email</field>
+        <field name="param_type">string</field>
+        <field name="required" eval="True" />
+        <field name="sequence">20</field>
+    </record>
+    <record
+        id="demo_param_create_portal_user_company_name"
+        model="endpoint.json2.param"
+    >
+        <field name="endpoint_id" ref="demo_endpoint_create_portal_user" />
+        <field name="name">company_name</field>
+        <field name="param_type">string</field>
+        <field name="required" eval="False" />
+        <field name="sequence">30</field>
+    </record>
+</odoo>

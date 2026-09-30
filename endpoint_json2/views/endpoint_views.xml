@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="endpoint_endpoint_json2_form_view" model="ir.ui.view">
+        <field name="name">endpoint.endpoint.json2.form</field>
+        <field name="model">endpoint.endpoint</field>
+        <field name="inherit_id" ref="endpoint.endpoint_endpoint_form_view" />
+        <field name="arch" type="xml">
+            <field name="route" position="attributes">
+                <attribute name="readonly">exec_mode == 'json2'</attribute>
+            </field>
+            <field name="route_group" position="attributes">
+                <attribute name="required">exec_mode == 'json2'</attribute>
+            </field>
+            <group name="config2" position="attributes">
+                <attribute name="invisible">exec_mode == 'json2'</attribute>
+            </group>
+            <page name="request_content_schema" position="attributes">
+                <attribute name="invisible">
+                    exec_mode == 'json2' or not request_content_schema_applicable
+                </attribute>
+            </page>
+            <page name="code" position="before">
+                <page
+                    name="json2_config"
+                    string="JSON2 Configuration"
+                    invisible="exec_mode != 'json2'"
+                >
+                    <group>
+                        <group string="Target">
+                            <field
+                                name="json2_model_id"
+                                required="exec_mode == 'json2'"
+                            />
+                            <field name="json2_model_name" invisible="1" />
+                            <field name="json2_default_domain" />
+                            <field name="json2_lang_id" />
+                            <field name="json2_tz" />
+                        </group>
+                        <group string="Access">
+                            <field name="json2_doc_url" widget="url" />
+                            <field
+                                name="json2_group_ids"
+                                widget="many2many_tags"
+                                required="exec_mode == 'json2'"
+                            />
+                            <field name="json2_description" />
+                        </group>
+                    </group>
+                    <separator string="Parameters" />
+                    <field name="json2_param_ids">
+                        <list editable="bottom">
+                            <field name="sequence" widget="handle" />
+                            <field name="name" />
+                            <field name="description" />
+                            <field name="param_type" />
+                            <field name="required" />
+                            <field name="default_value" />
+                        </list>
+                    </field>
+                    <group>
+                        <field name="json2_method" invisible="json2_code_snippet" />
+                        <field
+                            name="json2_code_snippet"
+                            widget="code"
+                            invisible="json2_method"
+                        />
+                    </group>
+                    <group>
+                        <group>
+                            <field name="json2_response_fields" />
+                        </group>
+                    </group>
+                </page>
+            </page>
+        </field>
+    </record>
+</odoo>
