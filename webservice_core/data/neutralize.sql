@@ -7,6 +7,12 @@ UPDATE webservice_backend
        password = NULL,
        api_key = NULL;
 
+-- Endpoints can override the authentication of their backend.
+UPDATE webservice_endpoint
+   SET username = NULL,
+       password = NULL,
+       api_key = NULL;
+
 -- Secret querystring params carry tokens, keys, ...
 -- `value` is required, so it gets a placeholder instead of NULL.
 UPDATE webservice_querystring_param

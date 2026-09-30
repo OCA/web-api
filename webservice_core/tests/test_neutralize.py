@@ -41,6 +41,28 @@ class TestNeutralize(TransactionCase):
                 cls.backend.id,
             ),
         )
+        cls.endpoint = cls.env["webservice.endpoint"].create(
+            {
+                "name": "Neutralize my endpoint",
+                "tech_name": "neutralize_my_endpoint",
+                "description": "Endpoint with its own credentials",
+                "backend_id": cls.backend.id,
+            }
+        )
+        cls.env.flush_all()
+        cls.env.cr.execute(
+            """
+            UPDATE webservice_endpoint
+               SET username = %s, password = %s, api_key = %s
+             WHERE id = %s
+            """,
+            (
+                "prod_endpoint_user",
+                "prod_endpoint_password",
+                "prod_endpoint_api_key",
+                cls.endpoint.id,
+            ),
+        )
         cls.public_param, cls.secret_param = cls.env[
             "webservice.querystring.param"
         ].create(
@@ -96,6 +118,18 @@ class TestNeutralize(TransactionCase):
         )
         return self.env.cr.dictfetchone()
 
+    def _read_endpoint_row(self):
+        """Return the raw database values of the test endpoint."""
+        self.env.cr.execute(
+            """
+            SELECT name, username, password, api_key
+              FROM webservice_endpoint
+             WHERE id = %s
+            """,
+            (self.endpoint.id,),
+        )
+        return self.env.cr.dictfetchone()
+
     def _read_param_value(self, param):
         """Return the raw database value of a querystring param."""
         self.env.cr.execute(
@@ -123,6 +157,15 @@ class TestNeutralize(TransactionCase):
         self.assertIsNone(row["username"])
         self.assertIsNone(row["password"])
         self.assertIsNone(row["api_key"])
+
+    def test_neutralize_clears_endpoint_credentials(self):
+        """Username, password and API key of the endpoint are cleared."""
+        self._run_neutralize()
+        row = self._read_endpoint_row()
+        self.assertIsNone(row["username"])
+        self.assertIsNone(row["password"])
+        self.assertIsNone(row["api_key"])
+        self.assertEqual(row["name"], "Neutralize my endpoint")
 
     def test_neutralize_keeps_other_fields(self):
         """Fields that are not endpoints or credentials are left untouched."""

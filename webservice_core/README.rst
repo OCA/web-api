@@ -95,6 +95,10 @@ Content-Type, Timeout, Headers and Querystring Params, overriding the
 backend's own for that specific endpoint - set only what needs to
 differ.
 
+When a database is neutralized, the URL of the backends is replaced by a
+placeholder, and the stored credentials (username, password, API key) of
+backends and endpoints are cleared.
+
 Usage
 =====
 
