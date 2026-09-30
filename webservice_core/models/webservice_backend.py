@@ -10,13 +10,11 @@ class WebserviceBackend(models.Model):
     _name = "webservice.backend"
     _inherit = ["webservice.request.mixin"]
     _description = "WebService Backend"
-    _sql_constraints = [
-        (
-            "tech_name_uniq",
-            "unique(tech_name)",
-            "`tech_name` must be unique!",
-        )
-    ]
+
+    _tech_name_uniq = models.Constraint(
+        "unique(tech_name)",
+        "`tech_name` must be unique!",
+    )
 
     name = fields.Char(required=True)
     url = fields.Char(required=True)

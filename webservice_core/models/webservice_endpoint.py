@@ -53,13 +53,10 @@ class WebserviceEndpoint(models.Model):
     protocol = fields.Selection(default="http")
     auth_type = fields.Selection(required=False)
 
-    _sql_constraints = [
-        (
-            "tech_name_backend_uniq",
-            "unique(backend_id, tech_name)",
-            "An endpoint with this technical name already exists for this backend.",
-        ),
-    ]
+    _tech_name_backend_uniq = models.Constraint(
+        "unique(backend_id, tech_name)",
+        "An endpoint with this technical name already exists for this backend.",
+    )
 
     @api.constrains("override_auth", "auth_type")
     def _check_override_auth(self):

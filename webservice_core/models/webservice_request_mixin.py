@@ -132,12 +132,11 @@ class WebserviceRequestMixin(models.AbstractModel):
 
         return self.env._(
             "Webservice '%(name)s' requires '%(auth_type)s' authentication. "
-            "However, the following field(s) are not valued: %(fields)s"
-        ) % {
-            "name": self.name,
-            "auth_type": get_selection_value("auth_type"),
-            "fields": ", ".join([f.string for f in missing_fields]),
-        }
+            "However, the following field(s) are not valued: %(fields)s",
+            name=self.name,
+            auth_type=get_selection_value("auth_type"),
+            fields=", ".join([f.string for f in missing_fields]),
+        )
 
     def _valid_field_parameter(self, field, name):
         extra_params = ("auth_type",)
