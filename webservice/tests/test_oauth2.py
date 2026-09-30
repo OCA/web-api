@@ -70,7 +70,7 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
             delta=1,  # Accept a diff of 1s
         )
         self.assertEqual(responses.calls[1].response.content.decode(), "OK")
-        self.assertEqual(result.decode(), "OK")
+        self.assertEqual(result.content.decode(), "OK")
 
     @responses.activate
     def test_update_token(self):
@@ -112,7 +112,7 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
             delta=1,  # Accept a diff of 1s
         )
         self.assertEqual(responses.calls[1].response.content.decode(), "OK")
-        self.assertEqual(result.decode(), "OK")
+        self.assertEqual(result.content.decode(), "OK")
 
     @responses.activate
     def test_update_token_with_error(self):
@@ -152,7 +152,7 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
         )
 
     @responses.activate
-    def test_call_with_content_only_false_returns_response(self):
+    def test_call_returns_response(self):
         now = time.time()
         duration = 3600
         responses.add(
@@ -172,7 +172,6 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
                 "post",
                 url=f"{self.url}endpoint",
                 data="payload",
-                content_only=False,
             )
 
         self.assertEqual(response.status_code, 200)
