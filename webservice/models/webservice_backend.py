@@ -10,29 +10,26 @@ from odoo.tools import config
 
 _logger = logging.getLogger(__name__)
 
+# Backward-compat switch for the `content_only` default removal on `_request`.
+# Existing databases get it set (see `webservice`'s `18.0.2.0.1` upgrade
+# script) to keep returning only the response content; new installs get the
+# full `requests.Response` object with no param set. Safe to delete once
+# calling code has been adapted; the code checking it can then be dropped
+# too.
+CONTENT_ONLY_COMPAT_PARAM = "webservice.request_content_only"
+
 
 class WebserviceBackend(models.Model):
     _name = "webservice.backend"
-    _inherit = ["collection.base"]
-    _description = "WebService Backend"
+    _inherit = [
+        "webservice.backend",
+        "collection.base",
+    ]
 
-    name = fields.Char(required=True)
-    tech_name = fields.Char(required=True)
-    protocol = fields.Selection([("http", "HTTP Request")], required=True)
-    url = fields.Char(required=True)
     auth_type = fields.Selection(
-        selection=[
-            ("none", "Public"),
-            ("user_pwd", "Username & password"),
-            ("api_key", "API Key"),
-            ("oauth2", "OAuth2"),
-        ],
-        required=True,
+        selection_add=[("oauth2", "OAuth2")],
+        ondelete={"oauth2": "cascade"},
     )
-    username = fields.Char(auth_type="user_pwd")
-    password = fields.Char(auth_type="user_pwd")
-    api_key = fields.Char(string="API Key", auth_type="api_key")
-    api_key_header = fields.Char(string="API Key header", auth_type="api_key")
     oauth2_flow = fields.Selection(
         [
             ("backend_application", "Backend Application (Client Credentials Grant)"),
@@ -86,30 +83,6 @@ class WebserviceBackend(models.Model):
         help="random key generated when authorization flow starts "
         "to ensure that no CSRF attack happen"
     )
-    content_type = fields.Selection(
-        [
-            ("application/json", "JSON"),
-            ("application/xml", "XML"),
-            ("application/x-www-form-urlencoded", "Form"),
-        ],
-    )
-    company_id = fields.Many2one("res.company", string="Company")
-
-    @api.constrains("auth_type")
-    def _check_auth_type(self):
-        valid_fields = {
-            k: v for k, v in self._fields.items() if hasattr(v, "auth_type")
-        }
-        for rec in self:
-            if rec.auth_type == "none":
-                continue
-            _fields = [v for v in valid_fields.values() if v.auth_type == rec.auth_type]
-            missing = []
-            for _field in _fields:
-                if not rec[_field.name]:
-                    missing.append(_field)
-            if missing:
-                raise exceptions.UserError(rec._msg_missing_auth_param(missing))
 
     @api.constrains(
         "auth_type",
@@ -151,22 +124,6 @@ class WebserviceBackend(models.Model):
             if missing:
                 raise exceptions.UserError(rec._msg_missing_auth_param(missing))
 
-    def _msg_missing_auth_param(self, missing_fields):
-        def get_selection_value(fname):
-            return self._fields.get(fname).convert_to_export(self[fname], self)
-
-        return self.env._(
-            "Webservice '%(name)s' requires '%(auth_type)s' authentication. "
-            "However, the following field(s) are not valued: %(fields)s",
-            name=self.name,
-            auth_type=get_selection_value("auth_type"),
-            fields=", ".join([f.string for f in missing_fields]),
-        )
-
-    def _valid_field_parameter(self, field, name):
-        extra_params = ("auth_type",)
-        return name in extra_params or super()._valid_field_parameter(field, name)
-
     @api.onchange("auth_type")
     def _onchange_auth_type(self):
         # Keep `oauth2_flow` in sync in the UI as the user edits `auth_type`,
@@ -192,6 +149,10 @@ class WebserviceBackend(models.Model):
         return res
 
     def call(self, method, *args, **kwargs):
+        if not self.auth_type.startswith("oauth2"):
+            return super().call(method, *args, **kwargs)
+        # NOTE: oauth2 still relies on `component` for now, until it gets
+        # extracted to its own module and reworked to drop that dependency too.
         _logger.debug("backend %s: call %s %s %s", self.name, method, args, kwargs)
         response = getattr(self._get_adapter(), method)(*args, **kwargs)
         _logger.debug("backend %s: response: \n%s", self.name, response)
@@ -203,6 +164,50 @@ class WebserviceBackend(models.Model):
                 usage="webservice.request",
                 webservice_protocol=self._get_adapter_protocol(),
             )
+
+    def _request(self, method, url=None, url_params=None, **kwargs):
+        self._pop_deprecated_content_only_kwarg(kwargs)
+        response = super()._request(method, url=url, url_params=url_params, **kwargs)
+        if self._get_request_content_only():
+            return response.content
+        return response
+
+    def _pop_deprecated_content_only_kwarg(self, kwargs):
+        """Drop the removed ``content_only`` call argument, warning if used.
+
+        It used to switch between returning the raw response content or the
+        full ``requests.Response`` object per call. It's gone: the full
+        response is always returned now, controlled only (and temporarily)
+        by the ``CONTENT_ONLY_COMPAT_PARAM`` system parameter for the whole
+        database - not something to keep sprinkling through call sites.
+        """
+        if "content_only" in kwargs:
+            kwargs.pop("content_only")
+            _logger.warning(
+                "%s: the 'content_only' argument is no longer supported "
+                "and was ignored; the full response object is always "
+                "returned now. Remove it from the calling code.",
+                self.display_name,
+            )
+
+    def _get_request_content_only(self):
+        """Whether to return only the response content (legacy behavior).
+
+        See ``CONTENT_ONLY_COMPAT_PARAM``.
+        """
+        content_only = bool(
+            self.env["ir.config_parameter"].sudo().get_param(CONTENT_ONLY_COMPAT_PARAM)
+        )
+        if content_only:
+            _logger.warning(
+                "%s: returning only the response content because the "
+                "'%s' system parameter is set (kept for backward "
+                "compatibility after upgrade). Delete it once the calling "
+                "code is adapted to use the full response object.",
+                self.display_name,
+                CONTENT_ONLY_COMPAT_PARAM,
+            )
+        return content_only
 
     def _get_adapter_protocol(self):
         protocol = self.protocol
