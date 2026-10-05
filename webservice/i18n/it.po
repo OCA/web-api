@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-09-10 12:46+0000\n"
+"PO-Revision-Date: 2026-10-05 10:46+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -39,17 +39,17 @@ msgstr "Applicazione backend (concessione credenziali client)"
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_client_auth_header
 msgid "Client Auth Header"
-msgstr ""
+msgstr "Intestazione autorizzazione client"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_client_auth_value
 msgid "Client Auth Header Value"
-msgstr ""
+msgstr "Valore intestazione autorizzazione client"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_client_auth_method
 msgid "Client Authentication"
-msgstr ""
+msgstr "Autenticazione client"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_clientid
@@ -59,7 +59,7 @@ msgstr "ID client"
 #. module: webservice
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__oauth2_client_auth_method__client_secret_basic
 msgid "Client ID & Secret (HTTP Basic)"
-msgstr ""
+msgstr "ID client e segreto (HTTP base)"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_client_secret
@@ -69,7 +69,7 @@ msgstr "Chiave segreta client"
 #. module: webservice
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__oauth2_client_auth_method__custom_header
 msgid "Custom Authorization header"
-msgstr ""
+msgstr "Intestazione autorizzazione personalizzata"
 
 #. module: webservice
 #: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_client_auth_value
@@ -77,11 +77,14 @@ msgid ""
 "Full, static header value sent to the token endpoint when the client "
 "authentication method is a custom Authorization header (e.g. 'SSWS <token>')."
 msgstr ""
+"Valore completo e statico dell'intestazione inviato all'endpoint del token "
+"quando il metodo di autenticazione del client è un'intestazione di "
+"autorizzazione personalizzata (ad esempio, 'SSWS <token>')."
 
 #. module: webservice
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__oauth2_token_method__get
 msgid "GET"
-msgstr ""
+msgstr "GET"
 
 #. module: webservice
 #: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_token_method
@@ -89,6 +92,9 @@ msgid ""
 "HTTP method used to request the token from the token endpoint. Most "
 "providers use POST; some expose the token endpoint as GET."
 msgstr ""
+"Metodo HTTP utilizzato per richiedere il token all'endpoint dedicato. La "
+"maggior parte dei provider utilizza il metodo POST; alcuni espongono "
+"l'endpoint del token tramite il metodo GET."
 
 #. module: webservice
 #: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_client_auth_header
@@ -96,11 +102,16 @@ msgid ""
 "Header name used to send the client credentials when the client "
 "authentication method is a custom Authorization header."
 msgstr ""
+"Nome dell'intestazione utilizzata per inviare le credenziali del client "
+"quando il metodo di autenticazione del client è un'intestazione di "
+"autorizzazione personalizzata."
 
 #. module: webservice
 #: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_client_auth_method
 msgid "How the client credentials are presented to the token endpoint."
 msgstr ""
+"Modalità di presentazione delle credenziali del client all'endpoint del "
+"token."
 
 #. module: webservice
 #: model_terms:ir.ui.view,arch_db:webservice.webservice_backend_form_view
@@ -135,7 +146,7 @@ msgstr "Token OAuth2"
 #. module: webservice
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__oauth2_token_method__post
 msgid "POST"
-msgstr ""
+msgstr "POST"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__redirect_url
@@ -164,7 +175,7 @@ msgstr ""
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_token_method
 msgid "Token Request Method"
-msgstr ""
+msgstr "Metodo richiesta token"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_token_url
