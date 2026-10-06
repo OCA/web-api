@@ -1,6 +1,8 @@
 # Copyright 2026 Camptocamp SA
 # @author Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from unittest import mock
+
 import responses
 from psycopg2 import errors as pg_errors
 
@@ -227,3 +229,27 @@ class TestWebserviceEndpoint(CommonWebService):
         endpoint = self.endpoint.copy({"tech_name": "no_path", "path": False})
         endpoint = endpoint.with_context(webservice_endpoint_display_path=1)
         self.assertEqual(endpoint.display_name, "Get Order Status")
+
+    def _get_requests_timeout(self, mocked_request):
+        self.assertEqual(mocked_request.call_count, 1)
+        return mocked_request.call_args.kwargs["timeout"]
+
+    def test_timeout_endpoint_inherits_backend(self):
+        self.backend.timeout = 5.0
+        with mock.patch("requests.request") as mocked_request:
+            self.endpoint.call(url_params={"order_id": 42})
+        self.assertEqual(self._get_requests_timeout(mocked_request), 5.0)
+
+    def test_timeout_endpoint_overrides_backend(self):
+        self.backend.timeout = 5.0
+        self.endpoint.timeout = 2.5
+        with mock.patch("requests.request") as mocked_request:
+            self.endpoint.call(url_params={"order_id": 42})
+        self.assertEqual(self._get_requests_timeout(mocked_request), 2.5)
+
+    def test_timeout_call_kwarg_overrides_endpoint(self):
+        self.backend.timeout = 5.0
+        self.endpoint.timeout = 2.5
+        with mock.patch("requests.request") as mocked_request:
+            self.endpoint.call(url_params={"order_id": 42}, timeout=1.0)
+        self.assertEqual(self._get_requests_timeout(mocked_request), 1.0)

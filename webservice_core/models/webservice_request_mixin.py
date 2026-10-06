@@ -64,6 +64,11 @@ class WebserviceRequestMixin(models.AbstractModel):
             ("application/x-www-form-urlencoded", "Form"),
         ],
     )
+    timeout = fields.Float(
+        help="Timeout in seconds for the whole request (connect + read). "
+        "An explicit `timeout` kwarg passed to `call()` wins over this. "
+        "Left empty, the call waits indefinitely.",
+    )
     header_ids = fields.One2many(
         "webservice.header",
         "res_id",
@@ -187,6 +192,9 @@ class WebserviceRequestMixin(models.AbstractModel):
         if self.content_type and "content_type" not in kwargs:
             kwargs["content_type"] = self.content_type
 
+        if self.timeout and "timeout" not in kwargs:
+            kwargs["timeout"] = self.timeout
+
         return kwargs
 
     def _get_protocol(self):
@@ -213,6 +221,10 @@ class WebserviceRequestMixin(models.AbstractModel):
         # ``content_type`` is only consumed by ``_get_headers``: it is not a valid
         # ``requests.request`` kwarg and must not leak into ``new_kwargs`` below.
         content_type = kwargs.pop("content_type", False)
+        # Not resolved via `self.timeout` here: by the time `_request` runs,
+        # `self` may be the backend even for an endpoint-configured timeout
+        # (see `_call_prepare`), so the value must already be in `kwargs`.
+        timeout = kwargs.pop("timeout", None)
         url_to_log = self._sanitize_url_for_log(url)
         _logger.info("%s call to %s", method, url_to_log)
         new_kwargs = kwargs.copy()
@@ -220,9 +232,7 @@ class WebserviceRequestMixin(models.AbstractModel):
             {
                 "auth": self._get_auth(**kwargs),
                 "headers": self._get_headers(content_type=content_type, **kwargs),
-                # TODO: no timeout is enforced here (requests would wait forever).
-                # Consider adding configurable connect/read timeout fields.
-                "timeout": None,
+                "timeout": timeout or None,
             }
         )
         if new_kwargs.get("params"):
