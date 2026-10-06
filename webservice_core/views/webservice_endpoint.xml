@@ -29,6 +29,7 @@
                         <field name="active" invisible="1" />
                         <field name="http_method" />
                         <field name="path" />
+                        <field name="timeout" />
                     </group>
                     <field
                         name="description"
