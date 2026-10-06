@@ -60,6 +60,13 @@ for a single call (same format `requests` itself accepts, e.g. a
 backend.call("get", auth=("other_user", "other_password"))
 ```
 
+**Timeout**: pass `timeout` to override the backend's own configured
+timeout (in seconds) for a single call:
+
+```python
+backend.call("get", timeout=5)
+```
+
 **Response**: `call()` always returns the full `requests.Response` object
 (status code, headers, content, ...):
 
