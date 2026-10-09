@@ -4,6 +4,8 @@
 
 from odoo import http
 
+from ..utils import make_endpoint
+
 
 class CTRLFake(http.Controller):
     # Shortcut for dotted path
@@ -29,3 +31,29 @@ class TestController(http.Controller):
     def _do_something2(self, default_arg, foo=None):
         body = f"{default_arg} -> got: {foo}"
         return http.request.make_response(body)
+
+
+class GeneratorFake:
+    """Fake routes generator."""
+
+    _path = "odoo.addons.endpoint_route_handler.tests.fake_controllers.GeneratorFake"
+
+    def generate(self, rule, *names, methods=("GET",)):
+        """Yield `<rule route>/<name>` for each name, served by `handle(name)`."""
+        for name in names:
+            route = f"{rule.route}/{name}"
+            routing = {
+                "routes": [route],
+                "auth": "public",
+                "methods": list(methods),
+                "csrf": False,
+            }
+            yield route, make_endpoint(self.handle, routing, pargs=(name,))
+
+    def handle(self, name, **kw):
+        """Respond w/ the name the route was generated for."""
+        return http.request.make_response(f"Generated: {name}")
+
+    def broken(self, rule, *names):
+        """Fail as a buggy generator would do."""
+        raise ValueError("Boom")
