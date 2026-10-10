@@ -1,0 +1,2 @@
+- Document arrays in query strings.
+- Allow to download all the documents of a category at once.
