@@ -3,7 +3,6 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import functools
-import importlib
 import json
 import logging
 
@@ -17,6 +16,7 @@ from odoo.tools import DotDict
 from odoo.addons.base.models.ir_model import query_insert
 
 from .exceptions import EndpointHandlerNotFound
+from .utils import import_method
 
 _logger = logging.getLogger(__name__)
 
@@ -238,6 +238,9 @@ class EndpointRegistry:
         return res
 
     def drop_rules(self, keys):
+        """Delete rules by key. Nothing to do w/o keys (`IN ()` is invalid SQL)."""
+        if not keys:
+            return True
         self.cr.execute("DELETE FROM endpoint_route WHERE key IN %s", (tuple(keys),))
         return True
 
@@ -314,10 +317,19 @@ class EndpointRule:
     def options(self, value):
         """Validate options.
 
-        See `_get_handler` for more info.
+        Options must contain either a `handler` or a `generator` key.
+
+        See `_get_handler` and `_get_generator` for more info.
         """
-        assert "klass_dotted_path" in value["handler"]
-        assert "method_name" in value["handler"]
+        handler = value.get("handler")
+        generator = value.get("generator")
+        assert bool(handler) != bool(generator), "Provide `handler` or `generator`"
+        if handler:
+            assert "klass_dotted_path" in handler
+            assert "method_name" in handler
+        else:
+            assert "method_name" in generator
+            assert "klass_dotted_path" in generator or "model" in generator
         self.opts = value
 
     @classmethod
@@ -348,8 +360,17 @@ class EndpointRule:
         return row
 
     @property
+    def is_generator(self):
+        """True if the rule yields its routes via a generator."""
+        return bool(self.opts.get("generator"))
+
+    @property
     def endpoint(self):
         """Lookup http.Endpoint to be used for the routing map."""
+        if self.is_generator:
+            raise ValueError(
+                f"{self} is a generator rule: use `iter_routing_rules` instead"
+            )
         handler = self._get_handler()
         pargs = self.handler_options.get("default_pargs", ())
         kwargs = self.handler_options.get("default_kwargs", {})
@@ -361,6 +382,28 @@ class EndpointRule:
     @property
     def handler_options(self):
         return self.options.handler
+
+    @property
+    def generator_options(self):
+        """Options of the generator (see `_get_generator`)."""
+        return self.options.generator
+
+    def iter_routing_rules(self, env):
+        """Yield `(url, endpoint)` pairs to load in the routing map.
+
+        A handler rule yields its own endpoint for each route.
+        A generator rule delegates to its generator,
+        which can yield any number of routes.
+        """
+        if not self.is_generator:
+            endpoint = self.endpoint
+            for url in self.routing["routes"]:
+                yield (url, endpoint)
+            return
+        generator = self._get_generator(env)
+        pargs = self.generator_options.get("default_pargs", ())
+        kwargs = self.generator_options.get("default_kwargs", {})
+        yield from generator(self, *pargs, **kwargs)
 
     def _get_handler(self):
         """Resolve endpoint handler lookup.
@@ -378,20 +421,42 @@ class EndpointRule:
 
         If any of them is not found, a specific exception is raised.
         """
-        mod_path, klass_name = self.handler_options.klass_dotted_path.rsplit(".", 1)
+        return import_method(
+            self.handler_options.klass_dotted_path, self.handler_options.method_name
+        )
+
+    def _get_generator(self, env):
+        """Resolve routes generator lookup.
+
+        `options` must contain `generator` key to provide either:
+
+            * `model`, optional `res_id` and `method_name`:
+              the method of the model (or of the record) is used.
+              This is the preferred way as the generator
+              can be extended via standard Odoo inheritance.
+            * `klass_dotted_path` and `method_name`:
+              same lookup as for handlers.
+
+        The generator is called with the rule as first argument
+        followed by `default_pargs` and `default_kwargs`.
+        It must return an iterable of `(url, endpoint)`.
+        Use `utils.make_endpoint` to build valid endpoints.
+        """
+        opts = self.generator_options
+        if not opts.get("model"):
+            return import_method(opts.klass_dotted_path, opts.method_name)
+        if opts.model not in env:
+            raise EndpointHandlerNotFound(f"Model `{opts.model}` not found")
+        target = env[opts.model].sudo()
+        if opts.get("res_id"):
+            target = target.browse(opts.res_id).exists()
+            if not target:
+                raise EndpointHandlerNotFound(
+                    f"Record `{opts.model}({opts.res_id})` not found"
+                )
         try:
-            mod = importlib.import_module(mod_path)
-        except ImportError as exc:
-            raise EndpointHandlerNotFound(f"Module `{mod_path}` not found") from exc
-        try:
-            klass = getattr(mod, klass_name)
-        except AttributeError as exc:
-            raise EndpointHandlerNotFound(f"Class `{klass_name}` not found") from exc
-        method_name = self.handler_options.method_name
-        try:
-            method = getattr(klass(), method_name)
+            return getattr(target, opts.method_name)
         except AttributeError as exc:
             raise EndpointHandlerNotFound(
-                f"Method name `{method_name}` not found"
+                f"Method name `{opts.method_name}` not found"
             ) from exc
-        return method
