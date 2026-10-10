@@ -3,6 +3,8 @@
 # @author Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from unittest import mock
+
 import psycopg2
 import responses
 from requests import auth
@@ -309,3 +311,40 @@ class TestWebServiceTechName(CommonWebService):
         form.name = "WebService renamed"
         # name changes no longer affect tech_name once it's set
         self.assertEqual(form.tech_name, "better_name")
+
+
+class TestWebServiceTimeout(CommonWebService):
+    @classmethod
+    def _setup_records(cls):
+        res = super()._setup_records()
+        cls.webservice = cls.env["webservice.backend"].create(
+            {
+                "name": "WebService",
+                "protocol": "http",
+                "url": "https://localhost.demo.odoo/",
+                "tech_name": "demo_ws_timeout",
+                "auth_type": "none",
+            }
+        )
+        return res
+
+    def _get_requests_timeout(self, mocked_request):
+        self.assertEqual(mocked_request.call_count, 1)
+        return mocked_request.call_args.kwargs["timeout"]
+
+    def test_timeout_unset_by_default(self):
+        with mock.patch("requests.request") as mocked_request:
+            self.webservice.call("get")
+        self.assertIsNone(self._get_requests_timeout(mocked_request))
+
+    def test_timeout_from_backend(self):
+        self.webservice.timeout = 5.0
+        with mock.patch("requests.request") as mocked_request:
+            self.webservice.call("get")
+        self.assertEqual(self._get_requests_timeout(mocked_request), 5.0)
+
+    def test_timeout_call_kwarg_overrides_backend(self):
+        self.webservice.timeout = 5.0
+        with mock.patch("requests.request") as mocked_request:
+            self.webservice.call("get", timeout=1.5)
+        self.assertEqual(self._get_requests_timeout(mocked_request), 1.5)
