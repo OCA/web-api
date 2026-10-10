@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Camptocamp SA
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record model="ir.ui.view" id="endpoint_mixin_form_view">
+        <field name="name">endpoint.mixin.form.openapi</field>
+        <field name="model">endpoint.mixin</field>
+        <field name="inherit_id" ref="endpoint.endpoint_mixin_form_view" />
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page name="api_doc" string="API docs">
+                    <group>
+                        <field name="api_doc_enabled" />
+                        <field name="api_doc_tags" invisible="not api_doc_enabled" />
+                        <field
+                            name="api_doc_description"
+                            invisible="not api_doc_enabled"
+                        />
+                    </group>
+                    <group invisible="not api_doc_enabled">
+                        <field name="api_doc_input_schema" widget="ace" />
+                        <field name="api_doc_output_schema" widget="ace" />
+                    </group>
+                    <a
+                        href="/openapi/docs?category=endpoint.endpoint"
+                        target="_blank"
+                        invisible="not api_doc_enabled"
+                    >Open API docs</a>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>
