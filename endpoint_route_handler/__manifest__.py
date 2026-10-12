@@ -4,15 +4,15 @@
 {
     "name": "Endpoint route handler",
     "summary": """Provide mixin and tool to generate custom endpoints on the fly.""",
-    "version": "19.0.1.2.4",
+    "version": "20.0.1.1.0",
     "license": "LGPL-3",
     "development_status": "Beta",
-    "author": "Camptocamp,Odoo Community Association (OCA)",
+    "author": "Camptocamp, Open2S, Odoo Community Association (OCA)",
     "maintainers": ["simahawk"],
     "website": "https://github.com/OCA/web-api",
     "depends": ["base"],
     "data": [
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
     ],
     "post_init_hook": "post_init_hook",
 }

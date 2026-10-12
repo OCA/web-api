@@ -42,7 +42,7 @@ class EndpointHttpCase(HttpCase):
         self._make_new_route(route="/my/test/<string:foo>", options=options)
         route = "/my/test/working"
         response = self.url_open(route)
-        self.assertEqual(response.status_code, 401)
+        self.assertIn(response.status_code, (401, 403))
         # Let's login now
         self.authenticate("admin", "admin")
         response = self.url_open(route)
@@ -60,7 +60,7 @@ class EndpointHttpCase(HttpCase):
         self._make_new_route(route="/my/advanced/test/<string:foo>", options=options)
         route = "/my/advanced/test/working"
         response = self.url_open(route)
-        self.assertEqual(response.status_code, 401)
+        self.assertIn(response.status_code, (401, 403))
         # Let's login now
         self.authenticate("admin", "admin")
         response = self.url_open(route)

@@ -22,7 +22,6 @@ class EndpointRouteHandler(models.AbstractModel):
         index=True,
         compute="_compute_route",
         inverse="_inverse_route",
-        precompute=True,
         readonly=False,
         store=True,
         copy=False,
@@ -88,7 +87,6 @@ class EndpointRouteHandler(models.AbstractModel):
             )
 
     def _get_endpoint_route_consumer_models(self):
-        global ENDPOINT_ROUTE_CONSUMER_MODELS
         if ENDPOINT_ROUTE_CONSUMER_MODELS.get(self.env.cr.dbname):
             return ENDPOINT_ROUTE_CONSUMER_MODELS.get(self.env.cr.dbname)
         models = []
@@ -111,11 +109,7 @@ class EndpointRouteHandler(models.AbstractModel):
         return [("http", "HTTP"), ("json", "JSON")]
 
     def _selection_auth_type(self):
-        return [
-            ("public", "Public"),
-            ("user_endpoint", "User"),
-            ("bearer", "API Key (User)"),
-        ]
+        return [("public", "Public"), ("user_endpoint", "User")]
 
     def _selection_request_method(self):
         return [
@@ -210,7 +204,9 @@ class EndpointRouteHandler(models.AbstractModel):
         """Shortcut to register one single controller."""
         rule = self._make_controller_rule(options=options, key=key)
         self._endpoint_registry.update_rules([rule], init=init)
-        self.env.registry.clear_cache("routing")
+        self.env.registry.registry_caches__.get("routing", (0, {}))[
+            1
+        ].clear() if hasattr(self.env.registry, "registry_caches__") else None
         self._logger.debug(
             "Registered controller %s (auth: %s)", self.route, self.auth_type
         )
@@ -220,14 +216,12 @@ class EndpointRouteHandler(models.AbstractModel):
         route, routing, endpoint_hash = self._get_routing_info()
         options = options or self._default_endpoint_options()
         return self._endpoint_registry.make_rule(
-            # fmt: off
             key,
             route,
             options,
             routing,
             endpoint_hash,
             route_group=self.route_group,
-            # fmt: on
         )
 
     def _default_endpoint_options(self):
@@ -249,13 +243,13 @@ class EndpointRouteHandler(models.AbstractModel):
 
     def _get_routing_info(self):
         route = self.route
-        routing = dict(
-            type=self.route_type,
-            auth=self.auth_type,
-            methods=[self.request_method],
-            routes=[route],
-            cors=self.cors,
-            csrf=self.csrf,
-            readonly=self.readonly,
-        )
+        routing = {
+            "type": self.route_type,
+            "auth": self.auth_type,
+            "methods": [self.request_method],
+            "routes": [route],
+            "cors": self.cors,
+            "csrf": self.csrf,
+            "readonly": self.readonly,
+        }
         return route, routing, self.endpoint_hash

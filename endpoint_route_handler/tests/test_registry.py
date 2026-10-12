@@ -42,7 +42,7 @@ class TestRegistry(TransactionCase):
 
     def test_last_update(self):
         self.assertEqual(self.reg.last_update(), 0.0)
-        rule1, rule2 = self._make_rules(stop=3)
+        rule1, _rule2 = self._make_rules(stop=3)
         last_update0 = self.reg.last_update()
         self.assertTrue(last_update0 > 0)
         rule1.options = {
@@ -162,15 +162,10 @@ class TestRegistry(TransactionCase):
     @mute_logger("odoo.sql_db")
     def test_rule_constraints(self):
         rule1, rule2 = self._make_rules(stop=3)
-        msg = (
-            'duplicate key value violates unique constraint "endpoint_route__key_uniq"'
-        )
+        msg = r"endpoint_route__key_uniq"
         with self.assertRaisesRegex(DatabaseError, msg), self.env.cr.savepoint():
             self.reg._create({rule1.key: rule1.to_row()})
-        msg = (
-            "duplicate key value violates unique constraint "
-            '"endpoint_route__endpoint_hash_uniq"'
-        )
+        msg = r"endpoint_route__endpoint_hash_uniq"
         with self.assertRaisesRegex(DatabaseError, msg), self.env.cr.savepoint():
             rule2.endpoint_hash = rule1.endpoint_hash
             rule2.key = "key3"

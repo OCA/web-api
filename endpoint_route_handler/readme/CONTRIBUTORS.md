@@ -1,3 +1,4 @@
 - Simone Orsi \<<simone.orsi@camptocamp.com>\>
 - Nguyen Minh Chien \<<chien@trobz.com>\>
-- Omar Assouma \<<omar.assouma@dataone.eu>\>
+- Open2S (https://www.open2s.com.ec):
+  - Danilo Moya \<<danilo.moya@open2s.com.ec>\>
