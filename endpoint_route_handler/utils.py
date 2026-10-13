@@ -4,7 +4,9 @@
 """Helpers to build endpoints for the routing map."""
 
 import functools
+import hashlib
 import importlib
+import json
 
 from odoo import http
 
@@ -126,3 +128,13 @@ class RouteConflictTracker:
             ):
                 return owner
         return None
+
+
+def stable_hash(values):
+    """Return a hash of `values` (a dict) that is the same in every process.
+
+    The builtin `hash()` of strings is randomized per process:
+    it cannot be stored and compared later.
+    """
+    data = json.dumps(values, sort_keys=True, default=str)
+    return hashlib.md5(data.encode(), usedforsecurity=False).hexdigest()
