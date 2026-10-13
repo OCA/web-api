@@ -177,6 +177,17 @@ The routes of the rule are refreshed when the rule changes (the routing
 map version is bumped) or when the code changes (as for any controller:
 restart the server).
 
+Route conflicts
+---------------
+
+When the routing map is built, each custom route (stored or generated)
+is checked against the routes already loaded (standard controllers and
+other custom routes). A route w/ the same URL and overlapping HTTP
+methods (no methods means any method) is skipped and an error is logged
+w/ both owners: the first route wins, as werkzeug would do, but the
+conflict is not silent anymore. The same URL w/ different methods (eg:
+GET and POST) is fine.
+
 Known issues / Roadmap
 ======================
 
