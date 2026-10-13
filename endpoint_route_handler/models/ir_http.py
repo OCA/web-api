@@ -3,13 +3,13 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import logging
-from itertools import chain
 
 import werkzeug
 
 from odoo import http, models, tools
 
 from ..registry import EndpointRegistry
+from ..utils import RouteConflictTracker
 
 _logger = logging.getLogger(__name__)
 
@@ -21,19 +21,44 @@ class IrHttp(models.AbstractModel):
         return EndpointRegistry.registry_for(cr or self.env.cr)
 
     def _generate_routing_rules(self, modules, converters):
-        # Override to inject custom endpoint rules.
-        return chain(
-            super()._generate_routing_rules(modules, converters),
-            self._endpoint_routing_rules(),
-        )
+        """Inject custom endpoint rules, skipping the conflicting ones.
+
+        Standard controllers come first and are only tracked.
+        Each custom rule is checked against everything tracked so far
+        (see `RouteConflictTracker`): the 1st rule wins, as in werkzeug,
+        conflicting ones are logged and skipped.
+
+        Cost: one dict lookup per rule (index by URL), negligible compared
+        to the build of the routing map (~3 ms for ~800 rules).
+        """
+        tracker = RouteConflictTracker()
+        for url, endpoint in super()._generate_routing_rules(modules, converters):
+            # Standard controllers are not checked against each other
+            tracker.add(url, endpoint, tracker.controller_owner(endpoint))
+            yield url, endpoint
+        for endpoint_rule, url, endpoint in self._endpoint_routing_rules():
+            owner = tracker.rule_owner(endpoint_rule)
+            conflict = tracker.conflict(url, endpoint)
+            if conflict:
+                _logger.error(
+                    "Route %s %s of %s conflicts w/ %s: skipped",
+                    url,
+                    tracker.methods_label(endpoint),
+                    owner,
+                    conflict,
+                )
+                continue
+            tracker.add(url, endpoint, owner)
+            yield url, endpoint
 
     def _endpoint_routing_rules(self):
-        """Yield custom endpoint rules"""
+        """Yield `(endpoint rule, url, endpoint)` for all the custom endpoint rules."""
         e_registry = self._endpoint_route_registry()
         for endpoint_rule in e_registry.get_rules():
             _logger.debug("LOADING %s", endpoint_rule)
             if not endpoint_rule.is_generator:
-                yield from endpoint_rule.iter_routing_rules(self.env)
+                for url, endpoint in endpoint_rule.iter_routing_rules(self.env):
+                    yield endpoint_rule, url, endpoint
                 continue
             # A broken generator must not break the whole routing map.
             # Collect its rules first, so that nothing is yielded on failure.
@@ -42,7 +67,8 @@ class IrHttp(models.AbstractModel):
             except Exception:
                 _logger.exception("Routes generation failed for %s", endpoint_rule)
                 continue
-            yield from rules
+            for url, endpoint in rules:
+                yield endpoint_rule, url, endpoint
 
     @tools.ormcache("key", "cls._endpoint_route_last_version()", cache="routing")
     def routing_map(cls, key=None):

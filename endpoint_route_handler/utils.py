@@ -58,3 +58,61 @@ def import_method(klass_dotted_path, method_name):
         return getattr(klass(), method_name)
     except AttributeError as exc:
         raise EndpointHandlerNotFound(f"Method name `{method_name}` not found") from exc
+
+
+class RouteConflictTracker:
+    """Track the routes of the routing map to detect conflicting ones.
+
+    Without this check, a route declared twice is silently shadowed:
+    werkzeug matches the first rule only.
+
+    Matching rules:
+
+    * URL: exact match of the URL as declared (routes are indexed by URL,
+      one dict lookup). URLs that differ only by their placeholders
+      (eg: `/foo/<int:id>` vs `/foo/<string:name>`) are not detected.
+    * methods: the sets of methods intersect, eg: `{GET, POST}` vs `{POST}`.
+      No methods means any method: it overlaps w/ everything.
+      Same URL w/ different methods is fine, eg: GET and POST on `/foo`.
+
+    A plain hash of `(url, methods)` would only catch identical method sets.
+    """
+
+    def __init__(self):
+        # URL -> list of `(methods, owner)`
+        self._routes = {}
+
+    @staticmethod
+    def methods(endpoint):
+        """Methods of an endpoint as a set, None for any method."""
+        methods = endpoint.routing.get("methods")
+        return set(methods) if methods else None
+
+    @classmethod
+    def methods_label(cls, endpoint):
+        """Methods of an endpoint for logs."""
+        methods = cls.methods(endpoint)
+        return ",".join(sorted(methods)) if methods else "(any method)"
+
+    @staticmethod
+    def controller_owner(endpoint):
+        """Human readable owner of a standard controller route, for logs."""
+        func = getattr(endpoint, "func", endpoint)
+        return f"controller {func.__module__}.{func.__qualname__}"
+
+    @staticmethod
+    def rule_owner(endpoint_rule):
+        """Human readable owner of a custom endpoint rule route, for logs."""
+        return f"endpoint rule {endpoint_rule.key}"
+
+    def add(self, url, endpoint, owner):
+        """Remember the methods served on `url` and by whom."""
+        self._routes.setdefault(url, []).append((self.methods(endpoint), owner))
+
+    def conflict(self, url, endpoint):
+        """Return the owner of a route already serving `url` w/ overlapping methods."""
+        methods = self.methods(endpoint)
+        for other_methods, owner in self._routes.get(url, ()):
+            if methods is None or other_methods is None or methods & other_methods:
+                return owner
+        return None
