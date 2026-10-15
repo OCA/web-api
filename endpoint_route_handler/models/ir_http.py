@@ -32,9 +32,17 @@ class IrHttp(models.AbstractModel):
         e_registry = self._endpoint_route_registry()
         for endpoint_rule in e_registry.get_rules():
             _logger.debug("LOADING %s", endpoint_rule)
-            endpoint = endpoint_rule.endpoint
-            for url in endpoint_rule.routing["routes"]:
-                yield (url, endpoint)
+            if not endpoint_rule.is_generator:
+                yield from endpoint_rule.iter_routing_rules(self.env)
+                continue
+            # A broken generator must not break the whole routing map.
+            # Collect its rules first, so that nothing is yielded on failure.
+            try:
+                rules = list(endpoint_rule.iter_routing_rules(self.env))
+            except Exception:
+                _logger.exception("Routes generation failed for %s", endpoint_rule)
+                continue
+            yield from rules
 
     @tools.ormcache("key", "cls._endpoint_route_last_version()", cache="routing")
     def routing_map(cls, key=None):
