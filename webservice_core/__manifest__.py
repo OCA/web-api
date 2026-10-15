@@ -1,10 +1,11 @@
 # Copyright 2020 Creu Blanca
 # Copyright 2022 Camptocamp SA
+# @author Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
     "name": "WebService Core",
-    "summary": """Webservice backend: auth & call features, no extra dependencies""",
+    "summary": """Webservice backend & endpoints: auth and call features""",
     "version": "18.0.1.1.0",
     "license": "AGPL-3",
     "development_status": "Production/Stable",
@@ -17,6 +18,7 @@
         "security/ir.model.access.csv",
         "security/ir_rule.xml",
         "views/webservice_backend.xml",
+        "views/webservice_endpoint.xml",
     ],
     "pre_init_hook": "pre_init_hook",
 }
