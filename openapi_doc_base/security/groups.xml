@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Camptocamp SA
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record id="group_openapi_doc_viewer" model="res.groups">
+        <field name="name">API docs: viewer</field>
+        <field name="category_id" ref="base.module_category_hidden" />
+        <field
+            name="comment"
+        >Default group allowed to see OpenAPI docs. Sources and categories can require other groups.</field>
+    </record>
+    <record id="base.group_system" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('group_openapi_doc_viewer'))]" />
+    </record>
+</odoo>
