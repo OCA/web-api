@@ -1,0 +1,1 @@
+odoo-addon-http_json_dispatcher @ git+https://github.com/OCA/web-api.git@refs/pull/179/head#subdirectory=http_json_dispatcher
