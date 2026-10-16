@@ -1,0 +1,2 @@
+odoo-addon-openapi_doc_viewer @ git+https://github.com/OCA/web-api.git@refs/pull/183/head#subdirectory=openapi_doc_viewer
+odoo-addon-openapi_doc_base @ git+https://github.com/OCA/web-api.git@refs/pull/181/head#subdirectory=openapi_doc_base
