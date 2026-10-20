@@ -3,6 +3,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import contextlib
+from unittest import mock
 
 from odoo.tests.common import TransactionCase, tagged
 from odoo.tools import DotDict
@@ -49,5 +50,7 @@ class CommonEndpoint(TransactionCase):
             for k, v in request_attrs.items():
                 setattr(mocked_request, k, v)
             mocked_request.make_response = lambda data, **kw: data
-            mocked_request.registry._init_modules = set()
-            yield mocked_request
+            # Scoped: the registry is shared, and emptying its `_init_modules`
+            # for good would drop the controllers of every module from the routing map
+            with mock.patch.object(mocked_request.registry, "_init_modules", set()):
+                yield mocked_request
