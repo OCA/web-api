@@ -6,7 +6,7 @@
 {
     "name": "WebService Core",
     "summary": """Webservice backend & endpoints: auth and call features""",
-    "version": "18.0.1.1.0",
+    "version": "18.0.1.2.0",
     "license": "AGPL-3",
     "development_status": "Production/Stable",
     "maintainers": ["simahawk"],
