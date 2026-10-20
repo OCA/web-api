@@ -7,7 +7,7 @@ import logging
 
 import requests
 
-from odoo import api, exceptions, fields, models
+from odoo import Command, api, exceptions, fields, models
 
 from ..utils import sanitize_url_for_log
 
@@ -32,17 +32,11 @@ class WebserviceRequestMixin(models.AbstractModel):
     ``_get_auth_for_<value>``/``_get_headers_for_<value>`` and/or override
     ``_request`` when the whole HTTP request flow needs to change (e.g.
     oauth2).
+
     """
 
     _name = "webservice.request.mixin"
     _description = "Webservice Request Mixin"
-    _sql_constraints = [
-        (
-            "tech_name_uniq",
-            "unique(tech_name)",
-            "`tech_name` must be unique!",
-        )
-    ]
 
     tech_name = fields.Char(
         required=True,
@@ -70,6 +64,51 @@ class WebserviceRequestMixin(models.AbstractModel):
             ("application/x-www-form-urlencoded", "Form"),
         ],
     )
+    timeout = fields.Float(
+        help="Timeout in seconds for the whole request (connect + read). "
+        "An explicit `timeout` kwarg passed to `call()` wins over this. "
+        "Left empty, the call waits indefinitely.",
+    )
+    header_ids = fields.One2many(
+        "webservice.header",
+        "res_id",
+        string="Headers",
+        domain=lambda self: [("res_model", "=", self._name)],
+        help="Static default headers, merged into every call. "
+        "An explicit `headers` kwarg passed to `call()` wins over these.",
+    )
+    querystring_param_ids = fields.One2many(
+        "webservice.querystring.param",
+        "res_id",
+        string="Querystring Params",
+        domain=lambda self: [("res_model", "=", self._name)],
+        help="Static default querystring params, merged into every call. "
+        "An explicit `params` kwarg passed to `call()` wins over these. "
+        "A value may contain a '{placeholder}' resolved against the same "
+        "values used to fill the URL path (the `url_params` kwarg).",
+    )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            self._set_reference_line_defaults(vals)
+            self._handle_tech_name(vals)
+        return super().create(vals_list)
+
+    def write(self, vals):
+        self._set_reference_line_defaults(vals)
+        self._handle_tech_name(vals)
+        return super().write(vals)
+
+    def _set_reference_line_defaults(self, vals):
+        # `header_ids`/`querystring_param_ids` point to generic
+        # (`res_model`/`res_id`) line models: the ORM only auto-fills
+        # `res_id` (the declared inverse of the One2many), so `res_model`
+        # must be set explicitly here.
+        for fname in ("header_ids", "querystring_param_ids"):
+            for command in vals.get(fname) or []:
+                if command[0] == Command.CREATE:
+                    command[2].setdefault("res_model", self._name)
 
     @api.constrains("auth_type")
     def _check_auth_type(self):
@@ -117,16 +156,6 @@ class WebserviceRequestMixin(models.AbstractModel):
             # make sure it's normalized
             self.tech_name = self._normalize_tech_name(self.tech_name)
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        for vals in vals_list:
-            self._handle_tech_name(vals)
-        return super().create(vals_list)
-
-    def write(self, vals):
-        self._handle_tech_name(vals)
-        return super().write(vals)
-
     def _handle_tech_name(self, vals):
         # make sure technical names are always there
         if not vals.get("tech_name") and vals.get("name"):
@@ -136,11 +165,37 @@ class WebserviceRequestMixin(models.AbstractModel):
         return self.env["ir.http"]._slugify(name).replace("-", "_")
 
     def call(self, method, *args, **kwargs):
+        kwargs = self._call_prepare(**kwargs)
         _logger.debug("%s: call %s %s %s", self.display_name, method, args, kwargs)
         handler = getattr(self, "_handle_call_for_" + self._get_protocol())
         response = handler(method, *args, **kwargs)
         _logger.debug("%s: response: \n%s", self.display_name, response)
         return response
+
+    def _call_prepare(self, **kwargs):
+        """Merge this record's own configured headers/querystring params into kwargs.
+
+        Call-time values (already present in ``kwargs``) win over this
+        record's own configuration for matching keys.
+
+        """
+        headers = {h.name: h.value for h in self.header_ids}
+        headers.update(kwargs.pop("headers", None) or {})
+        if headers:
+            kwargs["headers"] = headers
+
+        params = {p.name: p.value for p in self.querystring_param_ids}
+        params.update(kwargs.pop("params", None) or {})
+        if params:
+            kwargs["params"] = params
+
+        if self.content_type and "content_type" not in kwargs:
+            kwargs["content_type"] = self.content_type
+
+        if self.timeout and "timeout" not in kwargs:
+            kwargs["timeout"] = self.timeout
+
+        return kwargs
 
     def _get_protocol(self):
         return self.protocol
@@ -163,18 +218,27 @@ class WebserviceRequestMixin(models.AbstractModel):
 
     def _request(self, method, url=None, url_params=None, **kwargs):
         url = self._get_url(url=url, url_params=url_params)
+        # ``content_type`` is only consumed by ``_get_headers``: it is not a valid
+        # ``requests.request`` kwarg and must not leak into ``new_kwargs`` below.
+        content_type = kwargs.pop("content_type", False)
+        # Not resolved via `self.timeout` here: by the time `_request` runs,
+        # `self` may be the backend even for an endpoint-configured timeout
+        # (see `_call_prepare`), so the value must already be in `kwargs`.
+        timeout = kwargs.pop("timeout", None)
         url_to_log = self._sanitize_url_for_log(url)
         _logger.info("%s call to %s", method, url_to_log)
         new_kwargs = kwargs.copy()
         new_kwargs.update(
             {
                 "auth": self._get_auth(**kwargs),
-                "headers": self._get_headers(**kwargs),
-                # TODO: no timeout is enforced here (requests would wait forever).
-                # Consider adding configurable connect/read timeout fields.
-                "timeout": None,
+                "headers": self._get_headers(content_type=content_type, **kwargs),
+                "timeout": timeout or None,
             }
         )
+        if new_kwargs.get("params"):
+            new_kwargs["params"] = self._resolve_query_params(
+                new_kwargs["params"], url_params
+            )
         # pylint: disable=E8106
         request = requests.request(method, url, **new_kwargs)
         request.raise_for_status()
@@ -226,9 +290,17 @@ class WebserviceRequestMixin(models.AbstractModel):
         url_params = url_params or kwargs
         return url.format(**url_params)
 
+    def _resolve_query_params(self, params, url_params):
+        url_params = url_params or {}
+        return {
+            name: value.format(**url_params) if isinstance(value, str) else value
+            for name, value in params.items()
+        }
+
     def _get_base_url(self):
         """Return the base url requests are relative to.
 
         To be implemented by models inheriting this mixin.
+
         """
         raise NotImplementedError
