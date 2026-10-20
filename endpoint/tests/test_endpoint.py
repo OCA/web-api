@@ -252,6 +252,29 @@ class TestEndpoint(CommonEndpoint):
         endpoint = self.endpoint.copy()
         self.assertTrue(endpoint.route.endswith("/COPY_FIXME"))
 
+    def test_full_url_display_from_request(self):
+        # Prefer the current request's own host over `web.base.url`.
+        self.endpoint.invalidate_recordset(["full_url_display"])
+        with self._get_mocked_request(
+            httprequest={"url_root": "https://mocked.example.com/"}
+        ):
+            self.assertEqual(
+                self.endpoint.full_url_display,
+                f"https://mocked.example.com{self.endpoint.route}",
+            )
+
+    def test_full_url_display_fallback_to_web_base_url(self):
+        # No request in context (e.g. a cron or a shell session): fall back
+        # to the `web.base.url` system parameter.
+        self.env["ir.config_parameter"].sudo().set_param(
+            "web.base.url", "https://fallback.example.com"
+        )
+        self.endpoint.invalidate_recordset(["full_url_display"])
+        self.assertEqual(
+            self.endpoint.full_url_display,
+            f"https://fallback.example.com{self.endpoint.route}",
+        )
+
     def _json_response(self, result):
         """Render a result through the controller, as a request would."""
         with self._get_mocked_request() as req:
