@@ -18,118 +18,317 @@ msgstr ""
 
 #. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__api_key
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__api_key
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__api_key
 #: model:ir.model.fields.selection,name:webservice_core.selection__webservice_backend__auth_type__api_key
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_endpoint__auth_type__api_key
 #: model:ir.model.fields.selection,name:webservice_core.selection__webservice_request_mixin__auth_type__api_key
 msgid "API Key"
 msgstr "Chiave API"
 
 #. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__api_key_header
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__api_key_header
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__api_key_header
 msgid "API Key header"
 msgstr "Intestazione chiave API"
 
 #. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__active
+msgid "Active"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.constraint,message:webservice_core.constraint_webservice_endpoint_tech_name_backend_uniq
+msgid "An endpoint with this technical name already exists for this backend."
+msgstr ""
+
+#. module: webservice_core
+#: model_terms:ir.ui.view,arch_db:webservice_core.webservice_endpoint_search_view
+msgid "Archived"
+msgstr ""
+
+#. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__auth_type
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__auth_type
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__auth_type
 msgid "Auth Type"
 msgstr "Tipo autorizzazione"
 
 #. module: webservice_core
+#: model_terms:ir.ui.view,arch_db:webservice_core.webservice_endpoint_form_view
+msgid "Authentication"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__backend_id
+#: model_terms:ir.ui.view,arch_db:webservice_core.webservice_endpoint_search_view
+msgid "Backend"
+msgstr ""
+
+#. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__company_id
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__company_id
 msgid "Company"
 msgstr "Azienda"
 
 #. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__content_type
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__content_type
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__content_type
 msgid "Content Type"
 msgstr "Tipo di contenuto"
 
 #. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__create_uid
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__create_uid
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_header__create_uid
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_querystring_param__create_uid
 msgid "Created by"
 msgstr "Creato da"
 
 #. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__create_date
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__create_date
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_header__create_date
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_querystring_param__create_date
 msgid "Created on"
 msgstr "Creato il"
 
 #. module: webservice_core
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_endpoint__http_method__delete
+msgid "DELETE"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__description
+msgid "Description"
+msgstr ""
+
+#. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__display_name
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__display_name
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_header__display_name
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_querystring_param__display_name
 msgid "Display Name"
 msgstr "Nome visualizzato"
 
 #. module: webservice_core
+#. odoo-python
+#: code:addons/webservice_core/models/webservice_endpoint.py:0
+msgid ""
+"Endpoint '%(name)s' overrides authentication: an authentication type is "
+"required."
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__endpoint_count
+msgid "Endpoint Count"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__endpoint_ids
+#: model_terms:ir.ui.view,arch_db:webservice_core.webservice_backend_form_view
+msgid "Endpoints"
+msgstr ""
+
+#. module: webservice_core
 #: model:ir.model.fields.selection,name:webservice_core.selection__webservice_backend__content_type__application/x-www-form-urlencoded
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_endpoint__content_type__application/x-www-form-urlencoded
 #: model:ir.model.fields.selection,name:webservice_core.selection__webservice_request_mixin__content_type__application/x-www-form-urlencoded
 msgid "Form"
 msgstr "Maschera"
 
 #. module: webservice_core
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_endpoint__http_method__get
+msgid "GET"
+msgstr ""
+
+#. module: webservice_core
+#: model_terms:ir.ui.view,arch_db:webservice_core.webservice_endpoint_search_view
+msgid "Group By"
+msgstr ""
+
+#. module: webservice_core
 #: model:ir.model.fields.selection,name:webservice_core.selection__webservice_backend__protocol__http
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_endpoint__protocol__http
 #: model:ir.model.fields.selection,name:webservice_core.selection__webservice_request_mixin__protocol__http
 msgid "HTTP Request"
 msgstr "Richiesta HTTP"
 
 #. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__header_ids
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__header_ids
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__header_ids
+#: model_terms:ir.ui.view,arch_db:webservice_core.webservice_backend_form_view
+#: model_terms:ir.ui.view,arch_db:webservice_core.webservice_endpoint_form_view
+msgid "Headers"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__http_method
+msgid "Http Method"
+msgstr ""
+
+#. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__id
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__id
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_header__id
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_querystring_param__id
 msgid "ID"
 msgstr "ID"
 
 #. module: webservice_core
 #: model:ir.model.fields.selection,name:webservice_core.selection__webservice_backend__content_type__application/json
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_endpoint__content_type__application/json
 #: model:ir.model.fields.selection,name:webservice_core.selection__webservice_request_mixin__content_type__application/json
 msgid "JSON"
 msgstr "JSON"
 
 #. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__write_uid
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__write_uid
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_header__write_uid
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_querystring_param__write_uid
 msgid "Last Updated by"
 msgstr "Ultimo aggiornamento di"
 
 #. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__write_date
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__write_date
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_header__write_date
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_querystring_param__write_date
 msgid "Last Updated on"
 msgstr "Ultimo aggiornamento il"
 
 #. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__name
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__name
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_header__name
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_querystring_param__name
 msgid "Name"
 msgstr "Nome"
 
 #. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__override_auth
+msgid "Override Authentication"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_endpoint__http_method__post
+msgid "POST"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_endpoint__http_method__put
+msgid "PUT"
+msgstr ""
+
+#. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__password
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__password
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__password
 msgid "Password"
 msgstr "Password"
 
 #. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__path
+msgid "Path"
+msgstr ""
+
+#. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__protocol
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__protocol
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__protocol
 msgid "Protocol"
 msgstr "Protcollo"
 
 #. module: webservice_core
 #: model:ir.model.fields.selection,name:webservice_core.selection__webservice_backend__auth_type__none
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_endpoint__auth_type__none
 #: model:ir.model.fields.selection,name:webservice_core.selection__webservice_request_mixin__auth_type__none
 msgid "Public"
 msgstr "Pubblico"
 
 #. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__querystring_param_ids
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__querystring_param_ids
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__querystring_param_ids
+#: model_terms:ir.ui.view,arch_db:webservice_core.webservice_backend_form_view
+#: model_terms:ir.ui.view,arch_db:webservice_core.webservice_endpoint_form_view
+msgid "Querystring Params"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_header__res_id
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_querystring_param__res_id
+msgid "Record"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,help:webservice_core.field_webservice_endpoint__path
+msgid ""
+"Relative path appended to the backend URL. Supports the same '{placeholder}' "
+"syntax as the backend URL."
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_header__res_model
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_querystring_param__res_model
+msgid "Res Model"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,help:webservice_core.field_webservice_backend__header_ids
+#: model:ir.model.fields,help:webservice_core.field_webservice_endpoint__header_ids
+#: model:ir.model.fields,help:webservice_core.field_webservice_request_mixin__header_ids
+msgid ""
+"Static default headers, merged into every call. An explicit `headers` kwarg "
+"passed to `call()` wins over these."
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,help:webservice_core.field_webservice_backend__querystring_param_ids
+#: model:ir.model.fields,help:webservice_core.field_webservice_endpoint__querystring_param_ids
+#: model:ir.model.fields,help:webservice_core.field_webservice_request_mixin__querystring_param_ids
+msgid ""
+"Static default querystring params, merged into every call. An explicit "
+"`params` kwarg passed to `call()` wins over these. A value may contain a "
+"'{placeholder}' resolved against the same values used to fill the URL path "
+"(the `url_params` kwarg)."
+msgstr ""
+
+#. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__tech_name
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__tech_name
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__tech_name
 msgid "Tech Name"
 msgstr "Nome tecnico"
 
 #. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__timeout
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__timeout
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__timeout
+msgid "Timeout"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,help:webservice_core.field_webservice_backend__timeout
+#: model:ir.model.fields,help:webservice_core.field_webservice_endpoint__timeout
+#: model:ir.model.fields,help:webservice_core.field_webservice_request_mixin__timeout
+msgid ""
+"Timeout in seconds for the whole request (connect + read). An explicit "
+"`timeout` kwarg passed to `call()` wins over this. Left empty, the call "
+"waits indefinitely."
+msgstr ""
+
+#. module: webservice_core
 #: model:ir.model.fields,help:webservice_core.field_webservice_backend__tech_name
+#: model:ir.model.fields,help:webservice_core.field_webservice_endpoint__tech_name
 #: model:ir.model.fields,help:webservice_core.field_webservice_request_mixin__tech_name
 msgid ""
-"Unique name for technical purposes. Automatically generated from the name if"
-" left empty."
+"Unique name for technical purposes. Automatically generated from the name if "
+"left empty."
 msgstr ""
 "Nome univoco per scopi tecnici. Generato automaticamente a partire dal nome "
 "se lasciato vuoto."
@@ -140,16 +339,29 @@ msgid "Url"
 msgstr "URL"
 
 #. module: webservice_core
+#: model:ir.model.fields,help:webservice_core.field_webservice_endpoint__override_auth
+msgid "Use this endpoint's own authentication instead of the backend's."
+msgstr ""
+
+#. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__username
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__username
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__username
 msgid "Username"
 msgstr "Nome utente"
 
 #. module: webservice_core
 #: model:ir.model.fields.selection,name:webservice_core.selection__webservice_backend__auth_type__user_pwd
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_endpoint__auth_type__user_pwd
 #: model:ir.model.fields.selection,name:webservice_core.selection__webservice_request_mixin__auth_type__user_pwd
 msgid "Username & password"
 msgstr "Nome utente e password"
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_header__value
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_querystring_param__value
+msgid "Value"
+msgstr ""
 
 #. module: webservice_core
 #: model:ir.actions.act_window,name:webservice_core.webservice_backend_act_window
@@ -157,6 +369,23 @@ msgstr "Nome utente e password"
 #: model:ir.ui.menu,name:webservice_core.webservice_backend_menu
 msgid "WebService Backend"
 msgstr "Backend servizio web"
+
+#. module: webservice_core
+#: model:ir.actions.act_window,name:webservice_core.webservice_endpoint_act_window
+#: model:ir.model,name:webservice_core.model_webservice_endpoint
+#: model:ir.ui.menu,name:webservice_core.webservice_endpoint_menu
+msgid "WebService Endpoint"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model,name:webservice_core.model_webservice_header
+msgid "WebService Header"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model,name:webservice_core.model_webservice_querystring_param
+msgid "WebService Querystring Param"
+msgstr ""
 
 #. module: webservice_core
 #. odoo-python
@@ -174,13 +403,18 @@ msgid "Webservice Request Mixin"
 msgstr "Mixin richiesta servizio web"
 
 #. module: webservice_core
+#: model_terms:ir.ui.view,arch_db:webservice_core.webservice_endpoint_form_view
+msgid "What this endpoint is for..."
+msgstr ""
+
+#. module: webservice_core
 #: model:ir.model.fields.selection,name:webservice_core.selection__webservice_backend__content_type__application/xml
+#: model:ir.model.fields.selection,name:webservice_core.selection__webservice_endpoint__content_type__application/xml
 #: model:ir.model.fields.selection,name:webservice_core.selection__webservice_request_mixin__content_type__application/xml
 msgid "XML"
 msgstr "XML"
 
 #. module: webservice_core
 #: model:ir.model.constraint,message:webservice_core.constraint_webservice_backend_tech_name_uniq
-#: model:ir.model.constraint,message:webservice_core.constraint_webservice_request_mixin_tech_name_uniq
 msgid "`tech_name` must be unique!"
 msgstr "`tech_name` deve essere univoco!"
