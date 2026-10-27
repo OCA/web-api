@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Quartile (https://www.quartile.co)
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="endpoint_endpoint_form_view" model="ir.ui.view">
+        <field name="model">endpoint.endpoint</field>
+        <field name="inherit_id" ref="endpoint.endpoint_endpoint_form_view" />
+        <field name="arch" type="xml">
+            <div name="title" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button
+                        type="object"
+                        name="action_logs"
+                        icon="fa-book"
+                        invisible="not log_ids"
+                        groups="api_log.group_api_log"
+                    >
+                        <div class="o_stat_info">
+                            <span class="o_stat_text">Logs</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <field name="cors" position="after">
+                <field name="log_requests" groups="api_log.group_api_log" />
+            </field>
+        </field>
+    </record>
+</odoo>

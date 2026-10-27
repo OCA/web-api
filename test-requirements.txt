@@ -1,0 +1,1 @@
+odoo-addon-api_log @ git+https://github.com/OCA/rest-framework.git@refs/pull/616/head#subdirectory=api_log

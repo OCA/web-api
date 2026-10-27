@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Quartile (https://www.quartile.co)
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="endpoint_log_action" model="ir.actions.act_window">
+        <field name="name">Endpoint Logs</field>
+        <field name="res_model">api.log</field>
+        <field name="domain">[("collection_model", "=", "endpoint.endpoint")]</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="endpoint_log_menu"
+        name="Endpoint Logs"
+        parent="base.menu_custom"
+        action="endpoint_log_action"
+        groups="api_log.group_api_log"
+        sequence="101"
+    />
+</odoo>
