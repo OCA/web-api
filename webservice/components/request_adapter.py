@@ -12,8 +12,7 @@ from oauthlib.oauth2 import BackendApplicationClient, WebApplicationClient
 from requests_oauthlib import OAuth2Session
 
 from odoo.addons.component.core import Component
-
-from ..utils import StaticHeaderAuth, sanitize_url_for_log
+from odoo.addons.webservice_core.utils import StaticHeaderAuth, sanitize_url_for_log
 
 _logger = logging.getLogger(__name__)
 
@@ -26,7 +25,7 @@ class BaseRestRequestsAdapter(Component):
     # TODO: url and url_params could come from work_ctx
     def _request(self, method, url=None, url_params=None, **kwargs):
         url = self._get_url(url=url, url_params=url_params)
-        content_only = kwargs.pop("content_only", True)
+        self.collection._pop_deprecated_content_only_kwarg(kwargs)
         # TODO: turn on/off debug from webservice setting?
         url_to_log = self._sanitize_url_for_log(url)
         _logger.info("%s call to %s", method, url_to_log)
@@ -41,7 +40,7 @@ class BaseRestRequestsAdapter(Component):
         # pylint: disable=E8106
         request = requests.request(method, url, **new_kwargs)
         request.raise_for_status()
-        if content_only:
+        if self.collection._get_request_content_only():
             return request.content
         return request
 
@@ -206,7 +205,7 @@ class BackendApplicationOAuth2RestRequestsAdapter(Component):
 
     def _request(self, method, url=None, url_params=None, **kwargs):
         url = self._get_url(url=url, url_params=url_params)
-        content_only = kwargs.pop("content_only", True)
+        self.collection._pop_deprecated_content_only_kwarg(kwargs)
         new_kwargs = kwargs.copy()
         new_kwargs.update(
             {
@@ -219,7 +218,7 @@ class BackendApplicationOAuth2RestRequestsAdapter(Component):
             # pylint: disable=E8106
             request = session.request(method, url, **new_kwargs)
             request.raise_for_status()
-            if content_only:
+            if self.collection._get_request_content_only():
                 return request.content
             return request
 

@@ -35,8 +35,12 @@ WebService
 This module creates WebService frameworks to be used globally.
 
 The module introduces support for HTTP Request protocol. The webservice
-HTTP call returns by default the content of the response. A context
-'content_only' can be passed to get the full response object.
+HTTP call returns the full ``requests.Response`` object.
+
+It builds on top of ``webservice_core`` (which provides the
+``webservice.backend`` model with public/username-password/API key
+authentication) to add OAuth2 authentication and ``server_environment``
+support.
 
 **Table of contents**
 
@@ -45,6 +49,20 @@ HTTP call returns by default the content of the response. A context
 
 Configuration
 =============
+
+Upgrade from versions prior to 19.0.2.0.1
+-----------------------------------------
+
+On upgrade from a version prior to ``19.0.2.0.1``, a
+``webservice.request_content_only`` system parameter is created
+automatically (see that version's migration script) to preserve the
+previous default behavior of HTTP calls, which returned only the
+response content instead of the full ``requests.Response`` object.
+
+If your code relies on that implicit default, keep the parameter for
+now. Once it's adapted to use the full response object (see *Usage*),
+delete the parameter under *Settings > Technical > System Parameters* -
+new installs never get it set.
 
 OAuth2 (Client Credentials)
 ---------------------------
@@ -129,10 +147,13 @@ promote its widespread use.
 .. |maintainer-etobella| image:: https://github.com/etobella.png?size=40px
     :target: https://github.com/etobella
     :alt: etobella
+.. |maintainer-simahawk| image:: https://github.com/simahawk.png?size=40px
+    :target: https://github.com/simahawk
+    :alt: simahawk
 
-Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
+Current `maintainers <https://odoo-community.org/page/maintainer-role>`__:
 
-|maintainer-etobella| 
+|maintainer-etobella| |maintainer-simahawk| 
 
 This module is part of the `OCA/web-api <https://github.com/OCA/web-api/tree/19.0/webservice>`_ project on GitHub.
 
