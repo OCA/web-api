@@ -157,7 +157,6 @@ class TestGenerator(TransactionCase, GeneratorMixin):
         self.assertFalse([x for x in urls if x.startswith("/broken")])
 
 
-@tagged("-at_install", "post_install")
 class TestGeneratorHttp(HttpCase, GeneratorMixin):
     @classmethod
     def setUpClass(cls):
