@@ -192,7 +192,7 @@ class TestWebService(CommonWebService):
         url = "https://custom.url"
         responses.add(responses.POST, url, body="{}")
         result = self.webservice.call(
-            "post", url=url, headers={"demo_header": "HEADER"}
+            "post", url=url, headers={"demo_header": "HEADER"}, timeout=10
         )
         self.assertEqual(result, b"{}")
         self.assertEqual(len(responses.calls), 1)
@@ -200,6 +200,7 @@ class TestWebService(CommonWebService):
             responses.calls[0].request.headers["Content-Type"], "application/xml"
         )
         self.assertEqual(responses.calls[0].request.headers["demo_header"], "HEADER")
+        self.assertEqual(responses.calls[0].request.req_kwargs["timeout"], 10)
 
         url = self.url + "custom/path"
         self.webservice.url += "{endpoint}"
