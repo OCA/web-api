@@ -67,6 +67,15 @@ msgid "Backend"
 msgstr "Backend"
 
 #. module: webservice_core
+#: model:ir.model.fields,help:webservice_core.field_webservice_backend__full_url_display
+#: model:ir.model.fields,help:webservice_core.field_webservice_endpoint__full_url_display
+#: model:ir.model.fields,help:webservice_core.field_webservice_request_mixin__full_url_display
+msgid ""
+"Best-effort absolute URL, ready to copy/paste. Any '{placeholder}' token is "
+"left unresolved: fill it in before use."
+msgstr ""
+
+#. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__company_id
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__company_id
 msgid "Company"
@@ -140,6 +149,13 @@ msgstr "Endpoint"
 #: model:ir.model.fields.selection,name:webservice_core.selection__webservice_request_mixin__content_type__application/x-www-form-urlencoded
 msgid "Form"
 msgstr "Maschera"
+
+#. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__full_url_display
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__full_url_display
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__full_url_display
+msgid "Full Url Display"
+msgstr ""
 
 #. module: webservice_core
 #: model:ir.model.fields.selection,name:webservice_core.selection__webservice_endpoint__http_method__get
@@ -273,8 +289,8 @@ msgid ""
 "Relative path appended to the backend URL. Supports the same '{placeholder}' "
 "syntax as the backend URL."
 msgstr ""
-"Percorso relativo aggiunto all'URL del backend. Supporta la stessa sintassi '"
-"{placeholder}' dell'URL del backend."
+"Percorso relativo aggiunto all'URL del backend. Supporta la stessa sintassi "
+"'{placeholder}' dell'URL del backend."
 
 #. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_header__res_model
