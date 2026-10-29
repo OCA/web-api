@@ -4,6 +4,7 @@
 
 from unittest import mock
 
+from odoo import http
 from odoo.tests.common import HttpCase, TransactionCase, tagged
 from odoo.tools import mute_logger
 
@@ -148,7 +149,9 @@ class TestGenerator(TransactionCase, GeneratorMixin):
         )
         self.reg.update_rules([good, broken])
         with mute_logger("odoo.addons.endpoint_route_handler.models.ir_http"):
-            urls = [url for url, __ in self.env["ir.http"]._endpoint_routing_rules()]
+            urls = [
+                url for __, url, __ in self.env["ir.http"]._endpoint_routing_rules()
+            ]
         self.assertIn("/gen/one", urls)
         self.assertIn("/gen/two", urls)
         self.assertFalse([x for x in urls if x.startswith("/broken")])
@@ -192,3 +195,114 @@ class TestGeneratorHttp(HttpCase, GeneratorMixin):
         self.env.registry.clear_cache("routing")
         urls = [r.rule for r in self.env["ir.http"].routing_map().iter_rules()]
         self.assertIn("/gen/one", urls)
+
+
+@tagged("-at_install", "post_install")
+class TestRouteConflicts(TransactionCase, GeneratorMixin):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.reg = EndpointRegistry.registry_for(cls.env.cr)
+
+    def setUp(self):
+        super().setUp()
+        EndpointRegistry.wipe_registry_for(self.env.cr)
+
+    def _installed_modules(self):
+        """Installed modules, to build the routing rules."""
+        # Not `registry._init_modules`: it can be empty while running tests
+        return sorted(
+            self.env["ir.module.module"]
+            .search([("state", "=", "installed")])
+            .mapped("name")
+        )
+
+    def _controller_func(self, url):
+        """Return the standard controller method serving `url`."""
+        converters = self.env["ir.http"]._get_converters()
+        for rule_url, endpoint in http._generate_routing_rules(
+            self._installed_modules(), False, converters
+        ):
+            if rule_url == url:
+                return getattr(endpoint, "func", endpoint)
+
+    def _generated(self, prefix):
+        """Build the routing rules: return `(url, methods)` of the fake generated ones.
+
+        Only URLs starting w/ `prefix`, served by `GeneratorFake.handle`.
+        """
+        ir_http = self.env["ir.http"]
+        res = []
+        for url, endpoint in ir_http._generate_routing_rules(
+            self._installed_modules(), converters=ir_http._get_converters()
+        ):
+            if url.startswith(prefix) and endpoint.func.__name__ == "handle":
+                res.append((url, tuple(endpoint.routing["methods"] or ())))
+        return sorted(res)
+
+    def test_same_url_same_methods(self):
+        """Same URL and methods: the 1st rule wins, the 2nd is skipped and logged."""
+        # Both generate GET `/conf/one` and `/conf/two`
+        names = ("one", "two")
+        self.reg.update_rules(
+            [
+                self._make_generator_rule("gen1", "/conf", names=names),
+                self._make_generator_rule("gen2", "/conf", names=names),
+            ]
+        )
+        logger = "odoo.addons.endpoint_route_handler.models.ir_http"
+        with self.assertLogs(logger, "ERROR") as logs:
+            res = self._generated("/conf")
+        # Only once each
+        self.assertEqual(res, [("/conf/one", ("GET",)), ("/conf/two", ("GET",))])
+        # One error per skipped route, naming both rules
+        self.assertEqual(
+            [rec.getMessage() for rec in logs.records],
+            [
+                "Route /conf/one GET of endpoint rule gen2 "
+                "conflicts w/ endpoint rule gen1: skipped",
+                "Route /conf/two GET of endpoint rule gen2 "
+                "conflicts w/ endpoint rule gen1: skipped",
+            ],
+        )
+
+    def test_same_url_other_methods(self):
+        """Same URL w/ different methods: both are loaded."""
+        names = ("one", "two")
+        # Same URLs, but POST instead of GET
+        post = _generator_options(names=names, default_kwargs={"methods": ["POST"]})
+        self.reg.update_rules(
+            [
+                self._make_generator_rule("gen1", "/conf", names=names),
+                self._make_generator_rule("gen2", "/conf", options=post),
+            ]
+        )
+        res = self._generated("/conf")
+        self.assertEqual(
+            res,
+            [
+                ("/conf/one", ("GET",)),
+                ("/conf/one", ("POST",)),
+                ("/conf/two", ("GET",)),
+                ("/conf/two", ("POST",)),
+            ],
+        )
+
+    def test_conflict_w_controller(self):
+        """A route shadowing a standard controller (`/web/login`) is skipped."""
+        # Generates GET `/web/login`, already served by a controller
+        # (`web` or an override, depending on the installed modules)
+        func = self._controller_func("/web/login")
+        rule = self._make_generator_rule("gen1", "/web", names=("login",))
+        self.reg.update_rules([rule])
+        logger = "odoo.addons.endpoint_route_handler.models.ir_http"
+        with self.assertLogs(logger, "ERROR") as logs:
+            res = self._generated("/web/login")
+        self.assertFalse(res)
+        self.assertEqual(
+            [rec.getMessage() for rec in logs.records],
+            [
+                "Route /web/login GET of endpoint rule gen1 conflicts w/ "
+                f"controller {func.__module__}.{func.__qualname__}: skipped",
+            ],
+        )

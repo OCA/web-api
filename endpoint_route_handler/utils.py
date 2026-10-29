@@ -4,7 +4,9 @@
 """Helpers to build endpoints for the routing map."""
 
 import functools
+import hashlib
 import importlib
+import json
 
 from odoo import http
 
@@ -58,3 +60,81 @@ def import_method(klass_dotted_path, method_name):
         return getattr(klass(), method_name)
     except AttributeError as exc:
         raise EndpointHandlerNotFound(f"Method name `{method_name}` not found") from exc
+
+
+# Methods of a route declaring none: any method is served
+ANY_METHODS = object()
+
+
+def controller_owner(endpoint):
+    """Human readable owner of a standard controller route, for logs."""
+    func = getattr(endpoint, "func", endpoint)
+    return f"controller {func.__module__}.{func.__qualname__}"
+
+
+def rule_owner(endpoint_rule):
+    """Human readable owner of a custom endpoint rule route, for logs."""
+    return f"endpoint rule {endpoint_rule.key}"
+
+
+class RouteConflictTracker:
+    """Track the routes of the routing map to detect conflicting ones.
+
+    Without this check, a route declared twice is silently shadowed:
+    werkzeug matches the first rule only.
+
+    Matching rules:
+
+    * URL: exact match of the URL as declared (routes are indexed by URL,
+      one dict lookup). URLs that differ only by their placeholders
+      (eg: `/foo/<int:id>` vs `/foo/<string:name>`) are not detected.
+    * methods: the sets of methods intersect, eg: `{GET, POST}` vs `{POST}`.
+      No methods means any method: it overlaps w/ everything.
+      Same URL w/ different methods is fine, eg: GET and POST on `/foo`.
+
+    A plain hash of `(url, methods)` would only catch identical method sets.
+    """
+
+    def __init__(self):
+        # URL -> list of `(methods, owner)`
+        self._routes = {}
+
+    @staticmethod
+    def methods(endpoint):
+        """Methods of an endpoint as a set, `ANY_METHODS` if none is declared."""
+        methods = endpoint.routing.get("methods")
+        return set(methods) if methods else ANY_METHODS
+
+    @classmethod
+    def methods_label(cls, endpoint):
+        """Methods of an endpoint for logs."""
+        methods = cls.methods(endpoint)
+        if methods is ANY_METHODS:
+            return "(any method)"
+        return ",".join(sorted(methods))
+
+    def add(self, url, endpoint, owner):
+        """Remember the methods served on `url` and by whom."""
+        self._routes.setdefault(url, []).append((self.methods(endpoint), owner))
+
+    def conflict(self, url, endpoint):
+        """Return the owner of a route already serving `url` w/ overlapping methods."""
+        methods = self.methods(endpoint)
+        for other_methods, owner in self._routes.get(url, ()):
+            if (
+                methods is ANY_METHODS
+                or other_methods is ANY_METHODS
+                or methods & other_methods
+            ):
+                return owner
+        return None
+
+
+def stable_hash(values):
+    """Return a hash of `values` (a dict) that is the same in every process.
+
+    The builtin `hash()` of strings is randomized per process:
+    it cannot be stored and compared later.
+    """
+    data = json.dumps(values, sort_keys=True, default=str)
+    return hashlib.md5(data.encode(), usedforsecurity=False).hexdigest()
