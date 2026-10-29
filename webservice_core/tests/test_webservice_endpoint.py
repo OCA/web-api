@@ -253,3 +253,20 @@ class TestWebserviceEndpoint(CommonWebService):
         with mock.patch("requests.request") as mocked_request:
             self.endpoint.call(url_params={"order_id": 42}, timeout=1.0)
         self.assertEqual(self._get_requests_timeout(mocked_request), 1.0)
+
+    def test_full_url_display(self):
+        # `path` has an unresolved `{order_id}` placeholder: left as-is.
+        self.assertEqual(
+            self.endpoint.full_url_display, f"{self.url}orders/{{order_id}}/status"
+        )
+
+    def test_full_url_display_no_path(self):
+        endpoint = self.endpoint.copy({"tech_name": "no_path", "path": False})
+        self.assertEqual(endpoint.full_url_display, self.url)
+
+    def test_full_url_display_updates_with_backend_url(self):
+        self.backend.url = "https://other.demo.odoo/"
+        self.assertEqual(
+            self.endpoint.full_url_display,
+            "https://other.demo.odoo/orders/{order_id}/status",
+        )
