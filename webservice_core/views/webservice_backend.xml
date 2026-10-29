@@ -84,6 +84,22 @@
                                 </list>
                             </field>
                         </page>
+                        <page name="endpoints" string="Endpoints">
+                            <field name="endpoint_ids">
+                                <list decoration-muted="not active">
+                                    <field name="name" />
+                                    <field name="tech_name" />
+                                    <field name="http_method" />
+                                    <field name="path" />
+                                    <field name="active" column_invisible="1" />
+                                </list>
+                            </field>
+                            <button
+                                type="object"
+                                name="action_view_endpoints"
+                                string="Manage endpoints"
+                            />
+                        </page>
                     </notebook>
                 </sheet>
             </form>
