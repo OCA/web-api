@@ -20,6 +20,15 @@ msgid "'Exec as user' is mandatory for public endpoints."
 msgstr ""
 
 #. module: endpoint
+#: model:ir.model.fields,help:endpoint.field_endpoint_endpoint__full_url_display
+#: model:ir.model.fields,help:endpoint.field_endpoint_mixin__full_url_display
+msgid ""
+"Absolute URL of this endpoint, ready to copy/paste. Resolved from the "
+"current request when available (matching what you're actually browsing), "
+"otherwise falls back to the 'web.base.url' system parameter."
+msgstr ""
+
+#. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__active
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__active
 msgid "Active"
@@ -134,6 +143,12 @@ msgstr ""
 #. odoo-python
 #: code:addons/endpoint/models/endpoint_mixin.py:0
 msgid "Exec mode is set to `Code`: you must provide a piece of code"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__full_url_display
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__full_url_display
+msgid "Full Url Display"
 msgstr ""
 
 #. module: endpoint
