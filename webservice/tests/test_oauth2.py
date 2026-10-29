@@ -73,10 +73,11 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
         responses.add(responses.GET, f"{self.url}endpoint", body="OK")
 
         with mock_cursor(self.env.cr):
-            result = self.webservice.call("get", url=f"{self.url}endpoint")
+            result = self.webservice.call("get", url=f"{self.url}endpoint", timeout=10)
         self.webservice.invalidate_recordset()
         self.assertTrue("cool_token" in self.webservice.oauth2_token)
         self.assertEqual(result, b"OK")
+        self.assertEqual(responses.calls[-1].request.req_kwargs["timeout"], 10)
 
     @responses.activate
     def test_update_token(self):
