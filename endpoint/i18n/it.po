@@ -23,6 +23,15 @@ msgid "'Exec as user' is mandatory for public endpoints."
 msgstr "'Esegui come utente' è obbligatorio per gli endpoint pubblici."
 
 #. module: endpoint
+#: model:ir.model.fields,help:endpoint.field_endpoint_endpoint__full_url_display
+#: model:ir.model.fields,help:endpoint.field_endpoint_mixin__full_url_display
+msgid ""
+"Absolute URL of this endpoint, ready to copy/paste. Resolved from the "
+"current request when available (matching what you're actually browsing), "
+"otherwise falls back to the 'web.base.url' system parameter."
+msgstr ""
+
+#. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__active
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__active
 msgid "Active"
@@ -139,6 +148,12 @@ msgstr "Modo esecuzione"
 msgid "Exec mode is set to `Code`: you must provide a piece of code"
 msgstr ""
 "Im modo di esecuzione è impostato a `Codice`: bisogna fornire del codice"
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__full_url_display
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__full_url_display
+msgid "Full Url Display"
+msgstr ""
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__id

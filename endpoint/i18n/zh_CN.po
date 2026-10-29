@@ -23,6 +23,15 @@ msgid "'Exec as user' is mandatory for public endpoints."
 msgstr "对于公共端点，'以用户身份执行'是强制性的。"
 
 #. module: endpoint
+#: model:ir.model.fields,help:endpoint.field_endpoint_endpoint__full_url_display
+#: model:ir.model.fields,help:endpoint.field_endpoint_mixin__full_url_display
+msgid ""
+"Absolute URL of this endpoint, ready to copy/paste. Resolved from the "
+"current request when available (matching what you're actually browsing), "
+"otherwise falls back to the 'web.base.url' system parameter."
+msgstr ""
+
+#. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__active
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__active
 msgid "Active"
@@ -138,6 +147,12 @@ msgstr "执行模式"
 #: code:addons/endpoint/models/endpoint_mixin.py:0
 msgid "Exec mode is set to `Code`: you must provide a piece of code"
 msgstr "执行模式设置为`代码`：你必须提供一段代码"
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__full_url_display
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__full_url_display
+msgid "Full Url Display"
+msgstr ""
 
 #. module: endpoint
 #: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__id
@@ -258,8 +273,8 @@ msgstr "待同步"
 #. module: endpoint
 #: model_terms:ir.ui.view,arch_db:endpoint.endpoint_mixin_form_view
 msgid ""
-"Use the action \"Sync registry\" to make changes effective once you are done"
-" with edits and creates."
+"Use the action \"Sync registry\" to make changes effective once you are done "
+"with edits and creates."
 msgstr "完成编辑和创建后，使用“同步注册表”操作使更改生效。"
 
 #. module: endpoint
