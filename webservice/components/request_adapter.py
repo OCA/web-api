@@ -34,7 +34,6 @@ class BaseRestRequestsAdapter(Component):
             {
                 "auth": self._get_auth(**kwargs),
                 "headers": self._get_headers(**kwargs),
-                "timeout": None,
             }
         )
         # pylint: disable=E8106
@@ -210,7 +209,6 @@ class BackendApplicationOAuth2RestRequestsAdapter(Component):
         new_kwargs.update(
             {
                 "headers": self._get_headers(**kwargs),
-                "timeout": None,
             }
         )
         client = BackendApplicationClient(client_id=self.collection.oauth2_clientid)
