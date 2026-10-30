@@ -2,6 +2,7 @@
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+import importlib.util
 import json
 import textwrap
 from datetime import date
@@ -12,6 +13,7 @@ import werkzeug
 
 from odoo import exceptions
 from odoo.http import Response
+from odoo.tools import file_path
 from odoo.tools.misc import mute_logger
 
 from odoo.addons.endpoint.controllers.main import EndpointController
@@ -24,8 +26,55 @@ class TestEndpoint(CommonEndpoint):
     def _setup_records(cls):
         return super()._setup_records()
 
+    def test_endpoint_route_consumer_models(self):
+        """Indirect inheritors are consumers (via `endpoint.mixin`), mixins are not."""
+        models = self.env[
+            "endpoint.route.handler"
+        ]._get_endpoint_route_consumer_models()
+        self.assertIn("endpoint.endpoint", models)
+        self.assertNotIn("endpoint.mixin", models)
+
+    # Migration test: can be trashed when migrating to the next version
+    def test_migration_register_again(self):
+        """Routes in sync get the new hash, the others keep the old one."""
+        in_sync = self.endpoint
+        out_of_sync = self.env["endpoint.endpoint"].create(
+            {
+                "name": "Out of sync",
+                "route": "/demo/out_of_sync",
+                "request_method": "GET",
+                "exec_mode": "code",
+                "code_snippet": 'result = {"response": Response("ok")}',
+            }
+        )
+        (in_sync + out_of_sync)._register_controllers()
+        in_sync.registry_sync = True
+        keys = (
+            in_sync._endpoint_registry_unique_key(),
+            out_of_sync._endpoint_registry_unique_key(),
+        )
+        # Simulate hashes computed w/ the old randomized `hash()`
+        self.env.cr.execute(
+            "UPDATE endpoint_route SET endpoint_hash = 'old-' || id WHERE key IN %s",
+            (keys,),
+        )
+        migration = self._load_migration("19.0.1.3.0", "end-migrate.py")
+        migration.migrate(self.env.cr, "19.0.1.2.4")
+        reg = in_sync._endpoint_registry
+        self.assertEqual(reg._get_rule(keys[0]).endpoint_hash, in_sync.endpoint_hash)
+        self.assertTrue(reg._get_rule(keys[1]).endpoint_hash.startswith("old-"))
+
+    def _load_migration(self, version, filename):
+        """Import a migration script of `endpoint_route_handler` (not a package)."""
+        path = file_path(f"endpoint_route_handler/migrations/{version}/{filename}")
+        spec = importlib.util.spec_from_file_location("erh_migration", path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+
     @mute_logger("odoo.sql_db")
     def test_endpoint_unique(self):
+        """Two endpoints can't share the same route."""
         with self.assertRaises(psycopg2.IntegrityError):
             self.env["endpoint.endpoint"].create(
                 {
@@ -36,6 +85,7 @@ class TestEndpoint(CommonEndpoint):
             )
 
     def test_endpoint_validation(self):
+        """Invalid endpoints are refused: no code, or POST/PUT w/o content type."""
         with self.assertRaisesRegex(
             exceptions.UserError, r"you must provide a piece of code"
         ):
@@ -67,11 +117,13 @@ class TestEndpoint(CommonEndpoint):
             self.endpoint.request_method = "POST"
 
     def test_endpoint_find(self):
+        """An endpoint is found by its route."""
         self.assertEqual(
             self.env["endpoint.endpoint"]._find_endpoint("/demo/one"), self.endpoint
         )
 
     def test_endpoint_code_eval_full_response(self):
+        """Code can return a full response: 200 OK w/ the body."""
         with self._get_mocked_request() as req:
             result = self.endpoint._handle_request(req)
         resp = result["response"]
@@ -79,6 +131,7 @@ class TestEndpoint(CommonEndpoint):
         self.assertEqual(resp.data, b"ok")
 
     def test_endpoint_code_eval_free_vals(self):
+        """Code can set the payload and headers of the response."""
         self.endpoint.write(
             {
                 "code_snippet": textwrap.dedent(
@@ -97,6 +150,7 @@ class TestEndpoint(CommonEndpoint):
         self.assertEqual(json.loads(payload), {"a": 1, "b": 2})
 
     def test_endpoint_log(self):
+        """Logging from the code doesn't break the request."""
         self.endpoint.write(
             {
                 "code_snippet": textwrap.dedent(
@@ -116,6 +170,7 @@ class TestEndpoint(CommonEndpoint):
 
     @mute_logger("endpoint.endpoint", "odoo.modules.registry")
     def test_endpoint_validate_request(self):
+        """Requests w/ the wrong content type or method are rejected (415, 405)."""
         endpoint = self.endpoint.copy(
             {
                 "route": "/wrong",
@@ -135,6 +190,7 @@ class TestEndpoint(CommonEndpoint):
 
     @mute_logger("odoo.modules.registry")
     def test_routing(self):
+        """Routing info follows the fields of the endpoint, prefix included."""
         route, info, __ = self.endpoint._get_routing_info()
         self.assertEqual(route, "/demo/one")
         self.assertEqual(
@@ -172,7 +228,7 @@ class TestEndpoint(CommonEndpoint):
             },
         )
         # check prefix
-        type(endpoint)._endpoint_route_prefix = "/foo"
+        self.patch(type(endpoint), "_endpoint_route_prefix", "/foo")
         endpoint._compute_route()
         __, info, __ = endpoint._get_routing_info()
         self.assertEqual(
@@ -187,10 +243,10 @@ class TestEndpoint(CommonEndpoint):
                 "readonly": False,
             },
         )
-        type(endpoint)._endpoint_route_prefix = ""
 
     @mute_logger("odoo.modules.registry")
     def test_unlink(self):
+        """Deleting an endpoint removes its routing rule."""
         endpoint = self.endpoint.copy(
             {
                 "route": "/delete/this",
@@ -209,6 +265,7 @@ class TestEndpoint(CommonEndpoint):
 
     @mute_logger("odoo.modules.registry")
     def test_archive(self):
+        """Archiving an endpoint removes its routing rule."""
         endpoint = self.endpoint.copy(
             {
                 "route": "/enable-disable/this",
@@ -228,6 +285,7 @@ class TestEndpoint(CommonEndpoint):
         self.assertEqual(reg._get_rule(key), None)
 
     def test_registry_sync(self):
+        """A new endpoint is registered only once `registry_sync` is set."""
         endpoint = self.env["endpoint.endpoint"].create(
             {
                 "name": "New",
@@ -251,8 +309,32 @@ class TestEndpoint(CommonEndpoint):
             )
 
     def test_duplicate(self):
+        """Copying an endpoint changes its route: no clash w/ the original."""
         endpoint = self.endpoint.copy()
         self.assertTrue(endpoint.route.endswith("/COPY_FIXME"))
+
+    def test_full_url_display_from_request(self):
+        # Prefer the current request's own host over `web.base.url`.
+        self.endpoint.invalidate_recordset(["full_url_display"])
+        with self._get_mocked_request(
+            httprequest={"url_root": "https://mocked.example.com/"}
+        ):
+            self.assertEqual(
+                self.endpoint.full_url_display,
+                f"https://mocked.example.com{self.endpoint.route}",
+            )
+
+    def test_full_url_display_fallback_to_web_base_url(self):
+        # No request in context (e.g. a cron or a shell session): fall back
+        # to the `web.base.url` system parameter.
+        self.env["ir.config_parameter"].sudo().set_param(
+            "web.base.url", "https://fallback.example.com"
+        )
+        self.endpoint.invalidate_recordset(["full_url_display"])
+        self.assertEqual(
+            self.endpoint.full_url_display,
+            f"https://fallback.example.com{self.endpoint.route}",
+        )
 
     def _json_response(self, result):
         """Render a result through the controller, as a request would."""

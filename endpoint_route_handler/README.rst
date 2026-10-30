@@ -37,6 +37,9 @@ controller routes on the fly.
 
 Can be used as a mixin or as a tool.
 
+Rules can also provide a generator to yield many routes computed from
+the code instead of a single handler (see Usage).
+
 **Table of contents**
 
 .. contents::
@@ -123,6 +126,67 @@ existing one is updated, the ir.http.routing_map (which holds all Odoo
 controllers) will be updated.
 
 You can see a real life example on shopfloor.app model.
+
+Generated routes
+----------------
+
+A rule can provide a ``generator`` instead of a ``handler``. The
+generator is called when the routing map is built and yields any number
+of ``(url, endpoint)`` pairs. This way, a single row in the
+``endpoint_route`` table can serve many routes computed from the code
+(e.g. all the methods exposed by a set of services) and new routes do
+not require any update of the table.
+
+The preferred way is to point to a model method, which can be extended
+via standard inheritance:
+
+::
+
+   def _prepare_endpoint_rules(self, options=None):
+       options = {
+           "generator": {
+               "model": self._name,
+               "res_id": self.id,
+               "method_name": "_generate_routes",
+           }
+       }
+       return super()._prepare_endpoint_rules(options=options)
+
+   def _generate_routes(self, rule):
+       for name in ("foo", "bar"):
+           route = f"{rule.route}/{name}"
+           endpoint = make_endpoint(
+               MyController()._handle,
+               {"routes": [route], "methods": ["POST"], "auth": "user"},
+               pargs=(self.id, name),
+           )
+           yield route, endpoint
+
+The method is called with superuser rights as the routing map can be
+built by any user. A python class can be used too, via
+``klass_dotted_path``, like for handlers.
+
+Use ``utils.make_endpoint`` to build endpoints: it fills the routing
+keys that Odoo requires.
+
+A generator must be fast, deterministic and must not write to the
+database. If it fails, the error is logged and its routes are skipped:
+the rest of the routing map is not affected.
+
+The routes of the rule are refreshed when the rule changes (the routing
+map version is bumped) or when the code changes (as for any controller:
+restart the server).
+
+Route conflicts
+---------------
+
+When the routing map is built, each custom route (stored or generated)
+is checked against the routes already loaded (standard controllers and
+other custom routes). A route w/ the same URL and overlapping HTTP
+methods (no methods means any method) is skipped and an error is logged
+w/ both owners: the first route wins, as werkzeug would do, but the
+conflict is not silent anymore. The same URL w/ different methods (eg:
+GET and POST) is fine.
 
 Known issues / Roadmap
 ======================

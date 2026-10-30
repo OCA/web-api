@@ -6,6 +6,8 @@ import logging
 
 from odoo import api, exceptions, fields, models
 
+from ..utils import stable_hash
+
 ENDPOINT_ROUTE_CONSUMER_MODELS = {
     # by db
 }
@@ -88,20 +90,31 @@ class EndpointRouteHandler(models.AbstractModel):
             )
 
     def _get_endpoint_route_consumer_models(self):
+        """Return the concrete models using `endpoint.route.handler`.
+
+        Indirect inheritance included (eg: `endpoint.endpoint` via `endpoint.mixin`).
+        """
         global ENDPOINT_ROUTE_CONSUMER_MODELS
         if ENDPOINT_ROUTE_CONSUMER_MODELS.get(self.env.cr.dbname):
             return ENDPOINT_ROUTE_CONSUMER_MODELS.get(self.env.cr.dbname)
-        models = []
-        route_model = "endpoint.route.handler"
-        for model in self.env.values():
-            if (
-                model._name != route_model
-                and not model._abstract
-                and route_model in model._inherit
-            ):
-                models.append(model._name)
+        models = self._find_endpoint_route_consumer_models()
         ENDPOINT_ROUTE_CONSUMER_MODELS[self.env.cr.dbname] = models
         return models
+
+    def _find_endpoint_route_consumer_models(self):
+        """Look up the persistent models using `endpoint.route.handler` (no cache).
+
+        Transient models are tools (eg: `endpoint.route.handler.tool`): their
+        records are vacuumed by Odoo, so their routes must not be synced.
+        """
+        route_model = "endpoint.route.handler"
+        return sorted(
+            name
+            for name in self.env.registry.descendants([route_model], "_inherit")
+            if name != route_model
+            and not self.env[name]._abstract
+            and not self.env[name]._transient
+        )
 
     @property
     def _logger(self):
@@ -147,7 +160,7 @@ class EndpointRouteHandler(models.AbstractModel):
         ]
         for rec, vals in zip(self, values, strict=True):
             vals.pop("id", None)
-            rec.endpoint_hash = hash(tuple(vals.values()))
+            rec.endpoint_hash = stable_hash(vals)
 
     def _routing_impacting_fields(self):
         return ("route", "auth_type", "request_method")
