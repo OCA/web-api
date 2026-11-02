@@ -9,6 +9,12 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <widget
+                        name="web_ribbon"
+                        title="Archived"
+                        bg_color="bg-danger"
+                        invisible="active"
+                    />
                     <div
                         class="alert alert-info py-1"
                         role="alert"
