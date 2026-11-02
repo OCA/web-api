@@ -41,6 +41,7 @@ msgid "An endpoint with this technical name already exists for this backend."
 msgstr ""
 
 #. module: webservice_core
+#: model_terms:ir.ui.view,arch_db:webservice_core.webservice_endpoint_form_view
 #: model_terms:ir.ui.view,arch_db:webservice_core.webservice_endpoint_search_view
 msgid "Archived"
 msgstr ""
@@ -212,6 +213,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_header__write_date
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_querystring_param__write_date
 msgid "Last Updated on"
+msgstr ""
+
+#. module: webservice_core
+#: model_terms:ir.ui.view,arch_db:webservice_core.webservice_backend_form_view
+msgid "Manage endpoints"
 msgstr ""
 
 #. module: webservice_core
