@@ -10,6 +10,7 @@ import responses
 from oauthlib.oauth2.rfc6749.errors import InvalidGrantError
 
 from odoo import exceptions
+from odoo.tests import Form
 
 from .common import CommonWebService, mock_cursor
 
@@ -374,6 +375,30 @@ class TestWebServiceOauth2WebApplication(CommonWebService):
             json.loads(responses.calls[0].response.content.decode())["access_token"],
         )
         self.assertEqual("cool_token", token["access_token"])
+
+    def test_web_application_required_fields_with_ui(self):
+        """The authorization URL and the scope are required for the web
+        application flow, the authorization redirect needs them."""
+        ws_form = Form(
+            self.webservice.browse(), "webservice.webservice_backend_form_view"
+        )
+        ws_form.name = "WebService Test UI"
+        ws_form.tech_name = "webservice_test_ui_web_application"
+        ws_form.protocol = "http"
+        ws_form.url = self.url
+        ws_form.auth_type = "oauth2"
+        ws_form.oauth2_flow = "web_application"
+        ws_form.oauth2_clientid = "Test Client ID"
+        ws_form.oauth2_client_secret = "Test Client Secret"
+        ws_form.oauth2_token_url = f"{self.url}oauth2/token"
+        with self.assertRaisesRegex(AssertionError, "oauth2_scope"):
+            ws_form.save()
+        ws_form.oauth2_scope = "Test Scope"
+        with self.assertRaisesRegex(AssertionError, "oauth2_authorization_url"):
+            ws_form.save()
+        ws_form.oauth2_authorization_url = f"{self.url}oauth2/auth"
+        ws = ws_form.save()
+        self.assertEqual(ws.oauth2_authorization_url, f"{self.url}oauth2/auth")
 
 
 class TestWebServiceOauth2FlowReset(CommonWebService):
