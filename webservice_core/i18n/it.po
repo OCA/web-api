@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-10-30 13:46+0000\n"
+"PO-Revision-Date: 2026-11-04 11:46+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -139,7 +139,7 @@ msgstr ""
 #. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__endpoint_count
 msgid "Endpoint Count"
-msgstr "Numero di endpoint"
+msgstr "Conteggio endpoint"
 
 #. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__endpoint_ids
@@ -226,7 +226,7 @@ msgstr "Ultimo aggiornamento il"
 #. module: webservice_core
 #: model_terms:ir.ui.view,arch_db:webservice_core.webservice_backend_form_view
 msgid "Manage endpoints"
-msgstr ""
+msgstr "Gestione endpoint"
 
 #. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__name
