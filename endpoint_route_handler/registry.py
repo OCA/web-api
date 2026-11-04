@@ -276,12 +276,12 @@ class EndpointRule:
 
     __slots__ = (
         "_dbname",
-        "key",
-        "route",
-        "opts",
         "endpoint_hash",
-        "routing",
+        "key",
+        "opts",
+        "route",
         "route_group",
+        "routing",
     )
 
     def __init__(

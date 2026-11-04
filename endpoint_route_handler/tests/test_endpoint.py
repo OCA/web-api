@@ -174,36 +174,35 @@ class TestEndpointCrossEnv(CommonEndpoint):
         new_route._register_controllers(options=options)
 
         last_version0 = reg.last_version()
-        with self._get_mocked_request():
-            with new_rollbacked_env() as env2:
-                # Load maps
-                env1["ir.http"].routing_map()
-                env2["ir.http"].routing_map()
-                self.assertEqual(
-                    env1["ir.http"]._endpoint_route_last_version(), last_version0
-                )
-                self.assertEqual(
-                    env2["ir.http"]._endpoint_route_last_version(), last_version0
-                )
-                rmap = self.env["ir.http"].routing_map()
-                self.assertIn(route, [x.rule for x in rmap._rules])
-                rmap = env2["ir.http"].routing_map()
-                self.assertIn(route, [x.rule for x in rmap._rules])
+        with self._get_mocked_request(), new_rollbacked_env() as env2:
+            # Load maps
+            env1["ir.http"].routing_map()
+            env2["ir.http"].routing_map()
+            self.assertEqual(
+                env1["ir.http"]._endpoint_route_last_version(), last_version0
+            )
+            self.assertEqual(
+                env2["ir.http"]._endpoint_route_last_version(), last_version0
+            )
+            rmap = self.env["ir.http"].routing_map()
+            self.assertIn(route, [x.rule for x in rmap._rules])
+            rmap = env2["ir.http"].routing_map()
+            self.assertIn(route, [x.rule for x in rmap._rules])
 
-                # add new route
-                route = "/my/new/<model(app.model):foo>"
-                new_route = make_new_route(self.env, route=route)
-                new_route._register_controllers(options=options)
+            # add new route
+            route = "/my/new/<model(app.model):foo>"
+            new_route = make_new_route(self.env, route=route)
+            new_route._register_controllers(options=options)
 
-                rmap = self.env["ir.http"].routing_map()
-                self.assertIn(route, [x.rule for x in rmap._rules])
-                rmap = env2["ir.http"].routing_map()
-                self.assertIn(route, [x.rule for x in rmap._rules])
-                self.assertTrue(
-                    env1["ir.http"]._endpoint_route_last_version() > last_version0
-                )
-                self.assertTrue(
-                    env2["ir.http"]._endpoint_route_last_version() > last_version0
-                )
+            rmap = self.env["ir.http"].routing_map()
+            self.assertIn(route, [x.rule for x in rmap._rules])
+            rmap = env2["ir.http"].routing_map()
+            self.assertIn(route, [x.rule for x in rmap._rules])
+            self.assertTrue(
+                env1["ir.http"]._endpoint_route_last_version() > last_version0
+            )
+            self.assertTrue(
+                env2["ir.http"]._endpoint_route_last_version() > last_version0
+            )
 
     # TODO: test unregister
