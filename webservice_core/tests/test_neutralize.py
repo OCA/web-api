@@ -41,6 +41,26 @@ class TestNeutralize(TransactionCase):
                 cls.backend.id,
             ),
         )
+        cls.public_param, cls.secret_param = cls.env[
+            "webservice.querystring.param"
+        ].create(
+            [
+                {
+                    "res_model": cls.backend._name,
+                    "res_id": cls.backend.id,
+                    "name": "lang",
+                    "value": "en",
+                },
+                {
+                    "res_model": cls.backend._name,
+                    "res_id": cls.backend.id,
+                    "name": "token",
+                    "value": "prod_token",
+                    "secret": True,
+                },
+            ]
+        )
+        cls.env.flush_all()
 
     def _run_neutralize(self):
         """Run the neutralization queries of the webservice_core module."""
@@ -59,6 +79,14 @@ class TestNeutralize(TransactionCase):
         )
         return self.env.cr.dictfetchone()
 
+    def _read_param_value(self, param):
+        """Return the raw database value of a querystring param."""
+        self.env.cr.execute(
+            "SELECT value FROM webservice_querystring_param WHERE id = %s",
+            (param.id,),
+        )
+        return self.env.cr.fetchone()[0]
+
     def test_neutralize_replaces_url(self):
         """The production URL is replaced by a placeholder."""
         self._run_neutralize()
@@ -76,3 +104,13 @@ class TestNeutralize(TransactionCase):
         """Fields that are not endpoints or credentials are left untouched."""
         self._run_neutralize()
         self.assertEqual(self._read_backend_row()["name"], "Neutralize me")
+
+    def test_neutralize_replaces_secret_param_value(self):
+        """The value of a secret querystring param is replaced."""
+        self._run_neutralize()
+        self.assertEqual(self._read_param_value(self.secret_param), "neutralized")
+
+    def test_neutralize_keeps_public_param_value(self):
+        """The value of a non secret querystring param is left untouched."""
+        self._run_neutralize()
+        self.assertEqual(self._read_param_value(self.public_param), "en")

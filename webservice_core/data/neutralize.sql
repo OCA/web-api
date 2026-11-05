@@ -6,3 +6,9 @@ UPDATE webservice_backend
        username = NULL,
        password = NULL,
        api_key = NULL;
+
+-- Secret querystring params carry tokens, keys, ...
+-- `value` is required, so it gets a placeholder instead of NULL.
+UPDATE webservice_querystring_param
+   SET value = 'neutralized'
+ WHERE secret;
