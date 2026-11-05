@@ -100,6 +100,16 @@ class WebserviceEndpoint(models.Model):
         kwargs = super()._call_prepare(**kwargs)
         return self.backend_id._call_prepare(**kwargs)
 
+    def _get_own_secret_names(self):
+        """Return the secret names configured on the endpoint itself."""
+        return super()._get_secret_names()
+
+    def _get_secret_names(self):
+        # The backend's headers and params are merged into the endpoint call.
+        header_names, param_names = self._get_own_secret_names()
+        backend_headers, backend_params = self.backend_id._get_secret_names()
+        return header_names | backend_headers, param_names | backend_params
+
     def call(self, url_params=None, **kwargs):
         self.ensure_one()
         kwargs.setdefault("url", self.path)

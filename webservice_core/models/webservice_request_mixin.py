@@ -9,7 +9,7 @@ import requests
 
 from odoo import Command, api, exceptions, fields, models
 
-from ..utils import sanitize_url_for_log
+from ..utils import sanitize_url_for_log, sanitize_values_for_log
 
 _logger = logging.getLogger(__name__)
 
@@ -171,7 +171,13 @@ class WebserviceRequestMixin(models.AbstractModel):
 
     def call(self, method, *args, **kwargs):
         kwargs = self._call_prepare(**kwargs)
-        _logger.debug("%s: call %s %s %s", self.display_name, method, args, kwargs)
+        _logger.debug(
+            "%s: call %s %s %s",
+            self.display_name,
+            method,
+            args,
+            self._sanitize_kwargs_for_log(kwargs),
+        )
         handler = getattr(self, "_handle_call_for_" + self._get_protocol())
         response = handler(method, *args, **kwargs)
         _logger.debug("%s: response: \n%s", self.display_name, response)
@@ -251,6 +257,22 @@ class WebserviceRequestMixin(models.AbstractModel):
 
     def _sanitize_url_for_log(self, url):
         return sanitize_url_for_log(url)
+
+    def _get_secret_names(self):
+        """Return the names of the secret headers and querystring params."""
+        return (
+            {h.name for h in self.header_ids if h.secret},
+            {p.name for p in self.querystring_param_ids if p.secret},
+        )
+
+    def _sanitize_kwargs_for_log(self, kwargs):
+        """Return a copy of the call kwargs with the secret values masked."""
+        header_names, param_names = self._get_secret_names()
+        kwargs = dict(kwargs)
+        for key, names in (("headers", header_names), ("params", param_names)):
+            if kwargs.get(key):
+                kwargs[key] = sanitize_values_for_log(kwargs[key], secret_keys=names)
+        return kwargs
 
     def _get_auth(self, auth=False, **kwargs):
         if auth:

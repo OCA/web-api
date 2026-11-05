@@ -153,7 +153,13 @@ class WebserviceBackend(models.Model):
             return super().call(method, *args, **kwargs)
         # NOTE: oauth2 still relies on `component` for now, until it gets
         # extracted to its own module and reworked to drop that dependency too.
-        _logger.debug("backend %s: call %s %s %s", self.name, method, args, kwargs)
+        _logger.debug(
+            "backend %s: call %s %s %s",
+            self.name,
+            method,
+            args,
+            self._sanitize_kwargs_for_log(kwargs),
+        )
         response = getattr(self._get_adapter(), method)(*args, **kwargs)
         _logger.debug("backend %s: response: \n%s", self.name, response)
         return response

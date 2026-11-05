@@ -33,6 +33,16 @@ class WebserviceBackend(models.Model):
     def _compute_full_url_display(self):
         return super()._compute_full_url_display()
 
+    def _get_secret_names(self):
+        # Endpoint calls are logged by the backend, with the endpoint's
+        # headers and params merged in.
+        header_names, param_names = super()._get_secret_names()
+        for endpoint in self.endpoint_ids:
+            endpoint_headers, endpoint_params = endpoint._get_own_secret_names()
+            header_names |= endpoint_headers
+            param_names |= endpoint_params
+        return header_names, param_names
+
     def _compute_endpoint_count(self):
         data = self.env["webservice.endpoint"]._read_group(
             [("backend_id", "in", self.ids)], ["backend_id"], ["__count"]
