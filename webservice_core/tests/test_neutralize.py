@@ -60,6 +60,23 @@ class TestNeutralize(TransactionCase):
                 },
             ]
         )
+        cls.public_header, cls.secret_header = cls.env["webservice.header"].create(
+            [
+                {
+                    "res_model": cls.backend._name,
+                    "res_id": cls.backend.id,
+                    "name": "Accept-Language",
+                    "value": "en",
+                },
+                {
+                    "res_model": cls.backend._name,
+                    "res_id": cls.backend.id,
+                    "name": "X-Token",
+                    "value": "prod_token",
+                    "secret": True,
+                },
+            ]
+        )
         cls.env.flush_all()
 
     def _run_neutralize(self):
@@ -84,6 +101,13 @@ class TestNeutralize(TransactionCase):
         self.env.cr.execute(
             "SELECT value FROM webservice_querystring_param WHERE id = %s",
             (param.id,),
+        )
+        return self.env.cr.fetchone()[0]
+
+    def _read_header_value(self, header):
+        """Return the raw database value of a header."""
+        self.env.cr.execute(
+            "SELECT value FROM webservice_header WHERE id = %s", (header.id,)
         )
         return self.env.cr.fetchone()[0]
 
@@ -114,3 +138,13 @@ class TestNeutralize(TransactionCase):
         """The value of a non secret querystring param is left untouched."""
         self._run_neutralize()
         self.assertEqual(self._read_param_value(self.public_param), "en")
+
+    def test_neutralize_replaces_secret_header_value(self):
+        """The value of a secret header is replaced."""
+        self._run_neutralize()
+        self.assertEqual(self._read_header_value(self.secret_header), "neutralized")
+
+    def test_neutralize_keeps_public_header_value(self):
+        """The value of a non secret header is left untouched."""
+        self._run_neutralize()
+        self.assertEqual(self._read_header_value(self.public_header), "en")

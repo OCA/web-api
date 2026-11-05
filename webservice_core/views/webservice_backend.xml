@@ -82,10 +82,23 @@
                     <notebook>
                         <page name="headers" string="Headers">
                             <field name="header_ids">
-                                <list editable="bottom">
+                                <list>
                                     <field name="name" />
-                                    <field name="value" />
+                                    <field name="value" invisible="secret" />
+                                    <field name="secret" />
                                 </list>
+                                <form>
+                                    <group>
+                                        <field name="name" />
+                                        <field name="secret" />
+                                        <field name="value" invisible="secret" />
+                                        <field
+                                            name="value"
+                                            invisible="not secret"
+                                            password="True"
+                                        />
+                                    </group>
+                                </form>
                             </field>
                         </page>
                         <page name="querystring_params" string="Querystring Params">

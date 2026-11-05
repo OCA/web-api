@@ -12,3 +12,8 @@ UPDATE webservice_backend
 UPDATE webservice_querystring_param
    SET value = 'neutralized'
  WHERE secret;
+
+-- Same for secret headers.
+UPDATE webservice_header
+   SET value = 'neutralized'
+ WHERE secret;
