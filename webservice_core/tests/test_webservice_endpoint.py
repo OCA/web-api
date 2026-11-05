@@ -6,7 +6,7 @@ from unittest import mock
 import responses
 from psycopg2 import errors as pg_errors
 
-from odoo import exceptions
+from odoo import Command, exceptions
 from odoo.tests.common import tagged
 from odoo.tools import mute_logger
 
@@ -209,6 +209,63 @@ class TestWebserviceEndpoint(CommonWebService):
         self.backend.call("get")
         self.assertEqual(responses.calls[0].request.headers["X-Backend"], "1")
         self.assertIn("verbose=1", responses.calls[0].request.url)
+
+    @responses.activate
+    def test_call_does_not_log_secret_values(self):
+        """Secret header and param values are masked in the call log."""
+        # One record per side keeps the logged order stable:
+        # backend values first, updated with the endpoint ones.
+        self.backend.write(
+            {
+                "header_ids": [
+                    Command.create(
+                        {"name": "X-Backend-Token", "value": "b-s3cr3t", "secret": True}
+                    )
+                ],
+                "querystring_param_ids": [
+                    Command.create({"name": "verbose", "value": "1"})
+                ],
+            }
+        )
+        self.endpoint.write(
+            {
+                "header_ids": [
+                    Command.create(
+                        {"name": "X-Token", "value": "e-s3cr3t", "secret": True}
+                    )
+                ],
+                "querystring_param_ids": [
+                    Command.create(
+                        {"name": "token", "value": "p-s3cr3t", "secret": True}
+                    )
+                ],
+            }
+        )
+        url = f"{self.url}orders/42/status"
+        responses.add(responses.GET, url, body="{}")
+        with self.assertLogs(
+            "odoo.addons.webservice_core.models.webservice_request_mixin", "DEBUG"
+        ) as logs:
+            self.endpoint.call(url_params={"order_id": 42})
+        logger = "odoo.addons.webservice_core.models.webservice_request_mixin"
+        self.assertEqual(
+            logs.output,
+            [
+                f"DEBUG:{logger}:WebService: call get () "
+                "{'url': 'orders/{order_id}/status', 'url_params': {'order_id': 42}, "
+                "'content_type': 'application/xml', "
+                "'headers': {'X-Backend-Token': '***', 'X-Token': '***'}, "
+                "'params': {'verbose': '1', 'token': '***'}}",
+                f"INFO:{logger}:get call to "
+                "https://localhost.demo.odoo/orders/42/status",
+                f"DEBUG:{logger}:WebService: response: \n<Response [200]>",
+            ],
+        )
+        # the actual request still gets the secret values
+        request = responses.calls[0].request
+        self.assertEqual(request.headers["X-Backend-Token"], "b-s3cr3t")
+        self.assertEqual(request.headers["X-Token"], "e-s3cr3t")
+        self.assertIn("token=p-s3cr3t", request.url)
 
     def test_header_line_gets_res_model_and_res_id_set(self):
         self.backend.write({"header_ids": [(0, 0, {"name": "X", "value": "1"})]})
