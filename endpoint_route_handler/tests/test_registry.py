@@ -42,7 +42,7 @@ class TestRegistry(TransactionCase):
 
     def test_last_update(self):
         self.assertEqual(self.reg.last_update(), 0.0)
-        rule1, rule2 = self._make_rules(stop=3)
+        rule1, _rule2 = self._make_rules(stop=3)
         last_update0 = self.reg.last_update()
         self.assertTrue(last_update0 > 0)
         rule1.options = {

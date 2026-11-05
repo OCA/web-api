@@ -1,5 +1,7 @@
 # Copyright 2021 Camptocamp SA
+# Copyright 2026 Open2S (<https://www.open2s.com>)
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
+# @author: Danilo Moya <danilo.moya@open2s.com.ec>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import logging
@@ -9,7 +11,7 @@ from odoo import api, fields, models
 
 from ..registry import EndpointRegistry
 
-_logger = logging.getLogger(__file__)
+_logger = logging.getLogger(__name__)
 
 
 class EndpointRouteSyncMixin(models.AbstractModel):
@@ -40,7 +42,7 @@ class EndpointRouteSyncMixin(models.AbstractModel):
     )
 
     def write(self, vals):
-        if any([x in vals for x in self._routing_impacting_fields() + ("active",)]):
+        if any(x in vals for x in self._routing_impacting_fields() + ("active",)):
             # Mark as out of sync
             vals["registry_sync"] = False
         res = super().write(vals)
@@ -67,7 +69,7 @@ class EndpointRouteSyncMixin(models.AbstractModel):
         records.filtered(lambda x: not x.active)._unregister_controllers(
             clear_cache=False
         )
-        self.env.registry.clear_cache("routing")
+        self.env.transaction.invalidate_ormcache("routing")
 
     def _handle_registry_sync_post_commit(self, record_ids=None):
         """Handle registry sync after commit.
@@ -94,7 +96,7 @@ class EndpointRouteSyncMixin(models.AbstractModel):
         rules = self._prepare_endpoint_rules(options=options)
         self._endpoint_registry.update_rules(rules, init=init)
         if clear_cache:
-            self.env.registry.clear_cache("routing")
+            self.env.transaction.invalidate_ormcache("routing")
         _logger.debug(
             "%s registered controllers: %s",
             self._name,
@@ -106,7 +108,7 @@ class EndpointRouteSyncMixin(models.AbstractModel):
             return
         self._endpoint_registry.drop_rules(self._registered_endpoint_rule_keys())
         if clear_cache:
-            self.env.registry.clear_cache("routing")
+            self.env.transaction.invalidate_ormcache("routing")
         _logger.debug(
             "%s unregistered controllers: %s",
             self._name,

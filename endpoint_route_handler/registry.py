@@ -1,5 +1,7 @@
 # Copyright 2021 Camptocamp SA
+# Copyright 2026 Open2S (<https://www.open2s.com>)
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
+# @author: Danilo Moya <danilo.moya@open2s.com.ec>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import functools
@@ -12,7 +14,7 @@ from psycopg2.extensions import AsIs
 from psycopg2.extras import execute_values
 
 from odoo import tools
-from odoo.tools import DotDict
+from odoo.tools import SQL, DotDict
 
 from odoo.addons.base.models.ir_model import query_insert
 
@@ -69,17 +71,17 @@ class EndpointRegistry:
     * retrieve routing rules to load in ir.http routing map
     """
 
-    __slots__ = "cr"
+    __slots__ = ("cr",)
     _table = "endpoint_route"
     _columns = (
         # name, type, comment
-        ("key", "VARCHAR", ""),
-        ("route", "VARCHAR", ""),
-        ("opts", "text", ""),
-        ("routing", "text", ""),
-        ("endpoint_hash", "VARCHAR(32)", ""),
-        ("route_group", "VARCHAR(32)", ""),
-        ("updated_at", "TIMESTAMP NOT NULL DEFAULT NOW()", ""),
+        ("key", SQL("VARCHAR"), ""),
+        ("route", SQL("VARCHAR"), ""),
+        ("opts", SQL("text"), ""),
+        ("routing", SQL("text"), ""),
+        ("endpoint_hash", SQL("VARCHAR(32)"), ""),
+        ("route_group", SQL("VARCHAR(32)"), ""),
+        ("updated_at", SQL("TIMESTAMP NOT NULL DEFAULT NOW()"), ""),
     )
 
     @classmethod
@@ -88,7 +90,7 @@ class EndpointRegistry:
 
     @classmethod
     def wipe_registry_for(cls, cr):
-        cr.execute("TRUNCATE endpoint_route")
+        cr.execute("DELETE FROM endpoint_route")
         _logger.info("endpoint_route wiped")
 
     @classmethod

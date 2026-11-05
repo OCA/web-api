@@ -48,7 +48,7 @@ class TestEndpoint(CommonEndpoint):
         # request bound. website's TestWebsiteTechnicalPage does, through
         # website.technical.page.get_static_routes(). No mocked request here
         # on purpose.
-        self.env.registry.clear_cache("routing")
+        self.env.transaction.invalidate_ormcache("routing")
         self.assertTrue(self.env["ir.http"].routing_map())
 
     def test_as_tool_base_data(self):
@@ -64,6 +64,9 @@ class TestEndpoint(CommonEndpoint):
             new_route = make_new_route(self.env, auth_type=auth_type)
             __, routing, __ = new_route._get_routing_info()
             self.assertEqual(routing["auth"], auth_type)
+            if auth_type == "bearer":
+                self.assertEqual(routing.get("bearer_scope"), "rpc")
+                self.assertFalse(routing.get("save_session"))
 
     def test_route_field_precomputed(self):
         """Regression guard: ensure ``precompute=True`` stays on ``route``.
@@ -196,6 +199,9 @@ class TestEndpointCrossEnv(CommonEndpoint):
 
             rmap = self.env["ir.http"].routing_map()
             self.assertIn(route, [x.rule for x in rmap._rules])
+            # In production, other workers receive cache invalidation after commit.
+            # In tests with rollbacked transactions, simulate this manually on env2.
+            env2.transaction.invalidate_ormcache("routing")
             rmap = env2["ir.http"].routing_map()
             self.assertIn(route, [x.rule for x in rmap._rules])
             self.assertTrue(

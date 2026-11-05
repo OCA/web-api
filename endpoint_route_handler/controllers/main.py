@@ -9,7 +9,7 @@ from werkzeug.exceptions import NotFound
 
 from odoo import http
 
-_logger = logging.getLogger(__file__)
+_logger = logging.getLogger(__name__)
 
 
 class EndpointNotFoundController(http.Controller):
