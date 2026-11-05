@@ -1,5 +1,7 @@
 # Copyright 2021 Camptocamp SA
+# Copyright 2026 Open2S (<https://www.open2s.com>)
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
+# @author: Danilo Moya <danilo.moya@open2s.com.ec>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import logging
@@ -7,7 +9,8 @@ from itertools import chain
 
 import werkzeug
 
-from odoo import http, models, tools
+from odoo import api, http, models
+from odoo.http.session import SessionExpiredException
 
 from ..registry import EndpointRegistry
 
@@ -18,7 +21,12 @@ class IrHttp(models.AbstractModel):
     _inherit = "ir.http"
 
     def _endpoint_route_registry(self, cr=None):
-        return EndpointRegistry.registry_for(cr or self.env.cr)
+        if cr:
+            return EndpointRegistry.registry_for(cr)
+        request_env = getattr(http.request, "env", None) if http.request else None
+        if request_env:
+            return EndpointRegistry.registry_for(request_env.cr)
+        return EndpointRegistry.registry_for(self.env.cr)
 
     def _generate_routing_rules(self, modules, converters):
         # Override to inject custom endpoint rules.
@@ -36,8 +44,9 @@ class IrHttp(models.AbstractModel):
             for url in endpoint_rule.routing["routes"]:
                 yield (url, endpoint)
 
-    @tools.ormcache("key", "self._endpoint_route_last_version()", cache="routing")
+    @api.ormcache("key", "self._endpoint_route_last_version()", cache="routing")
     def routing_map(self, key=None):
+        self.env.transaction.invalidate_ormcache("routing")
         res = super().routing_map(key=key)
         return res
 
@@ -48,7 +57,7 @@ class IrHttp(models.AbstractModel):
         return self._endpoint_route_registry().last_version()
 
     @classmethod
-    def _auth_method_user_endpoint(cls):
+    def _auth_method_user_endpoint(cls, routing=None):
         """Special method for user auth which raises Unauthorized when needed.
 
         If you get an HTTP request (instead of a JSON one),
@@ -61,6 +70,9 @@ class IrHttp(models.AbstractModel):
         a proper exception is raised.
         """
         try:
-            cls._auth_method_user()
-        except http.SessionExpiredException as err:
+            if routing is not None:
+                cls._auth_method_user(routing)
+            else:
+                cls._auth_method_user({"auth": "user"})
+        except SessionExpiredException as err:
             raise werkzeug.exceptions.Unauthorized() from err

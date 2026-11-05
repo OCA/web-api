@@ -1,5 +1,7 @@
 # Copyright 2021 Camptocamp SA
+# Copyright 2026 Open2S (<https://www.open2s.com>)
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
+# @author: Danilo Moya <danilo.moya@open2s.com.ec>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import logging
@@ -88,18 +90,15 @@ class EndpointRouteHandler(models.AbstractModel):
             )
 
     def _get_endpoint_route_consumer_models(self):
-        global ENDPOINT_ROUTE_CONSUMER_MODELS
         if ENDPOINT_ROUTE_CONSUMER_MODELS.get(self.env.cr.dbname):
             return ENDPOINT_ROUTE_CONSUMER_MODELS.get(self.env.cr.dbname)
         models = []
         route_model = "endpoint.route.handler"
         for model in self.env.values():
-            if (
-                model._name != route_model
-                and not model._abstract
-                and route_model in model._inherit
-            ):
-                models.append(model._name)
+            if model._name != route_model and not model._abstract:
+                mro_names = [getattr(c, "_name", None) for c in type(model).mro()]
+                if route_model in mro_names:
+                    models.append(model._name)
         ENDPOINT_ROUTE_CONSUMER_MODELS[self.env.cr.dbname] = models
         return models
 
@@ -210,7 +209,7 @@ class EndpointRouteHandler(models.AbstractModel):
         """Shortcut to register one single controller."""
         rule = self._make_controller_rule(options=options, key=key)
         self._endpoint_registry.update_rules([rule], init=init)
-        self.env.registry.clear_cache("routing")
+        self.env.transaction.invalidate_ormcache("routing")
         self._logger.debug(
             "Registered controller %s (auth: %s)", self.route, self.auth_type
         )
@@ -220,14 +219,12 @@ class EndpointRouteHandler(models.AbstractModel):
         route, routing, endpoint_hash = self._get_routing_info()
         options = options or self._default_endpoint_options()
         return self._endpoint_registry.make_rule(
-            # fmt: off
             key,
             route,
             options,
             routing,
             endpoint_hash,
             route_group=self.route_group,
-            # fmt: on
         )
 
     def _default_endpoint_options(self):
@@ -249,13 +246,16 @@ class EndpointRouteHandler(models.AbstractModel):
 
     def _get_routing_info(self):
         route = self.route
-        routing = dict(
-            type=self.route_type,
-            auth=self.auth_type,
-            methods=[self.request_method],
-            routes=[route],
-            cors=self.cors,
-            csrf=self.csrf,
-            readonly=self.readonly,
-        )
+        routing = {
+            "type": self.route_type,
+            "auth": self.auth_type,
+            "methods": [self.request_method],
+            "routes": [route],
+            "cors": self.cors,
+            "csrf": self.csrf,
+            "readonly": self.readonly,
+        }
+        if self.auth_type == "bearer":
+            routing["bearer_scope"] = "rpc"
+            routing["save_session"] = False
         return route, routing, self.endpoint_hash
