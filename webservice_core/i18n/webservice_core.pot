@@ -298,6 +298,12 @@ msgid "Res Model"
 msgstr ""
 
 #. module: webservice_core
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_header__secret
+#: model:ir.model.fields,field_description:webservice_core.field_webservice_querystring_param__secret
+msgid "Secret"
+msgstr ""
+
+#. module: webservice_core
 #: model:ir.model.fields,help:webservice_core.field_webservice_backend__header_ids
 #: model:ir.model.fields,help:webservice_core.field_webservice_endpoint__header_ids
 #: model:ir.model.fields,help:webservice_core.field_webservice_request_mixin__header_ids
@@ -322,6 +328,14 @@ msgstr ""
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_endpoint__tech_name
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_request_mixin__tech_name
 msgid "Tech Name"
+msgstr ""
+
+#. module: webservice_core
+#: model:ir.model.fields,help:webservice_core.field_webservice_header__secret
+#: model:ir.model.fields,help:webservice_core.field_webservice_querystring_param__secret
+msgid ""
+"The value is a secret (e.g. a token or a key): it is hidden in the UI and "
+"dropped when the database is neutralized."
 msgstr ""
 
 #. module: webservice_core
