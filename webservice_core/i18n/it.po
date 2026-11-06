@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-11-04 11:46+0000\n"
+"PO-Revision-Date: 2026-11-06 15:46+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -305,7 +305,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_header__res_model
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_querystring_param__res_model
 msgid "Res Model"
-msgstr "Modello di destinazione"
+msgstr "Modello res"
 
 #. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_header__secret
