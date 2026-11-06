@@ -28,3 +28,7 @@ class WebserviceQueryStringParam(models.Model):
     )
     name = fields.Char(required=True)
     value = fields.Char(required=True)
+    secret = fields.Boolean(
+        help="The value is a secret (e.g. a token or a key): "
+        "it is hidden in the UI and dropped when the database is neutralized.",
+    )

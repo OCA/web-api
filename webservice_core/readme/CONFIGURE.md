@@ -14,6 +14,9 @@ Go to *Settings > Technical > WebService Backend* (requires the
 
 Under the **Headers** and **Querystring Params** tabs you can configure
 static defaults, merged into every call (see *Usage*).
+Flag a header or a querystring param as **Secret** when its value is a
+token, a key, ...: the value is hidden in the UI and dropped when the
+database is neutralized.
 
 Then configure authentication via **Auth Type**:
 
