@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-11-06 15:46+0000\n"
+"PO-Revision-Date: 2026-11-08 17:46+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -311,7 +311,7 @@ msgstr "Modello res"
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_header__secret
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_querystring_param__secret
 msgid "Secret"
-msgstr ""
+msgstr "Segreto"
 
 #. module: webservice_core
 #: model:ir.model.fields,help:webservice_core.field_webservice_backend__header_ids
@@ -355,6 +355,9 @@ msgid ""
 "The value is a secret (e.g. a token or a key): it is hidden in the UI and "
 "dropped when the database is neutralized."
 msgstr ""
+"Il valore è un segreto (es. un token o una chiave): è nascosto "
+"nell'interfaccia utente e viene eliminato quando il database viene "
+"neutralizzato."
 
 #. module: webservice_core
 #: model:ir.model.fields,field_description:webservice_core.field_webservice_backend__timeout
