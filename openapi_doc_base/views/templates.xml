@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Camptocamp SA
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <!-- Inspired by the `openapi` template of base_rest (OCA/rest-framework). -->
+    <template id="swagger_ui" name="OpenAPI docs">&lt;!DOCTYPE html&gt;
+        <html lang="en">
+        <head>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <title t-out="title" />
+            <link
+                rel="stylesheet"
+                href="/openapi_doc_base/static/lib/swagger-ui/swagger-ui.css"
+            />
+            <style>
+                    body { margin: 0; }
+                    .o_openapi_nav {
+                        font-family: sans-serif; font-size: 14px;
+                        background: #f4f5f7; border-bottom: 1px solid #dde1e6;
+                        padding: 10px 20px; display: flex; flex-wrap: wrap; gap: 8px 32px;
+                    }
+                    .o_openapi_nav .o_openapi_filter { display: flex; align-items: center; gap: 6px; }
+                    .o_openapi_nav .o_openapi_label { color: #6b7280; margin-right: 4px; }
+                    .o_openapi_nav a {
+                        color: #374151; text-decoration: none; padding: 3px 12px;
+                        border: 1px solid #cbd2d9; border-radius: 999px; background: #fff;
+                    }
+                    .o_openapi_nav a:hover { border-color: #49cc90; }
+                    .o_openapi_nav a.active { background: #49cc90; border-color: #49cc90; color: #fff; }
+                    .o_openapi_nav .o_openapi_server { margin-left: auto; }
+                    .o_openapi_nav select {
+                        font-size: 14px; padding: 3px 8px; border: 1px solid #cbd2d9;
+                        border-radius: 6px; max-width: 420px;
+                        color-scheme: light; color: #374151; background: #fff;
+                    }
+                    .o_openapi_nav select option { color: #374151; background: #fff; }
+                </style>
+        </head>
+        <body>
+            <nav class="o_openapi_nav">
+                <div t-if="categories" class="o_openapi_filter">
+                    <span class="o_openapi_label">Category</span>
+                    <t t-foreach="categories" t-as="link">
+                        <a
+                            t-att-href="link[1]"
+                            t-att-class="'active' if link[2] else None"
+                            t-out="link[0]"
+                        />
+                    </t>
+                </div>
+                <div t-if="apps" class="o_openapi_filter">
+                    <span class="o_openapi_label">App</span>
+                    <t t-foreach="apps" t-as="link">
+                        <a
+                            t-att-href="link[1]"
+                            t-att-class="'active' if link[2] else None"
+                            t-out="link[0]"
+                        />
+                    </t>
+                </div>
+                <div class="o_openapi_filter o_openapi_server">
+                    <label
+                        for="o_openapi_server"
+                        class="o_openapi_label"
+                        title="Base URL used by 'Try it out' and curl snippets"
+                    >Server</label>
+                    <select id="o_openapi_server">
+                        <option
+                            value=""
+                            class="o_openapi_server_page"
+                        >Current domain</option>
+                        <t t-foreach="servers" t-as="server">
+                            <option
+                                t-att-value="server[1]"
+                                t-out="'%s: %s' % (server[0], server[1]) if server[0] != server[1] else server[1]"
+                            />
+                        </t>
+                    </select>
+                </div>
+            </nav>
+            <div id="swagger-ui" t-att-data-settings="swagger_settings" />
+            <script
+                src="/openapi_doc_base/static/lib/swagger-ui/swagger-ui-bundle.js"
+            />
+            <script
+                src="/openapi_doc_base/static/lib/swagger-ui/swagger-ui-standalone-preset.js"
+            />
+            <script
+                type="module"
+                src="/openapi_doc_base/static/src/js/swagger_ui.esm.js"
+            />
+        </body>
+    </html>
+    </template>
+</odoo>
