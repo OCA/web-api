@@ -1,11 +1,12 @@
 [project]
 name = "odoo-addons-oca-web-api"
-version = "17.0.20250319.0"
+version = "17.0.20261110.0"
 dependencies = [
     "odoo-addon-endpoint>=17.0dev,<17.1dev",
     "odoo-addon-endpoint_auth_api_key>=17.0dev,<17.1dev",
     "odoo-addon-endpoint_route_handler>=17.0dev,<17.1dev",
     "odoo-addon-webservice>=17.0dev,<17.1dev",
+    "odoo-addon-webservice_server_env>=17.0dev,<17.1dev",
 ]
 classifiers=[
     "Programming Language :: Python",
