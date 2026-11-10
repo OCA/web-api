@@ -23,19 +23,9 @@ msgid "API Key"
 msgstr "API密钥"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_api_key_env_default
-msgid "API Key Env Default"
-msgstr "API密钥环境默认值"
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_header
 msgid "API Key header"
 msgstr "API密钥头"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_api_key_header_env_default
-msgid "API Key header Env Default"
-msgstr "API密钥头环境默认值"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_audience
@@ -43,29 +33,14 @@ msgid "Audience"
 msgstr "受众"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_audience_env_default
-msgid "Audience Env Default"
-msgstr "受众环境默认值"
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__auth_type
 msgid "Auth Type"
 msgstr "认证类型"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_auth_type_env_default
-msgid "Auth Type Env Default"
-msgstr "认证类型环境默认值"
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_authorization_url
 msgid "Authorization URL"
 msgstr "授权URL"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_authorization_url_env_default
-msgid "Authorization URL Env Default"
-msgstr "授权URL环境默认值"
 
 #. module: webservice
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__oauth2_flow__backend_application
@@ -78,19 +53,9 @@ msgid "Client ID"
 msgstr "客户端ID"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_clientid_env_default
-msgid "Client ID Env Default"
-msgstr "客户端ID环境默认值"
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_client_secret
 msgid "Client Secret"
 msgstr "客户端密钥"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_client_secret_env_default
-msgid "Client Secret Env Default"
-msgstr "客户端密钥环境默认值"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__company_id
@@ -101,11 +66,6 @@ msgstr "公司"
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type
 msgid "Content Type"
 msgstr "内容类型"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_content_type_env_default
-msgid "Content Type Env Default"
-msgstr "内容类型环境默认值"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__create_uid
@@ -173,19 +133,9 @@ msgid "Oauth2 Flow"
 msgstr "Oauth2流程"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_flow_env_default
-msgid "Oauth2 Flow Env Default"
-msgstr "Oauth2流程环境默认值"
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_scope
 msgid "Oauth2 Scope"
 msgstr "Oauth2范围"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_scope_env_default
-msgid "Oauth2 Scope Env Default"
-msgstr "Oauth2范围环境默认值"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__oauth2_state
@@ -203,19 +153,9 @@ msgid "Password"
 msgstr "密码"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_password_env_default
-msgid "Password Env Default"
-msgstr "密码环境默认值"
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol
 msgid "Protocol"
 msgstr "协议"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_protocol_env_default
-msgid "Protocol Env Default"
-msgstr "协议环境默认值"
 
 #. module: webservice
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__auth_type__none
@@ -228,14 +168,19 @@ msgid "Redirect Url"
 msgstr "重定向URL"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__server_env_defaults
-msgid "Server Env Defaults"
-msgstr "服务器环境默认值"
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__tech_name
 msgid "Tech Name"
 msgstr "技术名称"
+
+#. module: webservice
+#. odoo-python
+#: code:addons/webservice/upgrades/17.0.1.0.2/post-update.py:0
+#, python-format
+msgid ""
+"The 'webservice_server_env' module is not available. It is required to "
+"preserve the server environment managed fields of 'webservice.backend'. Make "
+"it available on the addons path before upgrading 'webservice'."
+msgstr ""
 
 #. module: webservice
 #: model:ir.model.fields,help:webservice.field_webservice_backend__redirect_url
@@ -248,11 +193,6 @@ msgid "Token URL"
 msgstr "令牌URL"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_token_url_env_default
-msgid "Token URL Env Default"
-msgstr "令牌URL环境默认值"
-
-#. module: webservice
 #: model:ir.model.fields,help:webservice.field_webservice_backend__tech_name
 msgid "Unique name for technical purposes. Eg: server env keys."
 msgstr "技术用途的唯一名称。例如：服务器环境键。"
@@ -263,11 +203,6 @@ msgid "Url"
 msgstr "URL"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_url_env_default
-msgid "Url Env Default"
-msgstr "URL环境默认值"
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__username
 msgid "Username"
 msgstr "用户名"
@@ -276,11 +211,6 @@ msgstr "用户名"
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__auth_type__user_pwd
 msgid "Username & password"
 msgstr "用户名和密码"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_username_env_default
-msgid "Username Env Default"
-msgstr "用户名环境默认值"
 
 #. module: webservice
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__oauth2_flow__web_application
@@ -301,82 +231,8 @@ msgstr "Web服务后端"
 msgid ""
 "Webservice '%(name)s' requires '%(auth_type)s' authentication. However, the "
 "following field(s) are not valued: %(fields)s"
-msgstr "Web服务'%(name)s'需要'%(auth_type)s'认证。然而，以下字段未被赋值：%(fields)s"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_api_key_env_is_editable
-msgid "X Api Key Env Is Editable"
-msgstr "X Api密钥环境可编辑"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_api_key_header_env_is_editable
-msgid "X Api Key Header Env Is Editable"
-msgstr "X Api密钥头环境可编辑"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_auth_type_env_is_editable
-msgid "X Auth Type Env Is Editable"
-msgstr "X认证类型环境可编辑"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_content_type_env_is_editable
-msgid "X Content Type Env Is Editable"
-msgstr "X内容类型环境可编辑"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_audience_env_is_editable
-msgid "X Oauth2 Audience Env Is Editable"
-msgstr "X Oauth2 受众环境可编辑"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_authorization_url_env_is_editable
-msgid "X Oauth2 Authorization Url Env Is Editable"
-msgstr "X Oauth2 授权网址环境可编辑"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_client_secret_env_is_editable
-msgid "X Oauth2 Client Secret Env Is Editable"
-msgstr "X Oauth2 客户端密钥环境可编辑"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_clientid_env_is_editable
-msgid "X Oauth2 Clientid Env Is Editable"
-msgstr "X Oauth2 客户端ID环境可编辑"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_flow_env_is_editable
-msgid "X Oauth2 Flow Env Is Editable"
-msgstr "X Oauth2 流程环境可编辑"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_scope_env_is_editable
-msgid "X Oauth2 Scope Env Is Editable"
-msgstr "X Oauth2 范围环境可编辑"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_oauth2_token_url_env_is_editable
-msgid "X Oauth2 Token Url Env Is Editable"
-msgstr "X Oauth2 令牌网址环境可编辑"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_password_env_is_editable
-msgid "X Password Env Is Editable"
-msgstr "X 密码环境可编辑"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_protocol_env_is_editable
-msgid "X Protocol Env Is Editable"
-msgstr "X 协议环境可编辑"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_url_env_is_editable
-msgid "X Url Env Is Editable"
-msgstr "X 网址环境可编辑"
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__x_username_env_is_editable
-msgid "X Username Env Is Editable"
-msgstr "X 用户名环境可编辑"
+msgstr ""
+"Web服务'%(name)s'需要'%(auth_type)s'认证。然而，以下字段未被赋值：%(fields)s"
 
 #. module: webservice
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/xml
@@ -392,7 +248,6 @@ msgstr "授权流程开始时生成的随机密钥，以确保不发生CSRF攻�
 
 #. module: webservice
 #: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_scope
-#: model:ir.model.fields,help:webservice.field_webservice_backend__x_oauth2_scope_env_default
 msgid "scope of the the authorization"
 msgstr "授权范围"
 
@@ -400,3 +255,96 @@ msgstr "授权范围"
 #: model:ir.model.fields,help:webservice.field_webservice_backend__oauth2_token
 msgid "the OAuth2 token (serialized JSON)"
 msgstr "OAuth2令牌（序列化JSON）"
+
+#~ msgid "API Key Env Default"
+#~ msgstr "API密钥环境默认值"
+
+#~ msgid "API Key header Env Default"
+#~ msgstr "API密钥头环境默认值"
+
+#~ msgid "Audience Env Default"
+#~ msgstr "受众环境默认值"
+
+#~ msgid "Auth Type Env Default"
+#~ msgstr "认证类型环境默认值"
+
+#~ msgid "Authorization URL Env Default"
+#~ msgstr "授权URL环境默认值"
+
+#~ msgid "Client ID Env Default"
+#~ msgstr "客户端ID环境默认值"
+
+#~ msgid "Client Secret Env Default"
+#~ msgstr "客户端密钥环境默认值"
+
+#~ msgid "Content Type Env Default"
+#~ msgstr "内容类型环境默认值"
+
+#~ msgid "Oauth2 Flow Env Default"
+#~ msgstr "Oauth2流程环境默认值"
+
+#~ msgid "Oauth2 Scope Env Default"
+#~ msgstr "Oauth2范围环境默认值"
+
+#~ msgid "Password Env Default"
+#~ msgstr "密码环境默认值"
+
+#~ msgid "Protocol Env Default"
+#~ msgstr "协议环境默认值"
+
+#~ msgid "Server Env Defaults"
+#~ msgstr "服务器环境默认值"
+
+#~ msgid "Token URL Env Default"
+#~ msgstr "令牌URL环境默认值"
+
+#~ msgid "Url Env Default"
+#~ msgstr "URL环境默认值"
+
+#~ msgid "Username Env Default"
+#~ msgstr "用户名环境默认值"
+
+#~ msgid "X Api Key Env Is Editable"
+#~ msgstr "X Api密钥环境可编辑"
+
+#~ msgid "X Api Key Header Env Is Editable"
+#~ msgstr "X Api密钥头环境可编辑"
+
+#~ msgid "X Auth Type Env Is Editable"
+#~ msgstr "X认证类型环境可编辑"
+
+#~ msgid "X Content Type Env Is Editable"
+#~ msgstr "X内容类型环境可编辑"
+
+#~ msgid "X Oauth2 Audience Env Is Editable"
+#~ msgstr "X Oauth2 受众环境可编辑"
+
+#~ msgid "X Oauth2 Authorization Url Env Is Editable"
+#~ msgstr "X Oauth2 授权网址环境可编辑"
+
+#~ msgid "X Oauth2 Client Secret Env Is Editable"
+#~ msgstr "X Oauth2 客户端密钥环境可编辑"
+
+#~ msgid "X Oauth2 Clientid Env Is Editable"
+#~ msgstr "X Oauth2 客户端ID环境可编辑"
+
+#~ msgid "X Oauth2 Flow Env Is Editable"
+#~ msgstr "X Oauth2 流程环境可编辑"
+
+#~ msgid "X Oauth2 Scope Env Is Editable"
+#~ msgstr "X Oauth2 范围环境可编辑"
+
+#~ msgid "X Oauth2 Token Url Env Is Editable"
+#~ msgstr "X Oauth2 令牌网址环境可编辑"
+
+#~ msgid "X Password Env Is Editable"
+#~ msgstr "X 密码环境可编辑"
+
+#~ msgid "X Protocol Env Is Editable"
+#~ msgstr "X 协议环境可编辑"
+
+#~ msgid "X Url Env Is Editable"
+#~ msgstr "X 网址环境可编辑"
+
+#~ msgid "X Username Env Is Editable"
+#~ msgstr "X 用户名环境可编辑"
