@@ -2,18 +2,13 @@
 # @author Alexandre Fayolle <alexandre.fayolle@camptocamp.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import json
-import os
 import time
-from unittest import mock
 from urllib.parse import quote
 
 import responses
 from oauthlib.oauth2.rfc6749.errors import InvalidGrantError
 
 from odoo.tests.common import Form
-
-from odoo.addons.server_environment import server_env
-from odoo.addons.server_environment.models import server_env_mixin
 
 from .common import CommonWebService, mock_cursor
 
@@ -23,17 +18,6 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
     def _setup_records(cls):
         res = super()._setup_records()
         cls.url = "https://localhost.demo.odoo/"
-        os.environ["SERVER_ENV_CONFIG"] = "\n".join(
-            [
-                "[webservice_backend.test_oauth2_back]",
-                "auth_type = oauth2",
-                "oauth2_flow = backend_application",
-                "oauth2_clientid = some_client_id",
-                "oauth2_client_secret = shh_secret",
-                f"oauth2_token_url = {cls.url}oauth2/token",
-                f"oauth2_audience = {cls.url}",
-            ]
-        )
         cls.webservice = cls.env["webservice.backend"].create(
             {
                 "name": "WebService OAuth2",
@@ -172,18 +156,6 @@ class TestWebServiceOauth2WebApplication(CommonWebService):
     def _setup_records(cls):
         res = super()._setup_records()
         cls.url = "https://localhost.demo.odoo/"
-        os.environ["SERVER_ENV_CONFIG"] = "\n".join(
-            [
-                "[webservice_backend.test_oauth2_web]",
-                "auth_type = oauth2",
-                "oauth2_flow = web_application",
-                "oauth2_clientid = some_client_id",
-                "oauth2_client_secret = shh_secret",
-                f"oauth2_token_url = {cls.url}oauth2/token",
-                f"oauth2_audience = {cls.url}",
-                f"oauth2_authorization_url = {cls.url}authorize",
-            ]
-        )
         cls.webservice = cls.env["webservice.backend"].create(
             {
                 "name": "WebService OAuth2",
@@ -246,38 +218,6 @@ class TestWebServiceOauth2WebApplication(CommonWebService):
         )
         self.assertEqual("cool_token", token["access_token"])
 
-    def test_oauth2_flow_compute_with_server_env(self):
-        """Check the ``compute`` method when updating server envs"""
-        ws = self.webservice
-        url = self.url
-        for auth_type, oauth2_flow in [
-            (tp, fl)
-            for tp in ws._fields["auth_type"].get_values(ws.env)
-            for fl in ws._fields["oauth2_flow"].get_values(ws.env)
-        ]:
-            # Update env with current ``auth_type`` and ``oauth2_flow``
-            with mock.patch.dict(
-                os.environ,
-                {
-                    "SERVER_ENV_CONFIG": f"""
-[webservice_backend.test_oauth2_web]
-auth_type = {auth_type}
-oauth2_flow = {oauth2_flow}
-oauth2_clientid = some_client_id
-oauth2_client_secret = shh_secret
-oauth2_token_url = {url}oauth2/token
-oauth2_audience = {url}
-oauth2_authorization_url = {url}/authorize
-""",
-                },
-            ):
-                server_env_mixin.serv_config = server_env._load_config()  # Reload vars
-                ws.invalidate_recordset()  # Avoid reading from cache
-                if auth_type == "oauth2":
-                    self.assertEqual(ws.oauth2_flow, oauth2_flow)
-                else:
-                    self.assertFalse(ws.oauth2_flow)
-
     def test_oauth2_flow_compute_with_ui(self):
         """Check the ``compute`` method when updating WS from UI"""
         ws = self.webservice
@@ -331,3 +271,64 @@ oauth2_authorization_url = {url}/authorize
             self.assertEqual(
                 ws.oauth2_flow, oauth2_flow if ws.auth_type == "oauth2" else False
             )
+
+
+class TestWebServiceOauth2FlowReset(CommonWebService):
+    """``oauth2_flow`` must be reset on any write, not only via the UI.
+
+    This is a plain ORM-level guarantee independent of ``server_environment``
+    (see ``webservice_server_env`` for the extra guarantee that applies when
+    that module is installed).
+    """
+
+    @classmethod
+    def _setup_records(cls):
+        res = super()._setup_records()
+        cls.url = "https://localhost.demo.odoo/"
+        cls.webservice = cls.env["webservice.backend"].create(
+            {
+                "name": "WebService OAuth2",
+                "tech_name": "test_oauth2_reset",
+                "auth_type": "oauth2",
+                "protocol": "http",
+                "url": cls.url,
+                "oauth2_flow": "backend_application",
+                "content_type": "application/xml",
+                "oauth2_clientid": "some_client_id",
+                "oauth2_client_secret": "shh_secret",
+                "oauth2_token_url": f"{cls.url}oauth2/token",
+                "oauth2_audience": cls.url,
+            }
+        )
+        return res
+
+    def test_write_resets_oauth2_flow_when_auth_type_changes(self):
+        self.webservice.write({"auth_type": "none"})
+        self.assertFalse(self.webservice.oauth2_flow)
+
+    def test_write_keeps_oauth2_flow_when_auth_type_stays_oauth2(self):
+        self.webservice.write({"oauth2_client_secret": "new_secret"})
+        self.assertEqual(self.webservice.oauth2_flow, "backend_application")
+
+    def test_create_resets_oauth2_flow_for_non_oauth2_auth_type(self):
+        ws = self.env["webservice.backend"].create(
+            {
+                "name": "WebService No Auth",
+                "tech_name": "test_oauth2_reset_create",
+                "auth_type": "none",
+                "protocol": "http",
+                "url": self.url,
+                # Inconsistent on purpose: no `create`/`write` should ever
+                # leave this set together with a non-oauth2 `auth_type`.
+                "oauth2_flow": "backend_application",
+            }
+        )
+        self.assertFalse(ws.oauth2_flow)
+
+    def test_onchange_resets_oauth2_flow(self):
+        ws = self.webservice.new(
+            {"auth_type": "oauth2", "oauth2_flow": "backend_application"}
+        )
+        ws.auth_type = "none"
+        ws._onchange_auth_type()
+        self.assertFalse(ws.oauth2_flow)
