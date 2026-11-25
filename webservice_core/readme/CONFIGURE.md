@@ -32,3 +32,17 @@ requires the ones that apply, and saving enforces it.
 Each `webservice.endpoint` (see *Description*) has its own Content-Type,
 Timeout, Headers and Querystring Params, overriding the backend's own for
 that specific endpoint - set only what needs to differ.
+
+**Access rights**
+
+- Configuring the webservice records (backends, endpoints, headers,
+  querystring params) requires the *Administration / Settings* group.
+- Calling them requires the *Webservice User* group, which gives read
+  access to the webservice records. The `call*` methods are not available
+  via RPC: they can only be called from server-side code, which should
+  decide who may trigger a call.
+- The credentials (API key, password, OAuth2 secrets and token, header and
+  querystring param values) can be read by administrators only. A call
+  reads the configuration as superuser, after checking that the current user
+  can read the endpoint and its backend, and drops the data read from the
+  cache at the end of the call.

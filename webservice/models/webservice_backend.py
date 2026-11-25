@@ -8,6 +8,8 @@ import logging
 from odoo import api, exceptions, fields, models
 from odoo.tools import config
 
+from odoo.addons.webservice_core.models.webservice_request_mixin import SECRET_GROUPS
+
 _logger = logging.getLogger(__name__)
 
 # Backward-compat switch for the `content_only` default removal on `_request`.
@@ -47,7 +49,7 @@ class WebserviceBackend(models.Model):
         help="How the client credentials are presented to the token endpoint.",
     )
     oauth2_clientid = fields.Char(string="Client ID")
-    oauth2_client_secret = fields.Char(string="Client Secret")
+    oauth2_client_secret = fields.Char(string="Client Secret", groups=SECRET_GROUPS)
     oauth2_client_auth_header = fields.Char(
         string="Client Auth Header",
         default="Authorization",
@@ -56,6 +58,7 @@ class WebserviceBackend(models.Model):
     )
     oauth2_client_auth_value = fields.Char(
         string="Client Auth Header Value",
+        groups=SECRET_GROUPS,
         help="Full, static header value sent to the token endpoint when the "
         "client authentication method is a custom Authorization header "
         "(e.g. 'SSWS <token>').",
@@ -74,7 +77,9 @@ class WebserviceBackend(models.Model):
         # no auth_type because not required
     )
     oauth2_scope = fields.Char(help="scope of the the authorization")
-    oauth2_token = fields.Char(help="the OAuth2 token (serialized JSON)")
+    oauth2_token = fields.Char(
+        help="the OAuth2 token (serialized JSON)", groups=SECRET_GROUPS
+    )
     redirect_url = fields.Char(
         compute="_compute_redirect_url",
         help="The redirect URL to be used as part of the OAuth2 authorisation flow",

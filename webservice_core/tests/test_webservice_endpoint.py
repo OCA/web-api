@@ -92,12 +92,14 @@ class TestWebserviceEndpoint(CommonWebService):
         )
 
     @responses.activate
-    def test_call_as_user_without_access(self):
-        """A call works for a user that cannot read the webservice records."""
-        user = new_test_user(self.env, login="ws_caller", groups="base.group_user")
+    def test_call_as_internal_user(self):
+        """An internal user can call but cannot read the credentials."""
+        user = new_test_user(
+            self.env, login="ws_caller", groups="webservice_core.group_webservice_user"
+        )
         endpoint = self.endpoint.with_user(user)
         with self.assertRaises(exceptions.AccessError):
-            endpoint.read(["path"])
+            endpoint.backend_id.read(["api_key"])
         url = f"{self.url}orders/42/status"
         responses.add(responses.GET, url, body="{}")
         result = endpoint.call(url_params={"order_id": 42})
@@ -106,6 +108,16 @@ class TestWebserviceEndpoint(CommonWebService):
         # The values read as superuser are not left in the cache.
         with self.assertRaises(exceptions.AccessError):
             endpoint.backend_id.read(["api_key"])
+        with self.assertRaises(exceptions.AccessError):
+            endpoint.backend_id.header_ids.read(["value"])
+
+    def test_call_without_read_access(self):
+        """A user not in the Webservice User group cannot call webservices."""
+        user = new_test_user(self.env, login="ws_internal", groups="base.group_user")
+        with self.assertRaises(exceptions.AccessError):
+            self.endpoint.with_user(user).call(url_params={"order_id": 42})
+        with self.assertRaises(exceptions.AccessError):
+            self.backend.with_user(user).call_get()
 
     def test_call_not_available_via_rpc(self):
         """The call methods cannot be triggered via RPC."""

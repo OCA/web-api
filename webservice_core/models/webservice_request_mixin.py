@@ -17,6 +17,8 @@ _logger = logging.getLogger(__name__)
 # DEPRECATED: temporary workaround to keep calling absolute urls outside the
 # backend base url. To be discarded on migration: fix the callers instead.
 ALLOW_ABSOLUTE_URL = "webservice.allow_absolute_url"
+# Credentials are readable by administrators only: calls read them as superuser.
+SECRET_GROUPS = "base.group_system"
 
 
 class WebserviceRequestMixin(models.AbstractModel):
@@ -59,8 +61,8 @@ class WebserviceRequestMixin(models.AbstractModel):
         required=True,
     )
     username = fields.Char(auth_type="user_pwd")
-    password = fields.Char(auth_type="user_pwd")
-    api_key = fields.Char(string="API Key", auth_type="api_key")
+    password = fields.Char(auth_type="user_pwd", groups=SECRET_GROUPS)
+    api_key = fields.Char(string="API Key", auth_type="api_key", groups=SECRET_GROUPS)
     api_key_header = fields.Char(string="API Key header", auth_type="api_key")
     content_type = fields.Selection(
         [
@@ -178,17 +180,23 @@ class WebserviceRequestMixin(models.AbstractModel):
     def _call_as_superuser(self):
         """Yield the records as superuser, then drop the data read from the cache.
 
-        The caller is not expected to have access to the webservice records:
-        their configuration (credentials included) is read as superuser.
+        The caller must be able to read the webservice records, but not their
+        credentials: the configuration is read as superuser.
         The ORM cache is shared by all the environments of the transaction
         and a cache hit does not check the access rights, so the records read
         are invalidated at the end to not leave the values readable.
         """
+        self._call_as_check_access()
         records = self.sudo()
         try:
             yield records
         finally:
             records._call_as_invalidate_cache()
+
+    def _call_as_check_access(self):
+        """Ensure the current user can read the records the call relies on."""
+        for records in self._call_as_check_records():
+            records.check_access("read")
 
     def _call_as_check_records(self):
         """Return the recordsets (of any model) whose data is read by a call."""
