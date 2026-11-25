@@ -8,7 +8,7 @@ from psycopg2 import errors as pg_errors
 
 from odoo import Command, exceptions
 from odoo.service.model import get_public_method
-from odoo.tests.common import tagged
+from odoo.tests.common import new_test_user, tagged
 from odoo.tools import mute_logger
 
 from .common import CommonWebService
@@ -90,6 +90,22 @@ class TestWebserviceEndpoint(CommonWebService):
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
         )
+
+    @responses.activate
+    def test_call_as_user_without_access(self):
+        """A call works for a user that cannot read the webservice records."""
+        user = new_test_user(self.env, login="ws_caller", groups="base.group_user")
+        endpoint = self.endpoint.with_user(user)
+        with self.assertRaises(exceptions.AccessError):
+            endpoint.read(["path"])
+        url = f"{self.url}orders/42/status"
+        responses.add(responses.GET, url, body="{}")
+        result = endpoint.call(url_params={"order_id": 42})
+        self.assertEqual(result.content, b"{}")
+        self.assertEqual(responses.calls[0].request.headers["Api-Key"], "backend-key")
+        # The values read as superuser are not left in the cache.
+        with self.assertRaises(exceptions.AccessError):
+            endpoint.backend_id.read(["api_key"])
 
     def test_call_not_available_via_rpc(self):
         """The call methods cannot be triggered via RPC."""

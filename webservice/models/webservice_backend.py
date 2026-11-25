@@ -150,20 +150,21 @@ class WebserviceBackend(models.Model):
 
     @api.private
     def call(self, method, *args, **kwargs):
-        if not self.auth_type.startswith("oauth2"):
-            return super().call(method, *args, **kwargs)
-        # NOTE: oauth2 still relies on `component` for now, until it gets
-        # extracted to its own module and reworked to drop that dependency too.
-        _logger.debug(
-            "backend %s: call %s %s %s",
-            self.name,
-            method,
-            args,
-            self._sanitize_kwargs_for_log(kwargs),
-        )
-        response = getattr(self._get_adapter(), method)(*args, **kwargs)
-        _logger.debug("backend %s: response: \n%s", self.name, response)
-        return response
+        with self._call_as_superuser() as backend:
+            if not backend.auth_type.startswith("oauth2"):
+                return super(WebserviceBackend, backend).call(method, *args, **kwargs)
+            # NOTE: oauth2 still relies on `component` for now, until it gets
+            # extracted to its own module and reworked to drop that dependency too.
+            _logger.debug(
+                "backend %s: call %s %s %s",
+                backend.name,
+                method,
+                args,
+                backend._sanitize_kwargs_for_log(kwargs),
+            )
+            response = getattr(backend._get_adapter(), method)(*args, **kwargs)
+            _logger.debug("backend %s: response: \n%s", backend.name, response)
+            return response
 
     def _get_adapter(self):
         with self.work_on(self._name) as work:
