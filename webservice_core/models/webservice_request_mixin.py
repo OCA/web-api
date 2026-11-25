@@ -14,6 +14,10 @@ from ..utils import sanitize_url_for_log, sanitize_values_for_log
 
 _logger = logging.getLogger(__name__)
 
+# DEPRECATED: temporary workaround to keep calling absolute urls outside the
+# backend base url. To be discarded on migration: fix the callers instead.
+ALLOW_ABSOLUTE_URL = "webservice.allow_absolute_url"
+
 
 class WebserviceRequestMixin(models.AbstractModel):
     """Auth configuration + HTTP call features for any webservice-like record.
@@ -337,6 +341,12 @@ class WebserviceRequestMixin(models.AbstractModel):
 
     def _get_url(self, url=None, url_params=None, **kwargs):
         url = self._compose_url(url)
+        # Only here a request is about to be sent: an explicit `url` (call
+        # kwarg or endpoint path) can leak the backend credentials to another
+        # host. `_compose_url` is also used to build display values, which
+        # must never raise or log.
+        if not url.startswith(self._get_base_url()):
+            self._check_absolute_url_allowed(url)
         url_params = url_params or kwargs
         return url.format(**url_params)
 
@@ -347,9 +357,33 @@ class WebserviceRequestMixin(models.AbstractModel):
         if not url.startswith(base):
             if not url.startswith("http"):
                 return f"{base.rstrip('/')}/{url.lstrip('/')}"
-            # TODO: if url is given, we should validate the domain
-            # to avoid abusing a webservice backend for different calls.
+            # An absolute url outside the base is returned as is:
+            # `_get_url` decides whether it can be called.
         return url
+
+    def _check_absolute_url_allowed(self, url):
+        """Raise unless calling an absolute url outside the base is enabled.
+
+        Bypass at your own risk with the system parameter
+        ``webservice.allow_absolute_url`` set to ``True`` (no UI on purpose,
+        deprecated: to be discarded on migration):
+        the error is skipped and a warning is logged on every such call.
+        """
+        param = self.env["ir.config_parameter"].sudo().get_param(ALLOW_ABSOLUTE_URL)
+        if param and param.lower() in ("1", "true"):
+            _logger.warning(
+                "Absolute URL outside the base allowed by the system parameter "
+                "%s (insecure, backend credentials may be sent to %s)",
+                ALLOW_ABSOLUTE_URL,
+                self._sanitize_url_for_log(url),
+            )
+        else:
+            raise exceptions.UserError(
+                self.env._(
+                    "Calling an absolute URL outside the configured base URL "
+                    "is not allowed."
+                )
+            )
 
     @api.depends()
     def _compute_full_url_display(self):

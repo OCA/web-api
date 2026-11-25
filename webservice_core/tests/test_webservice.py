@@ -197,10 +197,26 @@ class TestWebService(CommonWebService):
 
     @responses.activate
     def test_web_service_call_args(self):
+        self.env["ir.config_parameter"].sudo().set_param(
+            "webservice.allow_absolute_url", "True"
+        )
         url = "https://custom.url"
         responses.add(responses.POST, url, body="{}")
-        result = self.webservice.call(
-            "post", url=url, headers={"demo_header": "HEADER"}
+        with self.assertLogs(
+            "odoo.addons.webservice_core.models.webservice_request_mixin",
+            level="WARNING",
+        ) as logs:
+            result = self.webservice.call(
+                "post", url=url, headers={"demo_header": "HEADER"}
+            )
+        self.assertEqual(
+            logs.output,
+            [
+                "WARNING:odoo.addons.webservice_core.models."
+                "webservice_request_mixin:Absolute URL outside the base allowed "
+                "by the system parameter webservice.allow_absolute_url (insecure, "
+                "backend credentials may be sent to https://custom.url)"
+            ],
         )
         self.assertEqual(result.content, b"{}")
         self.assertEqual(len(responses.calls), 1)
