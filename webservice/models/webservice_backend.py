@@ -148,6 +148,7 @@ class WebserviceBackend(models.Model):
             ).oauth2_flow = False
         return res
 
+    @api.private
     def call(self, method, *args, **kwargs):
         if not self.auth_type.startswith("oauth2"):
             return super().call(method, *args, **kwargs)

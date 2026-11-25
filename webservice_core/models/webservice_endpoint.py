@@ -110,6 +110,7 @@ class WebserviceEndpoint(models.Model):
         backend_headers, backend_params = self.backend_id._get_secret_names()
         return header_names | backend_headers, param_names | backend_params
 
+    @api.private
     def call(self, url_params=None, **kwargs):
         self.ensure_one()
         kwargs.setdefault("url", self.path)

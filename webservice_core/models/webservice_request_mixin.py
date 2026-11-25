@@ -169,6 +169,7 @@ class WebserviceRequestMixin(models.AbstractModel):
     def _normalize_tech_name(self, name):
         return self.env["ir.http"]._slugify(name).replace("-", "_")
 
+    @api.private
     def call(self, method, *args, **kwargs):
         kwargs = self._call_prepare(**kwargs)
         _logger.debug(
@@ -215,15 +216,19 @@ class WebserviceRequestMixin(models.AbstractModel):
         return self._request(method, **kwargs)
 
     # shortcuts
+    @api.private
     def call_get(self, **kwargs):
         return self.call("get", **kwargs)
 
+    @api.private
     def call_post(self, **kwargs):
         return self.call("post", **kwargs)
 
+    @api.private
     def call_put(self, **kwargs):
         return self.call("put", **kwargs)
 
+    @api.private
     def call_delete(self, **kwargs):
         return self.call("delete", **kwargs)
 

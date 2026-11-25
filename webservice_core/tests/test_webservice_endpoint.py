@@ -7,6 +7,7 @@ import responses
 from psycopg2 import errors as pg_errors
 
 from odoo import Command, exceptions
+from odoo.service.model import get_public_method
 from odoo.tests.common import tagged
 from odoo.tools import mute_logger
 
@@ -89,6 +90,13 @@ class TestWebserviceEndpoint(CommonWebService):
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
         )
+
+    def test_call_not_available_via_rpc(self):
+        """The call methods cannot be triggered via RPC."""
+        for model in ("webservice.endpoint", "webservice.backend"):
+            for name in ("call", "call_get", "call_post", "call_put", "call_delete"):
+                with self.assertRaises(exceptions.AccessError, msg=f"{model}.{name}"):
+                    get_public_method(self.env[model], name)
 
     @responses.activate
     def test_call_with_override_auth_uses_own_credentials(self):
