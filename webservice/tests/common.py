@@ -39,7 +39,7 @@ class CommonWebService(TransactionComponentCase):
     @classmethod
     def _request_handler(cls, s: Session, r: PreparedRequest, /, **kw):
         if urlparse(r.url).netloc in ("localhost.demo.odoo", "custom.url"):
-            return cls._super_send(s, r)
+            return cls._super_send(s, r, **kw)
         return super()._request_handler(s, r, **kw)
 
 
