@@ -8,6 +8,8 @@ import logging
 from odoo import api, exceptions, fields, models
 from odoo.tools import config
 
+from odoo.addons.webservice_core.models.webservice_request_mixin import SECRET_GROUPS
+
 _logger = logging.getLogger(__name__)
 
 # Backward-compat switch for the `content_only` default removal on `_request`.
@@ -47,7 +49,7 @@ class WebserviceBackend(models.Model):
         help="How the client credentials are presented to the token endpoint.",
     )
     oauth2_clientid = fields.Char(string="Client ID")
-    oauth2_client_secret = fields.Char(string="Client Secret")
+    oauth2_client_secret = fields.Char(string="Client Secret", groups=SECRET_GROUPS)
     oauth2_client_auth_header = fields.Char(
         string="Client Auth Header",
         default="Authorization",
@@ -56,6 +58,7 @@ class WebserviceBackend(models.Model):
     )
     oauth2_client_auth_value = fields.Char(
         string="Client Auth Header Value",
+        groups=SECRET_GROUPS,
         help="Full, static header value sent to the token endpoint when the "
         "client authentication method is a custom Authorization header "
         "(e.g. 'SSWS <token>').",
@@ -74,7 +77,9 @@ class WebserviceBackend(models.Model):
         # no auth_type because not required
     )
     oauth2_scope = fields.Char(help="scope of the the authorization")
-    oauth2_token = fields.Char(help="the OAuth2 token (serialized JSON)")
+    oauth2_token = fields.Char(
+        help="the OAuth2 token (serialized JSON)", groups=SECRET_GROUPS
+    )
     redirect_url = fields.Char(
         compute="_compute_redirect_url",
         help="The redirect URL to be used as part of the OAuth2 authorisation flow",
@@ -148,21 +153,23 @@ class WebserviceBackend(models.Model):
             ).oauth2_flow = False
         return res
 
+    @api.private
     def call(self, method, *args, **kwargs):
-        if not self.auth_type.startswith("oauth2"):
-            return super().call(method, *args, **kwargs)
-        # NOTE: oauth2 still relies on `component` for now, until it gets
-        # extracted to its own module and reworked to drop that dependency too.
-        _logger.debug(
-            "backend %s: call %s %s %s",
-            self.name,
-            method,
-            args,
-            self._sanitize_kwargs_for_log(kwargs),
-        )
-        response = getattr(self._get_adapter(), method)(*args, **kwargs)
-        _logger.debug("backend %s: response: \n%s", self.name, response)
-        return response
+        with self._call_as_superuser() as backend:
+            if not backend.auth_type.startswith("oauth2"):
+                return super(WebserviceBackend, backend).call(method, *args, **kwargs)
+            # NOTE: oauth2 still relies on `component` for now, until it gets
+            # extracted to its own module and reworked to drop that dependency too.
+            _logger.debug(
+                "backend %s: call %s %s %s",
+                backend.name,
+                method,
+                args,
+                backend._sanitize_kwargs_for_log(kwargs),
+            )
+            response = getattr(backend._get_adapter(), method)(*args, **kwargs)
+            _logger.debug("backend %s: response: \n%s", backend.name, response)
+            return response
 
     def _get_adapter(self):
         with self.work_on(self._name) as work:

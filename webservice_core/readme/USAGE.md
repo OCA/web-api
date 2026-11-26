@@ -16,13 +16,17 @@ backend.call("post", json={"foo": "bar"})
 ```
 
 **URL**: by default the backend's own `url` is used. Pass `url` to hit a
-different path - relative paths are appended to the backend's URL, a full
-`http(s)://` URL is used as-is:
+different path - relative paths are appended to the backend's URL. A full
+`http(s)://` URL is accepted only if it starts with the backend's URL, as
+the backend credentials would otherwise be sent to an arbitrary host:
 
 ```python
 backend.call("get", url="orders")  # -> <backend url>/orders
-backend.call("get", url="https://other.example.com/orders")
 ```
+
+The system parameter `webservice.allow_absolute_url` set to `True` bypasses
+this check and logs a warning on every such call. It is insecure and
+deprecated: it will be discarded on migration.
 
 If the backend's URL (or the `url` passed above) contains `{placeholder}`
 tokens, fill them with `url_params`:

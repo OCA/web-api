@@ -4,6 +4,7 @@
 # @author Alexandre Fayolle <alexandre.fayolle@camptocamp.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import logging
+from contextlib import contextmanager
 
 import requests
 
@@ -12,6 +13,12 @@ from odoo import Command, api, exceptions, fields, models
 from ..utils import sanitize_url_for_log, sanitize_values_for_log
 
 _logger = logging.getLogger(__name__)
+
+# DEPRECATED: temporary workaround to keep calling absolute urls outside the
+# backend base url. To be discarded on migration: fix the callers instead.
+ALLOW_ABSOLUTE_URL = "webservice.allow_absolute_url"
+# Credentials are readable by administrators only: calls read them as superuser.
+SECRET_GROUPS = "base.group_system"
 
 
 class WebserviceRequestMixin(models.AbstractModel):
@@ -54,8 +61,8 @@ class WebserviceRequestMixin(models.AbstractModel):
         required=True,
     )
     username = fields.Char(auth_type="user_pwd")
-    password = fields.Char(auth_type="user_pwd")
-    api_key = fields.Char(string="API Key", auth_type="api_key")
+    password = fields.Char(auth_type="user_pwd", groups=SECRET_GROUPS)
+    api_key = fields.Char(string="API Key", auth_type="api_key", groups=SECRET_GROUPS)
     api_key_header = fields.Char(string="API Key header", auth_type="api_key")
     content_type = fields.Selection(
         [
@@ -169,19 +176,53 @@ class WebserviceRequestMixin(models.AbstractModel):
     def _normalize_tech_name(self, name):
         return self.env["ir.http"]._slugify(name).replace("-", "_")
 
+    @contextmanager
+    def _call_as_superuser(self):
+        """Yield the records as superuser, then drop the data read from the cache.
+
+        The caller must be able to read the webservice records, but not their
+        credentials: the configuration is read as superuser.
+        The ORM cache is shared by all the environments of the transaction
+        and a cache hit does not check the access rights, so the records read
+        are invalidated at the end to not leave the values readable.
+        """
+        self._call_as_check_access()
+        records = self.sudo()
+        try:
+            yield records
+        finally:
+            records._call_as_invalidate_cache()
+
+    def _call_as_check_access(self):
+        """Ensure the current user can read the records the call relies on."""
+        for records in self._call_as_check_records():
+            records.check_access("read")
+
+    def _call_as_check_records(self):
+        """Return the recordsets (of any model) whose data is read by a call."""
+        return [self]
+
+    def _call_as_invalidate_cache(self):
+        for records in self._call_as_check_records():
+            records.header_ids.invalidate_recordset()
+            records.querystring_param_ids.invalidate_recordset()
+            records.invalidate_recordset()
+
+    @api.private
     def call(self, method, *args, **kwargs):
-        kwargs = self._call_prepare(**kwargs)
-        _logger.debug(
-            "%s: call %s %s %s",
-            self.display_name,
-            method,
-            args,
-            self._sanitize_kwargs_for_log(kwargs),
-        )
-        handler = getattr(self, "_handle_call_for_" + self._get_protocol())
-        response = handler(method, *args, **kwargs)
-        _logger.debug("%s: response: \n%s", self.display_name, response)
-        return response
+        with self._call_as_superuser() as record:
+            kwargs = record._call_prepare(**kwargs)
+            _logger.debug(
+                "%s: call %s %s %s",
+                record.display_name,
+                method,
+                args,
+                record._sanitize_kwargs_for_log(kwargs),
+            )
+            handler = getattr(record, "_handle_call_for_" + record._get_protocol())
+            response = handler(method, *args, **kwargs)
+            _logger.debug("%s: response: \n%s", record.display_name, response)
+            return response
 
     def _call_prepare(self, **kwargs):
         """Merge this record's own configured headers/querystring params into kwargs.
@@ -215,15 +256,19 @@ class WebserviceRequestMixin(models.AbstractModel):
         return self._request(method, **kwargs)
 
     # shortcuts
+    @api.private
     def call_get(self, **kwargs):
         return self.call("get", **kwargs)
 
+    @api.private
     def call_post(self, **kwargs):
         return self.call("post", **kwargs)
 
+    @api.private
     def call_put(self, **kwargs):
         return self.call("put", **kwargs)
 
+    @api.private
     def call_delete(self, **kwargs):
         return self.call("delete", **kwargs)
 
@@ -304,6 +349,12 @@ class WebserviceRequestMixin(models.AbstractModel):
 
     def _get_url(self, url=None, url_params=None, **kwargs):
         url = self._compose_url(url)
+        # Only here a request is about to be sent: an explicit `url` (call
+        # kwarg or endpoint path) can leak the backend credentials to another
+        # host. `_compose_url` is also used to build display values, which
+        # must never raise or log.
+        if not url.startswith(self._get_base_url()):
+            self._check_absolute_url_allowed(url)
         url_params = url_params or kwargs
         return url.format(**url_params)
 
@@ -314,9 +365,33 @@ class WebserviceRequestMixin(models.AbstractModel):
         if not url.startswith(base):
             if not url.startswith("http"):
                 return f"{base.rstrip('/')}/{url.lstrip('/')}"
-            # TODO: if url is given, we should validate the domain
-            # to avoid abusing a webservice backend for different calls.
+            # An absolute url outside the base is returned as is:
+            # `_get_url` decides whether it can be called.
         return url
+
+    def _check_absolute_url_allowed(self, url):
+        """Raise unless calling an absolute url outside the base is enabled.
+
+        Bypass at your own risk with the system parameter
+        ``webservice.allow_absolute_url`` set to ``True`` (no UI on purpose,
+        deprecated: to be discarded on migration):
+        the error is skipped and a warning is logged on every such call.
+        """
+        param = self.env["ir.config_parameter"].sudo().get_param(ALLOW_ABSOLUTE_URL)
+        if param and param.lower() in ("1", "true"):
+            _logger.warning(
+                "Absolute URL outside the base allowed by the system parameter "
+                "%s (insecure, backend credentials may be sent to %s)",
+                ALLOW_ABSOLUTE_URL,
+                self._sanitize_url_for_log(url),
+            )
+        else:
+            raise exceptions.UserError(
+                self.env._(
+                    "Calling an absolute URL outside the configured base URL "
+                    "is not allowed."
+                )
+            )
 
     @api.depends()
     def _compute_full_url_display(self):

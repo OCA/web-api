@@ -15,6 +15,7 @@
     "depends": ["base"],
     "external_dependencies": {"python": ["requests", "openupgradelib"]},
     "data": [
+        "security/webservice_groups.xml",
         "security/ir.model.access.csv",
         "security/ir_rule.xml",
         "views/webservice_backend.xml",

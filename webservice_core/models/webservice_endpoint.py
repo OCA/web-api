@@ -110,12 +110,19 @@ class WebserviceEndpoint(models.Model):
         backend_headers, backend_params = self.backend_id._get_secret_names()
         return header_names | backend_headers, param_names | backend_params
 
+    def _call_as_check_records(self):
+        return [self, self.backend_id]
+
+    @api.private
     def call(self, url_params=None, **kwargs):
-        self.ensure_one()
-        kwargs.setdefault("url", self.path)
-        if url_params:
-            kwargs["url_params"] = url_params
-        kwargs = self._call_prepare(**kwargs)
-        if self.override_auth:
-            return super().call(self.http_method, **kwargs)
-        return self.backend_id.call(self.http_method, **kwargs)
+        with self._call_as_superuser() as endpoint:
+            endpoint.ensure_one()
+            kwargs.setdefault("url", endpoint.path)
+            if url_params:
+                kwargs["url_params"] = url_params
+            kwargs = endpoint._call_prepare(**kwargs)
+            if endpoint.override_auth:
+                return super(WebserviceEndpoint, endpoint).call(
+                    endpoint.http_method, **kwargs
+                )
+            return endpoint.backend_id.call(endpoint.http_method, **kwargs)

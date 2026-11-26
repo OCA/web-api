@@ -7,7 +7,8 @@ import responses
 from psycopg2 import errors as pg_errors
 
 from odoo import Command, exceptions
-from odoo.tests.common import tagged
+from odoo.service.model import get_public_method
+from odoo.tests.common import new_test_user, tagged
 from odoo.tools import mute_logger
 
 from .common import CommonWebService
@@ -89,6 +90,41 @@ class TestWebserviceEndpoint(CommonWebService):
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
         )
+
+    @responses.activate
+    def test_call_as_internal_user(self):
+        """An internal user can call but cannot read the credentials."""
+        user = new_test_user(
+            self.env, login="ws_caller", groups="webservice_core.group_webservice_user"
+        )
+        endpoint = self.endpoint.with_user(user)
+        with self.assertRaises(exceptions.AccessError):
+            endpoint.backend_id.read(["api_key"])
+        url = f"{self.url}orders/42/status"
+        responses.add(responses.GET, url, body="{}")
+        result = endpoint.call(url_params={"order_id": 42})
+        self.assertEqual(result.content, b"{}")
+        self.assertEqual(responses.calls[0].request.headers["Api-Key"], "backend-key")
+        # The values read as superuser are not left in the cache.
+        with self.assertRaises(exceptions.AccessError):
+            endpoint.backend_id.read(["api_key"])
+        with self.assertRaises(exceptions.AccessError):
+            endpoint.backend_id.header_ids.read(["value"])
+
+    def test_call_without_read_access(self):
+        """A user not in the Webservice User group cannot call webservices."""
+        user = new_test_user(self.env, login="ws_internal", groups="base.group_user")
+        with self.assertRaises(exceptions.AccessError):
+            self.endpoint.with_user(user).call(url_params={"order_id": 42})
+        with self.assertRaises(exceptions.AccessError):
+            self.backend.with_user(user).call_get()
+
+    def test_call_not_available_via_rpc(self):
+        """The call methods cannot be triggered via RPC."""
+        for model in ("webservice.endpoint", "webservice.backend"):
+            for name in ("call", "call_get", "call_post", "call_put", "call_delete"):
+                with self.assertRaises(exceptions.AccessError, msg=f"{model}.{name}"):
+                    get_public_method(self.env[model], name)
 
     @responses.activate
     def test_call_with_override_auth_uses_own_credentials(self):
@@ -326,4 +362,42 @@ class TestWebserviceEndpoint(CommonWebService):
         self.assertEqual(
             self.endpoint.full_url_display,
             "https://other.demo.odoo/orders/{order_id}/status",
+        )
+
+    def test_full_url_display_absolute_path_outside_base(self):
+        """Displaying an absolute path outside the base does not raise."""
+        endpoint = self.endpoint.copy(
+            {"tech_name": "absolute_path", "path": "https://other.example.com/x"}
+        )
+        self.assertEqual(endpoint.full_url_display, "https://other.example.com/x")
+
+    def test_absolute_url_outside_base_refused(self):
+        """An absolute URL outside the base is refused by default."""
+        with self.assertRaisesRegex(exceptions.UserError, "absolute URL"):
+            self.backend._get_url("https://evil.example.com/steal")
+
+    def test_absolute_url_inside_base_allowed(self):
+        """An absolute URL starting with the base URL is accepted."""
+        url = self.url + "orders"
+        self.assertEqual(self.backend._get_url(url), url)
+
+    def test_absolute_url_outside_base_with_flag(self):
+        """The hidden system parameter allows absolute URLs outside the base."""
+        self.env["ir.config_parameter"].sudo().set_param(
+            "webservice.allow_absolute_url", "True"
+        )
+        url = "https://other.example.com/x"
+        with self.assertLogs(
+            "odoo.addons.webservice_core.models.webservice_request_mixin",
+            level="WARNING",
+        ) as logs:
+            self.assertEqual(self.backend._get_url(url), url)
+        self.assertEqual(
+            logs.output,
+            [
+                "WARNING:odoo.addons.webservice_core.models."
+                "webservice_request_mixin:Absolute URL outside the base allowed "
+                "by the system parameter webservice.allow_absolute_url (insecure, "
+                "backend credentials may be sent to https://other.example.com/x)"
+            ],
         )
