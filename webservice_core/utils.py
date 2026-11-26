@@ -26,21 +26,37 @@ class StaticHeaderAuth(AuthBase):
         return request
 
 
+DEFAULT_BLACKLISTED_KEYS = ("apikey", "password", "pwd")
+
+
+def is_blacklisted_key(key, blacklisted_keys=None):
+    """Tell if a key looks sensitive, comparing case insensitively."""
+    blacklisted_keys = blacklisted_keys or DEFAULT_BLACKLISTED_KEYS
+    return any(bl_key.lower() in key.lower() for bl_key in blacklisted_keys)
+
+
 def sanitize_url_for_log(url, blacklisted_keys=None):
     """Sanitize url to avoid loggin sensitive data"""
-    blacklisted_keys = blacklisted_keys or ("apikey", "password", "pwd")
     parsed = urlparse(url)
     query = parse_qs(parsed.query, keep_blank_values=False)
-    clean_query = {}
-
-    def is_blacklisted(k):
-        for bl_key in blacklisted_keys:
-            if bl_key.lower() in k.lower():
-                return True
-
-    for k, v in query.items():
-        if not is_blacklisted(k):
-            clean_query[k] = v
-
+    clean_query = {
+        k: v for k, v in query.items() if not is_blacklisted_key(k, blacklisted_keys)
+    }
     parsed = parsed._replace(query=urlencode(clean_query, True))
     return urlunparse(parsed)
+
+
+def sanitize_values_for_log(values, secret_keys=(), blacklisted_keys=None):
+    """Return a copy of `values` (e.g. headers) safe to log.
+
+    The values of the `secret_keys` and of the keys looking sensitive
+    (see `is_blacklisted_key`) are masked. Keys are compared case
+    insensitively.
+    """
+    secret_keys = {k.lower() for k in secret_keys}
+    return {
+        k: "***"
+        if k.lower() in secret_keys or is_blacklisted_key(k, blacklisted_keys)
+        else v
+        for k, v in values.items()
+    }
